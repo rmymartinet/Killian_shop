@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import stripeLib from "stripe";
-const stripe = stripeLib(process.env.STRIPE_SECRET_KEY);
+const stripe = new stripeLib(process.env.STRIPE_SECRET_KEY || "");
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,9 +33,7 @@ export default async function handler(
         cancel_url: "http://localhost:5173/payment-cancel",
       });
       res.json({ url: session.url });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+    } catch {}
   } else {
     res.setHeader("Allow", "POST");
     res.status(405).end("Method Not Allowed");
