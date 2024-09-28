@@ -1,12 +1,13 @@
 "use client";
 import { animatePageOut } from "@/app/utils/Animation";
 import { usePathname, useRouter } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   href: string;
   label?: string;
   children?: React.ReactNode;
-  setIsClicked?: boolean;
+  setIsClicked?: Dispatch<SetStateAction<boolean>>;
 }
 
 const TransitionLink = ({ href, label, setIsClicked, children }: Props) => {

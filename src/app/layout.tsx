@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import MobileNav from "../app/_components/Nav/MobileNav";
 import Nav from "../app/_components/Nav/NavBar";
 import "../app/globals.css";
@@ -10,35 +11,29 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const [showLandingPage, setShowLandingPage] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setShowLandingPage(false);
-  //   }, 10000);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 498);
+    };
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    // Initial check
+    handleResize();
 
-  // return (
-  //   <html lang="fr">
-  //     <body className={`antialiased`}>
-  //       {showLandingPage ? (
-  //         <LandingPage />
-  //       ) : (
-  //         <>
-  //           <Navbar />
-  //           {children}
-  //         </>
-  //       )}
-  //     </body>
-  //   </html>
-  // );
+    // Event listener to handle window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <html lang="fr">
       <body className={`antialiased`}>
-        {window.innerWidth > 498 ? <Nav /> : <MobileNav />}
+        {isMobile ? <MobileNav /> : <Nav />}
         <CartProvider>{children}</CartProvider>
       </body>
     </html>

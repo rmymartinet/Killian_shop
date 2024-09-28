@@ -2,7 +2,7 @@ import Image from "next/image";
 import TransitionLink from "./TransitionLinks";
 
 interface ProductCardProps {
-  imageSrc?: [string];
+  imageSrc?: string;
   id: string;
   price: string;
   title: string;
@@ -10,14 +10,14 @@ interface ProductCardProps {
   imageHeight?: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCard = ({
   imageSrc,
   id,
   price,
   title,
   imageWidth,
   imageHeight,
-}) => {
+}: ProductCardProps) => {
   return (
     <div className="flex flex-col justify-center items-center">
       <TransitionLink href={`/products/${id}`}>
@@ -27,7 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               className="mb-12 self-center cursor-pointer"
               width={imageWidth || 700}
               height={imageHeight || 700}
-              src={imageSrc}
+              src={imageSrc?.[0] ?? "/path/to/default/image.jpg"}
               alt=""
               layout="responsive"
               objectFit="cover"

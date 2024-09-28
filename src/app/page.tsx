@@ -8,11 +8,11 @@ import ProductCard from "./_components/ProductCard";
 import ScrollBanner from "./_components/ScrollBanner";
 import { useItemsFiltered } from "./hooks/useItemsFiltered";
 
-interface Item {
+interface Pants {
   id: string;
-  imageUrls: string[];
   title: string;
-  price: number;
+  price: string; // Si c'est string, assurez-vous que tout est correct
+  imageUrls: string[];
 }
 
 const IMAGE_CHANGE_INTERVAL = 2000;
@@ -50,7 +50,7 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex justify-center md:justify-between flex-wrap gap-10 w-full">
-          {data.map((item: Item) => (
+          {data.map((item: Pants) => (
             <ProductCard
               key={item.id}
               id={item.id}

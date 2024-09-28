@@ -2,14 +2,14 @@ import gsap from "gsap";
 import { useEffect, useRef } from "react";
 
 const ScrollBanner = () => {
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null); // Spécifiez le type ici
 
   useEffect(() => {
     const element = scrollRef.current;
-    const firstChild = element?.firstChild;
+    const firstChild = element?.firstChild; // Cela devrait fonctionner maintenant
 
     if (element && firstChild) {
-      const childWidth = firstChild.offsetWidth;
+      const childWidth = (firstChild as HTMLElement).offsetWidth; // Utiliser le type approprié
 
       // Calculer combien d'éléments sont nécessaires pour couvrir l'écran et un peu plus
       const repeatCount = Math.ceil(window.innerWidth / childWidth) + 3;

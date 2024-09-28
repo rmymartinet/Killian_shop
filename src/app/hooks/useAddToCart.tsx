@@ -1,6 +1,6 @@
 import { useCart } from "../context/CartContext";
 
-interface CartItem {
+interface Pants {
   id: string;
   category: string;
   title: string;
@@ -15,7 +15,7 @@ interface CartItem {
 export const useAddToCart = () => {
   const { setCart } = useCart();
 
-  const addToCart = (product: CartItem) => {
+  const addToCart = (product: Pants) => {
     setCart((prevCart) => [...prevCart, product]);
   };
 

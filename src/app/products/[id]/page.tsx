@@ -209,7 +209,9 @@ const ProductPage = ({ params }: ProductPageProps) => {
                   <button
                     onClick={() => {
                       setIsShoppingOpen(true);
-                      addToCart(filteredDataById);
+                      if (filteredDataById.length > 0) {
+                        addToCart({ ...filteredDataById[0], quantity: 1 });
+                      }
                     }}
                     className="cursor-pointer"
                   >
@@ -218,7 +220,14 @@ const ProductPage = ({ params }: ProductPageProps) => {
                 </div>
                 <div className="rounded-[8px] bg-black text-white py-2 grid place-content-center font-semibold w-full">
                   <TransitionLink href={"/checkout"}>
-                    <button onClick={() => addToCart(filteredDataById)}>
+                    <button
+                      onClick={() => {
+                        setIsShoppingOpen(true);
+                        if (filteredDataById.length > 0) {
+                          addToCart({ ...filteredDataById[0], quantity: 1 });
+                        }
+                      }}
+                    >
                       Acheter maintenant
                     </button>
                   </TransitionLink>

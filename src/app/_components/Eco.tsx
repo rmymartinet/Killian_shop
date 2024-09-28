@@ -21,14 +21,12 @@ const Eco = () => {
           <Card
             title="Recherche de matière"
             description="La première étape du processus de création consiste à déambuler librement dans des marchés de seconde main et de se laisser surprendre par des tissus originaux qui méritent d'avoir une seconde vie. Ils sont ensuite lavés et repassés."
-            number={1}
           />
           <Card
             title="Imagination"
             description="Après avoir acheté plusieurs pièces, nous imaginons de multiples
       assemblages avec différentes coupes, différentes matières pour créer
       une pièce finalement unique, originale, durable et éthique."
-            number={2}
           />
 
           <Card
@@ -41,7 +39,6 @@ const Eco = () => {
       haleine, dont nous sommes extrêmement fiers lorsque le résultat est
       à la hauteur des nos imaginations et qu'on souhaite partager avec
       vous."
-            number={3}
           />
         </div>
       </div>

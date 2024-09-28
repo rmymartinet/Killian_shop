@@ -12,7 +12,9 @@ export default function Checkout() {
 
   // Calculer le montant total basé sur le panier
   useEffect(() => {
-    const total = cart.flat().reduce((acc, item) => acc + item.price, 0);
+    const total = cart
+      .flat()
+      .reduce((acc, item) => acc + Number(item.price), 0);
     setTotalAmount(Number(Number(total).toFixed(2)));
   }, [cart]);
 
