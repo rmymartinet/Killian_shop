@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 "use client";
 
 import Footer from "@/app/_components/Footer";
@@ -21,6 +23,18 @@ interface ProductPageProps {
   };
 }
 
+interface Pants {
+  id: string;
+  category: string;
+  title: string;
+  price: string;
+  length: string;
+  weight: string;
+  material: string;
+  imageUrls: string[];
+  imageDetails: string[];
+}
+
 const ProductPage = ({ params }: ProductPageProps) => {
   const { id } = params;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -29,10 +43,11 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const [isPrevActive, setIsPrevActive] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
 
-  const { data, error, loading } = useItemsFiltered("pants");
+  const { data }: { data: Pants[]; loading: boolean } =
+    useItemsFiltered("pants");
 
   // Filtrer les données basées sur l'ID du produit
-  const filteredDataById = data.filter((item: any) => item.id === id);
+  const filteredDataById = data.filter((item: Pants) => item.id === id);
   const datas = filteredDataById[0];
 
   // Obtenir la longueur des images
@@ -193,7 +208,8 @@ const ProductPage = ({ params }: ProductPageProps) => {
                 <div className="rounded-[8px] bg-black text-white py-2 grid place-content-center font-semibold w-full">
                   <button
                     onClick={() => {
-                      setIsShoppingOpen(true), addToCart(filteredDataById);
+                      setIsShoppingOpen(true);
+                      addToCart(filteredDataById);
                     }}
                     className="cursor-pointer"
                   >

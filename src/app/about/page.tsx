@@ -11,14 +11,14 @@ const About = () => {
             <GiEcology size={30} />
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl text-pretty">
-            Acheter des vêtements issus de la mode responsable, c’est repenser
-            notre façon de consommer. C’est un geste d’engagement envers la
-            planète et les travailleurs, en choisissant des pièces produites de
-            manière transparente, avec des matériaux recyclés. Porter ces
-            vêtements permet de contribuer à un changement positif, tout en
-            affirmant son propre style unique. C’est une façon d’être fier de
-            son choix tout en ayant un impact concret sur l'environnement et la
-            société.
+            Acheter des vêtements issus de la mode responsable, c&apos;est
+            repenser notre façon de consommer. C&apos;est un geste d’engagement
+            envers la planète et les travailleurs, en choisissant des pièces
+            produites de manière transparente, avec des matériaux recyclés.
+            Porter ces vêtements permet de contribuer à un changement positif,
+            tout en affirmant son propre style unique. C’est une façon d’être
+            fier de son choix tout en ayant un impact concret sur
+            l&apos;environnement et la société.
           </h1>
         </div>
 
@@ -69,25 +69,26 @@ const About = () => {
             className="rounded-xl"
           />
           <p className="text-lg sm:text-xl text-pretty">
-            La fast fashion, bien qu'attirante grâce à ses prix bas, impose un
-            lourd tribut à l'environnement. En effet, cette industrie, deuxième
-            source de pollution après celle du pétrole, contribue massivement
-            aux émissions de carbone et à la dégradation des écosystèmes. Avec
-            800 milliards de nouveaux vêtements produits chaque année, elle
-            génère 10 % des émissions mondiales de carbone et altère les
-            écosystèmes à chaque étape de sa chaîne d’approvisionnement.
+            La fast fashion, bien qu&apos;attirante grâce à ses prix bas, impose
+            un lourd tribut à l&apos;environnement. En effet, cette industrie,
+            deuxième source de pollution après celle du pétrole, contribue
+            massivement aux émissions de carbone et à la dégradation des
+            écosystèmes. Avec 800 milliards de nouveaux vêtements produits
+            chaque année, elle génère 10 % des émissions mondiales de carbone et
+            altère les écosystèmes à chaque étape de sa chaîne
+            d&apos;approvisionnement.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 place-items-center gap-10 md:gap-40 h-auto md:h-[70vh] p-5 sm:p-10 md:p-20">
           <p className="text-lg sm:text-xl text-pretty">
             Derrière la façade de la fast fashion se cache une réalité souvent
-            méconnue : l'exploitation humaine. Cette industrie repose sur des
-            conditions de travail inhumaines, parfois assimilables à
-            l’esclavage, avec des employés – parfois même des enfants – soumis à
-            des tâches exigeantes. La petite taille des mains des enfants les
-            rend vulnérables et exploités dans des travaux minutieux comme la
-            cueillette du coton.
+            méconnue : l&apos;exploitation humaine. Cette industrie repose sur
+            des conditions de travail inhumaines, parfois assimilables à
+            l&apos;esclavage, avec des employés – parfois même des enfants –
+            soumis à des tâches exigeantes. La petite taille des mains des
+            enfants les rend vulnérables et exploités dans des travaux minutieux
+            comme la cueillette du coton.
           </p>
           <Image
             src={"/assets/images/about/enfant.jpg"}
@@ -111,11 +112,11 @@ const About = () => {
             className="rounded-xl"
           />
           <p className="text-lg sm:text-xl text-pretty">
-            La production de vêtements en fibres synthétiques, bien qu’efficace
-            en termes de coûts, est une source majeure de pollution des océans.
-            Ces fibres synthétiques sont responsables de 35 % des
-            microplastiques qui contaminent nos mers, affectant la faune marine
-            et, par extension, la chaîne alimentaire.
+            La production de vêtements en fibres synthétiques, bien
+            qu&apos;efficace en termes de coûts, est une source majeure de
+            pollution des océans. Ces fibres synthétiques sont responsables de
+            35 % des microplastiques qui contaminent nos mers, affectant la
+            faune marine et, par extension, la chaîne alimentaire.
           </p>
         </div>
 
@@ -124,9 +125,9 @@ const About = () => {
             3 Millions de barils de pétrole
           </h1>
           <p className="text-lg sm:text-xl text-pretty text-center">
-            Le coton, l’une des principales matières utilisées dans la fast
-            fashion, est extrêmement gourmand en eau et nécessite l’utilisation
-            de pesticides nocifs pour l’environnement.
+            Le coton, l&apos;une des principales matières utilisées dans la fast
+            fashion, est extrêmement gourmand en eau et nécessite
+            l&apos;utilisation de pesticides nocifs pour l&apos;environnement.
           </p>
         </div>
 
@@ -141,8 +142,8 @@ const About = () => {
             className="rounded-xl"
           />
           <p className="text-lg sm:text-xl text-pretty">
-            En réponse à ces défis, certaines marques choisissent d’adopter une
-            démarche éco-responsable en utilisant des tissus déjà produits,
+            En réponse à ces défis, certaines marques choisissent d&apos;adopter
+            une démarche éco-responsable en utilisant des tissus déjà produits,
             permettant de limiter la surproduction textile.
           </p>
         </div>

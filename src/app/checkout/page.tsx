@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 
@@ -51,7 +52,11 @@ export default function Checkout() {
             className="flex flex-col justify-center items-center border-b border-gray-300 mb-5 border-solid black w-max h-full"
           >
             {/* Affichage de la première image du tableau imageUrls */}
-            <img
+            <Image
+              width={500}
+              height={500}
+              layout="responsive"
+              objectFit="contain"
               src={item.imageUrls[0]} // Utilisation de la première image du tableau
               alt={item.title}
               className="w-[500px] h-[500px] object-contain p-5"

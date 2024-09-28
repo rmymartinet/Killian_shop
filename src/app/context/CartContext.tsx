@@ -1,11 +1,18 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
+interface CartItem {
+  id: string;
+  title: string;
+  price: string;
+  quantity: number;
+  imageUrls: string[];
+}
+
 interface CartContextProps {
-  cart: any[];
-  setCart: (cart: any[]) => void;
+  cart: CartItem[];
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   isShoppingOpen: boolean;
   setIsShoppingOpen: (isShoppingOpen: boolean) => void;
-  children: ReactNode;
 }
 
 // Créer le contexte du panier
@@ -13,14 +20,14 @@ const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 // Fournisseur du contexte
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [isShoppingOpen, setIsShoppingOpen] = useState<boolean>(false);
 
   console.log(isShoppingOpen);
 
   return (
     <CartContext.Provider
-      value={{ cart, setCart, isShoppingOpen, setIsShoppingOpen, children }}
+      value={{ cart, setCart, isShoppingOpen, setIsShoppingOpen }}
     >
       {children}
     </CartContext.Provider>

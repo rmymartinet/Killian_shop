@@ -20,7 +20,6 @@
     "framer-motion": "^11.5.6",
     "gsap": "^3.12.5",
     "helmet": "^7.1.0",
-    "mongoose": "^8.7.0",
     "next": "14.2.8",
     "nodemon": "^3.1.7",
     "react": "^18.3.1",
