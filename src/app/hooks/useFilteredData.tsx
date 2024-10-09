@@ -20,12 +20,16 @@ export function useItemsFiltered(filter: string) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get<Pants[]>("/api/pants");
+        const response = await axios.get<Pants[]>("/api/products");
+        console.log(response.data);
         const filteredData = response.data.filter(
           (item) => item.category === filter
         );
         setData(filteredData);
-      } catch {
+      } catch (error) {
+        console.log(error);
+        console.error("Error fetching items");
+        setData([]);
       } finally {
         setLoading(false);
       }

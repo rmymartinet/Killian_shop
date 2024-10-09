@@ -6,7 +6,7 @@ import Eco from "./_components/Eco";
 import Footer from "./_components/Footer";
 import ProductCard from "./_components/ProductCard";
 import ScrollBanner from "./_components/ScrollBanner";
-import { useItemsFiltered } from "./hooks/useItemsFiltered";
+import { useItemsFiltered } from "./hooks/useFilteredData";
 
 interface Pants {
   id: string;
