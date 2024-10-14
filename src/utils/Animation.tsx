@@ -18,7 +18,11 @@ export const animatePageIn = () => {
   }
 };
 
-export const animatePageOut = (href: string, router: AppRouterInstance) => {
+export const animatePageOut = (
+  href: string,
+  router: AppRouterInstance,
+  onComplete: () => void
+) => {
   const sentence = document.getElementById("sentence");
 
   if (sentence) {
@@ -33,6 +37,7 @@ export const animatePageOut = (href: string, router: AppRouterInstance) => {
       ease: "power3.inOut",
       onComplete: () => {
         router.push(href);
+        onComplete();
       },
     });
   }

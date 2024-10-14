@@ -20,7 +20,6 @@ const OPACITIES_MOBILE = Array.from({ length: 30 }, (_, i) =>
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
   const { width } = useWindow();
 
   useEffect(() => {
