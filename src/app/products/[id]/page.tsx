@@ -148,7 +148,12 @@ const ProductPage = ({ params }: ProductPageProps) => {
                 filteredDataById.map((item: Data) => (
                   <Image
                     key={item.id}
-                    src={item?.imageDetails[currentImageIndex] ?? ""}
+                    src={
+                      item?.imageDetails &&
+                      currentImageIndex < item.imageDetails.length
+                        ? item.imageDetails[currentImageIndex]
+                        : ""
+                    }
                     width={400}
                     height={400}
                     alt=""
