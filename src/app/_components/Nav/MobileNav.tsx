@@ -38,13 +38,17 @@ export default function MobileNav() {
   }, [isCLicked]);
   return (
     <>
-      <div className="w-full flex justify-end p-10">
-        <span
+      <div className="w-full flex items-center justify-between py-10">
+        <div
           onClick={() => handleClickMenu()}
-          className="bg-black text-white py-2 px-3 rounded-full cursor-pointer"
+          className="text-white flex flex-col gap-2 cursor-pointer"
         >
-          Menu
-        </span>
+          <div className="h-[2px] w-6 bg-black" />
+          <div className="h-[2px] w-6 bg-black" />
+        </div>
+        <div className="">
+          <FaShoppingCart size={18} />
+        </div>
       </div>
 
       <nav
@@ -70,17 +74,14 @@ export default function MobileNav() {
           />
           <TransitionLink
             setIsClicked={setIsClicked}
-            href="/about"
-            label="About"
+            href="/marque"
+            label="Marque"
           />
           <TransitionLink
             setIsClicked={setIsClicked}
             href="/contact"
             label="Contact"
           />
-        </div>
-        <div className="absolute top-40 right-10 p-5">
-          <FaShoppingCart size={20} />
         </div>
       </nav>
     </>
