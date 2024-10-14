@@ -2,11 +2,11 @@ import { FaArrowRight } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className="flex flex-wrap gap-20 lg:justify-between h-screen bg-black text-white p-20 mt-40">
+    <footer className="flex flex-wrap gap-20 lg:justify-between h-screen bg-black text-white p-20 mt-40 w-full -mx-2">
       <div className="flex flex-col justify-between gap-20">
         <div className="flex flex-col gap-5">
           <h2 className="text-5xl lg:text-8xl">Contactez-moi</h2>
-          <span className=" text-2xl lg:text-5xl">killianpapail@gmail.com</span>
+          <span className=" text-2xl lg:text-5xl">@instagram</span>
         </div>
         <div className="flex flex-col items-start gap-7">
           <span className="text-sm">
