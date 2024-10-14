@@ -53,8 +53,7 @@ const LoadingPage = ({
     h1Refs.forEach((ref, index) => {
       gsap.fromTo(
         ref.current,
-        { fontSize: "8vw" },
-
+        { fontSize: width > 498 ? "8vw" : "8.5vw" },
         {
           fontSize: width > 498 ? "8vw" : "8.5vw",
           opacity: opacities[index] / 100,
