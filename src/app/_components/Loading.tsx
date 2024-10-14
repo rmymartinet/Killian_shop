@@ -52,7 +52,6 @@ const LoadingPage = ({
   useGSAP(() => {
     h1Refs.forEach((ref, index) => {
       gsap.to(ref.current, {
-        fontSize: width > 498 ? "8vw" : "8.8vw",
         opacity: opacities[index] / 100,
         yPercent: 0,
         duration: 0.5,
@@ -72,7 +71,9 @@ const LoadingPage = ({
         <h1
           key={index}
           ref={ref}
-          className="text-black  md:text-[8vw] flex flex-col uppercase font-medium opacity-0"
+          className={`text-black text-8xl flex flex-col ${
+            width < 498 ? "text-[8.7vw]" : "text-[8vw]"
+          } uppercase font-medium z-50 opacity-0`}
           style={{ lineHeight: "1" }}
         >
           sois fier de tes sapes
