@@ -7,9 +7,11 @@ import Link from "next/link";
 import { useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import { useCart } from "../context/CartContext";
+import { useRemoveFromCart } from "../hooks/useRemoveFromCart";
 
 const CartSideBar = () => {
   const { cart, isShoppingOpen, setIsShoppingOpen } = useCart();
+  const removeItemFromCart = useRemoveFromCart();
   const shoppingContainerRef = useRef<HTMLDivElement>(null);
   console.log(cart);
 
@@ -84,7 +86,12 @@ const CartSideBar = () => {
                 <p className="text-sm font-bold mb-1">{item.price} €</p>
                 <p className="text-sm">Quantité: 1</p>
               </div>
-              <p className="text-red-500 cursor-pointer text-sm">Supprimer</p>
+              <button
+                onClick={() => removeItemFromCart(item.id)}
+                className="text-red-500 cursor-pointer text-sm"
+              >
+                Supprimer
+              </button>
             </div>
           ))
         ) : (
