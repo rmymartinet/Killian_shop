@@ -51,22 +51,18 @@ const LoadingPage = ({
 
   useGSAP(() => {
     h1Refs.forEach((ref, index) => {
-      gsap.fromTo(
-        ref.current,
-        { fontSize: width > 498 ? "8vw" : "8.5vw" },
-        {
-          fontSize: width > 498 ? "8vw" : "8.5vw",
-          opacity: opacities[index] / 100,
-          yPercent: 0,
-          duration: 0.5,
-          ease: "power3.inOut",
-          onComplete: () => {
-            if (index === h1Refs.length - 1) {
-              setIsAnimated(false);
-            }
-          },
-        }
-      );
+      gsap.to(ref.current, {
+        fontSize: width > 498 ? "8vw" : "8.8vw",
+        opacity: opacities[index] / 100,
+        yPercent: 0,
+        duration: 0.5,
+        ease: "power3.inOut",
+        onComplete: () => {
+          if (index === h1Refs.length - 1) {
+            setIsAnimated(false);
+          }
+        },
+      });
     });
   }, []);
 
