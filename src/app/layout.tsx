@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import "../app/globals.css";
 import CartSideBar from "./_components/CardSideBar";
@@ -19,6 +20,8 @@ export default function RootLayout({
   const [isAnimated, setIsAnimated] = useState(true);
 
   const { width } = useWindow();
+
+  const pathname = usePathname();
 
   useEffect(() => {
     if (width < 768) {
@@ -42,7 +45,7 @@ export default function RootLayout({
                 <CartSideBar />
               </CartProvider>
             </div>
-            <Footer />
+            {pathname !== "/contact" && <Footer />}
           </>
         )}
       </body>
