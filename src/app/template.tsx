@@ -1,34 +1,47 @@
 "use client";
 
-import { animatePageIn } from "@/app/utils/Animation";
+import { animatePageIn } from "@/utils/Animation";
+import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
+const TEXT = "sois fier de tes sapes";
+const OPACITIES = [90, 80, 70, 60, 50, 40, 30, 20, 10, 10];
+
 export default function Template({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   useEffect(() => {
-    // Joue l'animation uniquement si l'animation n'a pas encore été déclenchée
+    // Lancer l'animation lors du changement de route
     animatePageIn();
-  }, []);
+  }, [pathname]);
 
   return (
     <>
-      <div>
+      <div className="overflow-hidden">
         <div
-          id="banner-1"
-          className="min-h-screen bg-neutral-950 z-10 fixed top-0 left-0 w-1/4"
-        />
-        <div
-          id="banner-2"
-          className="min-h-screen bg-neutral-950 z-10 fixed top-0 left-1/4 w-1/4"
-        />
-        <div
-          id="banner-3"
-          className="min-h-screen bg-neutral-950 z-10 fixed top-0 left-2/4 w-1/4"
-        />
-        <div
-          id="banner-4"
-          className="min-h-screen bg-neutral-950 z-10 fixed top-0 left-3/4 w-1/4"
-        />
-        {children}
+          id="sentence"
+          className="min-h-screen w-screen bg-white z-10 fixed top-0 left-0"
+          style={{ lineHeight: "1" }}
+        >
+          {OPACITIES.map((opacity, index) => (
+            <h1
+              key={index}
+              id={`text-${index}`}
+              className="text-black lg:text-[8vw] fixed top-0 left-0 uppercase font-medium z-50"
+              style={{ opacity: opacity / 100 }}
+            >
+              {TEXT}
+            </h1>
+          ))}
+        </div>
+        <motion.div
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          transition={{ ease: "easeInOut", duration: 0.75, delay: 0.5 }}
+        >
+          {children}
+        </motion.div>
       </div>
     </>
   );

@@ -1,32 +1,39 @@
 "use client";
-import { animatePageOut } from "@/app/utils/Animation";
+import { TransitionLinkProps } from "@/types/dataTypes";
+import { animatePageOut } from "@/utils/Animation";
 import { usePathname, useRouter } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 
-interface Props {
-  href: string;
-  label?: string;
-  children?: React.ReactNode;
-  setIsClicked?: Dispatch<SetStateAction<boolean>>;
-}
-
-const TransitionLink = ({ href, label, setIsClicked, children }: Props) => {
+const TransitionLink = ({
+  href,
+  label,
+  setIsClicked,
+  children,
+}: TransitionLinkProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleClick = () => {
     if (setIsClicked) {
       setIsClicked(false);
     }
+
+    if (isTransitioning) return;
+
     if (pathname !== href) {
-      animatePageOut(href, router);
+      setIsTransitioning(true);
+      animatePageOut(href, router, () => {
+        setIsTransitioning(false);
+      });
     }
   };
 
   return (
     <button
-      className="text-white hover:text-gray-300 uppercase"
+      className="text-white hover:text-gray-300 w-full"
       onClick={handleClick}
+      disabled={isTransitioning}
     >
       {label}
       {children}

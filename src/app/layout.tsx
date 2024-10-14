@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MobileNav from "../app/_components/Nav/MobileNav";
-import Nav from "../app/_components/Nav/NavBar";
 import "../app/globals.css";
+import CartSideBar from "./_components/CardSideBar";
+import Footer from "./_components/Footer";
+import LoadingPage from "./_components/Loading";
+import MobileNav from "./_components/Nav/MobileNav";
+import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
+import useWindow from "./hooks/useWindow";
 
 export default function RootLayout({
   children,
@@ -12,29 +16,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [isMobile, setIsMobile] = useState(false);
+  const [isAnimated, setIsAnimated] = useState(true);
+
+  const { width } = useWindow();
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 498);
-    };
-
-    // Initial check
-    handleResize();
-
-    // Event listener to handle window resize
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+    if (width < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, [width]);
 
   return (
     <html lang="fr">
       <body className={`antialiased`}>
-        {isMobile ? <MobileNav /> : <Nav />}
-        <CartProvider>{children}</CartProvider>
+        {isAnimated ? (
+          <LoadingPage setIsAnimated={setIsAnimated} />
+        ) : (
+          <>
+            <div className="px-2">
+              {isMobile ? <MobileNav /> : <Nav />}
+              <CartProvider>
+                {children}
+                <CartSideBar />
+              </CartProvider>
+            </div>
+            <Footer />
+          </>
+        )}
       </body>
     </html>
   );
