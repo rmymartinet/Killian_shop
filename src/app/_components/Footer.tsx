@@ -1,8 +1,6 @@
-import { FaArrowRight } from "react-icons/fa6";
-
 const Footer = () => {
   return (
-    <footer className="flex flex-wrap gap-20 lg:justify-between h-screen bg-black text-white p-20 mt-40 w-full -mx-2">
+    <footer className="flex flex-wrap gap-20 lg:justify-between h-screen bg-black text-white p-10 md:p-20 mt-40 w-[100vdw]">
       <div className="flex flex-col justify-between gap-20">
         <div className="flex flex-col gap-5">
           <h2 className="text-5xl lg:text-8xl">Contactez-moi</h2>
@@ -10,10 +8,10 @@ const Footer = () => {
             href="https://www.instagram.com/sfdts.fr/"
             className=" text-2xl lg:text-5xl"
           >
-            @instagram
+            @SFDTS
           </a>
         </div>
-        <div className="flex flex-col items-start gap-7">
+        {/* <div className="flex flex-col items-start gap-7">
           <span className="text-sm">
             Suivez notre newletter pour les nouveautés
           </span>
@@ -33,7 +31,7 @@ const Footer = () => {
             </div>
             <div className="w-full h-[1px] bg-slate-400"></div>
           </form>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-20 justify-between lg:gap-72">
         <div className="flex gap-10">
