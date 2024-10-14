@@ -6,7 +6,12 @@ const Footer = () => {
       <div className="flex flex-col justify-between gap-20">
         <div className="flex flex-col gap-5">
           <h2 className="text-5xl lg:text-8xl">Contactez-moi</h2>
-          <span className=" text-2xl lg:text-5xl">@instagram</span>
+          <a
+            href="https://www.instagram.com/sfdts.fr/"
+            className=" text-2xl lg:text-5xl"
+          >
+            @instagram
+          </a>
         </div>
         <div className="flex flex-col items-start gap-7">
           <span className="text-sm">
@@ -33,14 +38,20 @@ const Footer = () => {
       <div className="flex flex-col gap-20 justify-between lg:gap-72">
         <div className="flex gap-10">
           <div>
-            <span className="px-2 py-2 rounded-xl border-[1px] border-white font-semibold">
+            <a
+              href="https://www.instagram.com/sfdts.fr/"
+              className="px-2 py-2 rounded-xl border-[1px] border-white font-semibold"
+            >
               Instagram
-            </span>
+            </a>
           </div>
           <div>
-            <span className="px-2 py-2 rounded-xl border-[1px] border-white font-semibold">
+            <a
+              href="https://www.tiktok.com/@sfdts.fr"
+              className="px-2 py-2 rounded-xl border-[1px] border-white font-semibold"
+            >
               Tiktok
-            </span>
+            </a>
           </div>
         </div>
         <div className="flex flex-col gap-2">
