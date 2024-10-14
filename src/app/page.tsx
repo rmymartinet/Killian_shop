@@ -2,6 +2,7 @@
 
 import { Data } from "@/types/dataTypes";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import EcologyContainer from "./_components/EcologyContainer";
@@ -185,7 +186,9 @@ export default function Home() {
             Créations disponibles
           </h1>
           <div className="flex items-center gap-4">
-            <p className="underline cursor-pointer">Voir tous les produits</p>
+            <Link href="/shop" className="underline cursor-pointer">
+              Voir tous les produits
+            </Link>
             <IoIosArrowRoundForward />
           </div>
         </div>
@@ -208,7 +211,9 @@ export default function Home() {
             Une marque éco-responsable
           </h1>
           <div className="flex items-center gap-4">
-            <p className="underline cursor-pointer">La vision de la marque</p>
+            <Link href="/marque" className="underline cursor-pointer">
+              La vision de la marque
+            </Link>
             <IoIosArrowRoundForward />
           </div>
         </div>
