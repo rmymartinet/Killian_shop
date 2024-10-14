@@ -32,7 +32,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
       <div className="overflow-hidden">
         <div
           id="sentence"
-          className="min-h-screen w-screen flex flex-col justify-center bg-white z-10 fixed top-0 left-0"
+          className="min-h-screen w-screen flex flex-col bg-white z-10 fixed top-0 left-0"
           style={{ lineHeight: "1" }}
         >
           {width > 1024 &&
@@ -40,7 +40,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
               <h1
                 key={index}
                 id={`text-${index}`}
-                className="text-black text-[8.5vw] uppercase font-medium z-50"
+                className="text-black text-[10vw] md:text-[8vw] uppercase font-medium z-50"
                 style={{ opacity: opacity / 100 }}
               >
                 {TEXT}

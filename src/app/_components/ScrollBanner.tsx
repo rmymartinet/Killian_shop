@@ -2,14 +2,14 @@ import gsap from "gsap";
 import { useEffect, useRef } from "react";
 
 const ScrollBanner = () => {
-  const scrollRef = useRef<HTMLDivElement | null>(null); // Spécifiez le type ici
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const element = scrollRef.current;
-    const firstChild = element?.firstChild; // Cela devrait fonctionner maintenant
+    const firstChild = element?.firstChild;
 
     if (element && firstChild) {
-      const childWidth = (firstChild as HTMLElement).offsetWidth; // Utiliser le type approprié
+      const childWidth = (firstChild as HTMLElement).offsetWidth;
 
       // Calculer combien d'éléments sont nécessaires pour couvrir l'écran et un peu plus
       const repeatCount = Math.ceil(window.innerWidth / childWidth) + 3;
@@ -21,10 +21,10 @@ const ScrollBanner = () => {
 
       // Créer l'animation infinie
       gsap.to(element, {
-        x: `-=${childWidth * repeatCount}`, // Défile toute la largeur des éléments
-        duration: 40, // Durée pour un cycle complet
-        repeat: -1, // Répète indéfiniment
-        ease: "none", // Défilement linéaire
+        x: `-=${childWidth * repeatCount}`,
+        duration: 40,
+        repeat: -1,
+        ease: "none",
         modifiers: {
           x: (x) => (parseFloat(x) % (childWidth * repeatCount)) + "px", // Retourne au début sans interruption
         },
