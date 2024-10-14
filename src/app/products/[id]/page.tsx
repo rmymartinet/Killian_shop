@@ -4,6 +4,7 @@ import ProductCard from "@/app/_components/ProductCard";
 import { useCart } from "@/app/context/CartContext";
 import { useAddToCart } from "@/app/hooks/useAddToCart";
 import { useFilteredData } from "@/app/hooks/useFilteredData";
+import useWindow from "@/app/hooks/useWindow";
 import { Data } from "@/types/dataTypes";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -28,9 +29,10 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [isNextActive, setIsNextActive] = useState(false);
   const [isPrevActive, setIsPrevActive] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
   const TABLET_BREAKPOINT = 768;
   const DESKTOP_BREAKPOINT = 1024;
+
+  const { width } = useWindow();
 
   const { data }: { data: Data[]; loading: boolean } = useFilteredData("pants");
 
@@ -70,16 +72,6 @@ const ProductPage = ({ params }: ProductPageProps) => {
     );
   }, [imageDetailsLength.length]);
 
-  // Gestion de la taille de la fenêtre
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowWidth(window.innerWidth);
-      const handleResize = () => setWindowWidth(window.innerWidth);
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }
-  }, []);
-
   // Carrousel automatique qui change toutes les 2 secondes
   useEffect(() => {
     const interval = setInterval(() => {
@@ -93,11 +85,11 @@ const ProductPage = ({ params }: ProductPageProps) => {
       {/* Contenu fixe au centre */}
       <div className="mt-20 flex justify-center w-full px-10">
         {/* Affichage pour les écrans desktop */}
-        {windowWidth > DESKTOP_BREAKPOINT && <ProductLabels />}
+        {width > DESKTOP_BREAKPOINT && <ProductLabels />}
         <div className="flex flex-col lg:gap-10 bg-white lg:mx-10 rounded-xl shadow-lg">
           <div className="flex justify-center">
             {/* Affichage de l'image principale pour les écrans tablet et desktop */}
-            {windowWidth > TABLET_BREAKPOINT && (
+            {width > TABLET_BREAKPOINT && (
               <div className="flex flex-col justify-center items-center relative rounded-bl-xl rounded-tl-xl ">
                 <div className="p-4 rounded-xl">
                   {filteredDataById.map((item: Data) => (
@@ -171,7 +163,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
           />
         </div>
         {/* Miniatures pour les images en desktop */}
-        {windowWidth > DESKTOP_BREAKPOINT && filteredDataById.length > 0 && (
+        {width > DESKTOP_BREAKPOINT && filteredDataById.length > 0 && (
           <ImagesList
             data={filteredDataById}
             refs={refs}
