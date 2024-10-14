@@ -43,3 +43,12 @@ body {
   backdrop-filter: blur(5.5px);
   -webkit-backdrop-filter: blur(5.5px);
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* pour Firefox */
+  -ms-overflow-style: none; /* pour Internet Explorer et Edge */
+}
