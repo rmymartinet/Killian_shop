@@ -61,16 +61,6 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const addToCart = useAddToCart();
   const { setIsShoppingOpen } = useCart();
 
-  const nextImage = useSwipeable({
-    onSwipedLeft: () => handleNextImage(),
-    trackMouse: true,
-  });
-
-  const prevImage = useSwipeable({
-    onSwipedRight: () => handlePrevImage(),
-    trackMouse: true,
-  });
-
   // Créer des références pour les miniatures des images
   useEffect(() => {
     setRefs((refs) =>
@@ -127,7 +117,6 @@ const ProductPage = ({ params }: ProductPageProps) => {
             <div className="flex justify-center items-center relative">
               {/* Bouton pour aller à l'image suivante */}
               <div
-                {...nextImage}
                 onClick={handleNextImage}
                 className={`absolute select-none right-0 lg:-right-4 w-10 h-10 rounded-full glassmorphism grid place-content-center cursor-pointer 
               transition-transform duration-100 ease-in-out ${
@@ -142,7 +131,6 @@ const ProductPage = ({ params }: ProductPageProps) => {
 
               {/* Bouton pour revenir à l'image précédente */}
               <div
-                {...prevImage}
                 onClick={handlePrevImage}
                 className={`absolute select-none left-0 lg:-left-4 w-10 h-10 rounded-full glassmorphism grid place-content-center cursor-pointer 
               transition-transform duration-100 ease-in-out ${
