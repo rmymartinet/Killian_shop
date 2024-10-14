@@ -45,7 +45,7 @@ export default function RootLayout({
                 <CartSideBar />
               </CartProvider>
             </div>
-            {pathname !== "/contact" && <Footer />}
+            {pathname !== "/contact" && pathname !== "/checkout" && <Footer />}
           </>
         )}
       </body>
