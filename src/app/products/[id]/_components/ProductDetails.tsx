@@ -9,7 +9,7 @@ const PorductDetails = ({
   addToCart,
 }: ProductDetailsProps) => {
   return (
-    <div className="p-10 lg:p-16 rounded-xl relative lg:mt-0 flex flex-col justify-between">
+    <div className="p-2 md:p-10 lg:p-16 rounded-xl relative lg:mt-0 flex flex-col justify-between">
       <div className="flex flex-col gap-10">
         <div className="w-full flex justify-between">
           <div>

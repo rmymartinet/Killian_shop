@@ -13,8 +13,6 @@ const CartSideBar = () => {
   const { cart, isShoppingOpen, setIsShoppingOpen } = useCart();
   const removeItemFromCart = useRemoveFromCart();
   const shoppingContainerRef = useRef<HTMLDivElement>(null);
-  console.log(cart);
-
   const totalWithoutDelivery = cart.reduce((total, item) => {
     const itemPrice =
       parseFloat(
@@ -59,7 +57,7 @@ const CartSideBar = () => {
   return (
     <div
       ref={shoppingContainerRef}
-      className="fixed top-0 right-0 w-[400px] h-screen bg-white z-50 flex flex-col shadow-lg pointer-events-auto"
+      className="fixed top-0 right-0 w-screen lg:w-[400px] h-screen bg-white z-50 flex flex-col shadow-lg pointer-events-auto"
     >
       <div className="p-5 cursor-pointer">
         <IoClose onClick={handleCloseClick} size={20} />

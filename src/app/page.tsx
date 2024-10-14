@@ -190,7 +190,7 @@ export default function Home() {
             <IoIosArrowRoundForward />
           </div>
         </div>
-        <div className="flex md:justify-center gap-4 w-full overflow-x-auto  hide-scrollbar">
+        <div className="flex md:justify-center gap-4 w-full overflow-x-auto">
           {data.map((item: Data) => (
             <ProductCard
               key={item.id}

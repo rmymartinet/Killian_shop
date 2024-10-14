@@ -14,8 +14,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Data[]>([]);
   const [isShoppingOpen, setIsShoppingOpen] = useState<boolean>(false);
 
-  console.log(isShoppingOpen);
-
   return (
     <CartContext.Provider
       value={{ cart, setCart, isShoppingOpen, setIsShoppingOpen }}

@@ -83,7 +83,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
   return (
     <>
       {/* Contenu fixe au centre */}
-      <div className="mt-20 flex justify-center w-full px-10">
+      <div className="mt-20 flex justify-center w-full md:px-10">
         {/* Affichage pour les écrans desktop */}
         {width > DESKTOP_BREAKPOINT && <ProductLabels />}
         <div className="flex flex-col lg:gap-10 bg-white lg:mx-10 rounded-xl shadow-lg">
@@ -172,8 +172,8 @@ const ProductPage = ({ params }: ProductPageProps) => {
           />
         )}
       </div>
-      <div className="mt-20 min-w-screen  overflow-hidden flex justify-center items-center">
-        <div className="overflow-x-auto w-full h-full flex justify-center gap-4 lg:gap-40">
+      <div className="mt-20 min-w-screen overflow-hidden flex md:justify-center items-center">
+        <div className="overflow-x-auto w-full h-full flex md:justify-center gap-4 lg:gap-40">
           {data
             .filter((item: Data) => item.id !== id)
             .map((item: Data) => (
