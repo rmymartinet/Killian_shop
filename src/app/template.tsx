@@ -40,7 +40,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
               <h1
                 key={index}
                 id={`text-${index}`}
-                className="text-black text-[10vw] md:text-[8vw] uppercase font-medium z-50"
+                className="text-black text-8xl  md:text-[8vw] uppercase font-medium z-50"
                 style={{ opacity: opacity / 100 }}
               >
                 {TEXT}
