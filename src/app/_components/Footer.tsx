@@ -3,7 +3,7 @@ const Footer = () => {
     <footer className="flex flex-wrap gap-20 lg:justify-between h-screen bg-black text-white p-10 md:p-20 mt-40 w-[100vdw]">
       <div className="flex flex-col justify-between gap-20">
         <div className="flex flex-col gap-5">
-          <h2 className="text-5xl lg:text-8xl">Contactez-moi</h2>
+          <h1 className="text-4xl lg:text-8xl">Contactez-moi</h1>
           <a
             href="https://www.instagram.com/sfdts.fr/"
             className=" text-2xl lg:text-5xl"
