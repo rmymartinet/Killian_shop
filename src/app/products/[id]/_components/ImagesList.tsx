@@ -3,7 +3,7 @@ import Image from "next/image";
 
 interface ImagesListProps {
   data: Data[];
-  refs: any[];
+  refs: React.RefObject<HTMLDivElement>[];
   currentImageIndex: number;
   setCurrentImageIndex: (value: number) => void;
 }
