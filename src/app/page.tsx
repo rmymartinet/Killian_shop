@@ -29,66 +29,154 @@ export default function Home() {
     <section>
       <div className="relative flex flex-col items-center justify-center gap-10">
         <Image
-          className="shadow-xl"
+          className="shadow-xl relative"
           width={600}
           height={600}
-          src="/assets/banner1.png"
+          src="/assets/identity.png"
           alt=""
         />
-        {width > 498 && (
+
+        {width > 1024 && (
           <>
-            <div className="absolute top-[390px] md:right-12 lg:right-72 w-72 h-52 overflow-hidden">
-              <video
-                className="w-full h-full object-cover"
-                autoPlay
-                playsInline
-                muted
-                loop
-                src="/assets/videos/banner.mp4"
-              />
-            </div>
             <Image
-              className="absolute top-20 md:left-4 lg:left-20"
-              width={200}
-              height={200}
-              src="/assets/marseille.png"
+              className="absolute top-[30vh] right-[30vw] "
+              width={150}
+              height={150}
+              src="/assets/custom_jean.png"
               alt=""
             />
             <Image
-              className="absolute top-12 md:right-20 lg:left-[420px]"
-              width={100}
-              height={100}
+              className="absolute top-[5vh] left-[5vw]"
+              width={200}
+              height={200}
+              src="/assets/nike_shoes.png"
+              alt=""
+            />
+            <Image
+              className="absolute -top-[5vh] left-[25vw]"
+              width={120}
+              height={120}
               src="/assets/brocante.png"
               alt=""
             />
             <Image
-              className="absolute top-72 left-20 lg:left-72"
+              className="absolute top-[10vh] left-[23vw]"
               width={200}
               height={200}
               src="/assets/erwan.jpg"
               alt=""
             />
             <Image
-              className="absolute top-20 lg:right-[400px]"
+              className="absolute top-[5vh] right-[30vw]"
               width={150}
               height={150}
               src="/assets/pants_love.jpg"
               alt=""
             />
             <Image
-              className="absolute top-46 right-[200px]"
-              width={150}
-              height={150}
+              className="absolute top-[10vh] right-[10vw]"
+              width={170}
+              height={170}
               src="/assets/remy.jpg"
               alt=""
             />
           </>
         )}
-        {width > 1024 && (
-          <h1 className="absolute top-0 text-[7vw] text-white mix-blend-difference uppercase">
-            sois fier de tes sapes
-          </h1>
+        {width < 1025 && width > 498 && (
+          <>
+            <Image
+              className="absolute top-[37vh] right-[5vw] -z-10"
+              width={100}
+              height={100}
+              src="/assets/custom_jean.png"
+              alt=""
+            />
+            <Image
+              className="absolute top-[5vh] left-[5vw]"
+              width={100}
+              height={100}
+              src="/assets/nike_shoes.png"
+              alt=""
+            />
+            <Image
+              className="absolute left-[15vw]"
+              width={120}
+              height={120}
+              src="/assets/brocante.png"
+              alt=""
+            />
+            <Image
+              className="absolute top-[15vh] left-[5vw] -z-10"
+              width={200}
+              height={200}
+              src="/assets/erwan.jpg"
+              alt=""
+            />
+            <Image
+              className="absolute top-[0vh] right-[5vw]"
+              width={150}
+              height={150}
+              src="/assets/pants_love.jpg"
+              alt=""
+            />
+            <Image
+              className="absolute top-[15vh] right-[10vw]"
+              width={170}
+              height={170}
+              src="/assets/remy.jpg"
+              alt=""
+            />
+          </>
         )}
+        {width < 498 && (
+          <>
+            <Image
+              className="absolute top-[25vh] right-[5vw]"
+              width={50}
+              height={50}
+              src="/assets/custom_jean.png"
+              alt=""
+            />
+            <Image
+              className="absolute top-[5vh] left-[5vw]"
+              width={50}
+              height={50}
+              src="/assets/nike_shoes.png"
+              alt=""
+            />
+            <Image
+              className="absolute -top-[5vh] left-[15vw]"
+              width={70}
+              height={70}
+              src="/assets/brocante.png"
+              alt=""
+            />
+            <Image
+              className="absolute top-[20vh] left-[5vw]"
+              width={70}
+              height={70}
+              src="/assets/erwan.jpg"
+              alt=""
+            />
+            <Image
+              className="absolute top-[0vh] right-[5vw]"
+              width={80}
+              height={80}
+              src="/assets/pants_love.jpg"
+              alt=""
+            />
+            <Image
+              className="absolute top-[15vh] right-[10vw]"
+              width={70}
+              height={70}
+              src="/assets/remy.jpg"
+              alt=""
+            />
+          </>
+        )}
+      </div>
+      <div className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white  text-[7.5vw] xl:text-[8vw] uppercase mix-blend-difference">
+        sois fier de tes sapes
       </div>
 
       <div className="w-max lg:px-40 flex flex-col items-start gap-20 mt-40">
