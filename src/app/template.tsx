@@ -32,7 +32,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
       <div className="overflow-hidden">
         <div
           id="sentence"
-          className="min-h-screen w-screen flex flex-col bg-white z-10 fixed top-0 left-0"
+          className="min-h-screen w-screen flex flex-col justify-center bg-white z-10 fixed top-0 left-0"
           style={{ lineHeight: "1" }}
         >
           {width > 1024 &&
