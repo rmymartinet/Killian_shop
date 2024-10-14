@@ -175,11 +175,10 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white  text-[7.5vw] xl:text-[8vw] uppercase mix-blend-difference">
+      <div className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white text-[8.5vw] uppercase mix-blend-difference">
         sois fier de tes sapes
       </div>
-
-      <div className="w-max lg:px-40 flex flex-col items-start gap-20 mt-40">
+      <div className="w-full lg:px-40 flex flex-col items-start gap-20 mt-40">
         {/* <ScrollBanner /> */}
         <div className="flex flex-col gap-1">
           <h1 className="text-xl uppercase font-medium">
@@ -190,7 +189,7 @@ export default function Home() {
             <IoIosArrowRoundForward />
           </div>
         </div>
-        <div className="flex md:justify-center gap-4 w-full overflow-x-auto">
+        <div className="flex md:justify-center gap-4 w-full h-full overflow-x-auto">
           {data.map((item: Data) => (
             <ProductCard
               key={item.id}
@@ -202,6 +201,7 @@ export default function Home() {
           ))}
         </div>
       </div>
+
       <div className="flex lg:px-40 flex-col items-start gap-20 mt-40">
         <div className="flex flex-col gap-1">
           <h1 className="text-xl uppercase font-medium">
