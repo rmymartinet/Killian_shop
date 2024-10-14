@@ -71,7 +71,7 @@ const LoadingPage = ({
         <h1
           key={index}
           ref={ref}
-          className="text-black text-[8vw] flex flex-col justify-center uppercase font-medium opacity-0"
+          className="text-black text-[8.5vw] flex flex-col justify-center uppercase font-medium opacity-0"
           style={{ lineHeight: "1" }}
         >
           sois fier de tes sapes
