@@ -51,17 +51,23 @@ const LoadingPage = ({
 
   useGSAP(() => {
     h1Refs.forEach((ref, index) => {
-      gsap.to(ref.current, {
-        opacity: opacities[index] / 100, // Utiliser les opacités définies en divisant par 100
-        yPercent: 0,
-        duration: 0.5,
-        ease: "power3.inOut",
-        onComplete: () => {
-          if (index === h1Refs.length - 1) {
-            setIsAnimated(false);
-          }
-        },
-      });
+      gsap.fromTo(
+        ref.current,
+        { fontSize: "8vw" },
+
+        {
+          fontSize: width > 498 ? "8vw" : "8.5vw",
+          opacity: opacities[index] / 100,
+          yPercent: 0,
+          duration: 0.5,
+          ease: "power3.inOut",
+          onComplete: () => {
+            if (index === h1Refs.length - 1) {
+              setIsAnimated(false);
+            }
+          },
+        }
+      );
     });
   }, []);
 
@@ -71,7 +77,7 @@ const LoadingPage = ({
         <h1
           key={index}
           ref={ref}
-          className="text-black text-8xl md:text-[8vw] flex flex-col uppercase font-medium opacity-0"
+          className="text-black  md:text-[8vw] flex flex-col uppercase font-medium opacity-0"
           style={{ lineHeight: "1" }}
         >
           sois fier de tes sapes
