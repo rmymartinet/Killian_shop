@@ -41,13 +41,13 @@ export default function RootLayout({
           ) : (
             <>
               <div className="px-2">
-                {pathname !== "/success" &&
-                pathname !== "/cancel" &&
-                isMobile ? (
-                  <MobileNav />
-                ) : (
-                  <Nav />
-                )}
+                {pathname !== "/success" && pathname !== "/cancel" ? (
+                  isMobile ? (
+                    <MobileNav />
+                  ) : (
+                    <Nav />
+                  )
+                ) : null}
                 <CartProvider>
                   {children}
                   <CartSideBar />
@@ -56,7 +56,8 @@ export default function RootLayout({
               {pathname !== "/contact" &&
                 pathname !== "/checkout" &&
                 pathname !== "/success" &&
-                pathname !== "/cancel" && <Footer />}
+                pathname !== "/cancel" &&
+                pathname !== "/404" && <Footer />}
             </>
           )}
         </body>
