@@ -48,9 +48,9 @@ export default function MobileNav() {
           <div className="h-[2px] w-6 bg-black" />
           <div className="h-[2px] w-6 bg-black" />
         </div>
-        <div className="">
-          <FaShoppingCart size={18} />
-        </div>
+        <Link href="/checkout">
+          <FaShoppingCart onClick={() => handleClickCloseMenu()} size={20} />
+        </Link>
       </nav>
 
       <nav
