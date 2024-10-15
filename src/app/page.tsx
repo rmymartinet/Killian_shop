@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import EcologyContainer from "./_components/EcologyContainer";
 import ProductCard from "./_components/ProductCard";
 import { useFilteredData } from "./hooks/useFilteredData";
 import useWindow from "./hooks/useWindow";
@@ -203,21 +202,6 @@ export default function Home() {
             />
           ))}
         </div>
-      </div>
-
-      <div className="flex lg:px-40 flex-col items-start gap-20 mt-40">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-xl uppercase font-medium">
-            Une marque éco-responsable
-          </h1>
-          <div className="flex items-center gap-4">
-            <Link href="/marque" className="underline cursor-pointer">
-              La vision de la marque
-            </Link>
-            <IoIosArrowRoundForward />
-          </div>
-        </div>
-        <EcologyContainer />
       </div>
     </section>
   );
