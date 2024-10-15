@@ -7,7 +7,7 @@ const Contact = () => {
       <div className="flex flex-col items-center md:items-start md:flex-row justify-between gap-72 mt-20">
         <div className="flex flex-col self-start gap-4">
           <a href="https://www.instagram.com/sfdts.fr/" className="text-4xl">
-            @sfdts
+            @SFDTS.fr
           </a>
           <div className="flex gap-2">
             <a

@@ -10,7 +10,7 @@ const Footer = () => {
             href="https://www.instagram.com/sfdts.fr/"
             className=" text-2xl lg:text-5xl"
           >
-            @SFDTS
+            @SFDTS.fr
           </a>
         </div>
         {/* <div className="flex flex-col items-start gap-7">
