@@ -98,7 +98,6 @@ const CartSideBar = () => {
           </div>
         )}
       </div>
-
       <div className="bg-white w-full p-5 sticky bottom-0 z-10 border-t border-gray-200">
         <div className="flex justify-between mb-2">
           <p>VALEUR DE LA COMMANDE</p>
@@ -114,7 +113,7 @@ const CartSideBar = () => {
         </div>
         <Link href="/checkout">
           <button
-            onClick={() => setIsShoppingOpen(true)}
+            onClick={() => setIsShoppingOpen(false)}
             className="w-full py-2 text-sm uppercase border border-black bg-white hover:bg-black hover:text-white transition"
           >
             Panier

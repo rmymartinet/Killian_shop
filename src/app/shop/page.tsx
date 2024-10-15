@@ -36,6 +36,7 @@ export default function Shop() {
             imageUrls={item.imageUrls[currentImageIndex]}
             title={item.title}
             price={item.price}
+            quantity={item.quantity}
           />
         ))}
       </div>
