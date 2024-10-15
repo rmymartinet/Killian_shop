@@ -50,7 +50,7 @@ const PaymentSuccess = () => {
   }, [paymentVerified, router]);
 
   return (
-    <main className="-mt-20 grid h-max place-content-center">
+    <main className="-mt-20 grid h-screen place-content-center">
       <div className="flex flex-col items-center gap-8 text-center">
         {paymentVerified === null && (
           <div>

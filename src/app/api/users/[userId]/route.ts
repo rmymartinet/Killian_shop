@@ -7,10 +7,6 @@ export async function GET(
   { params }: { params: { userId: string } }
 ) {
   const { userId } = params;
-
-  console.log("Recherche de l'utilisateur avec l'ID:", userId);
-
-  // Nettoyer l'ID utilisateur
   const cleanedUserId = userId.trim();
 
   try {
@@ -24,13 +20,20 @@ export async function GET(
       console.log(
         "Utilisateur non trouvé, création d'un nouvel utilisateur..."
       );
+
       // Récupérer les détails supplémentaires de l'utilisateur via Clerk
       const currentUserDetails = await currentUser();
 
-      // Extraire les informations nécessaires
-      const email =
-        currentUserDetails?.emailAddresses[0]?.emailAddress ||
-        "inconnu@example.com";
+      // Extraire l'adresse e-mail
+      const email = currentUserDetails?.emailAddresses[0]?.emailAddress;
+
+      // Si aucune adresse e-mail n'est disponible, renvoyer une erreur
+      if (!email) {
+        return NextResponse.json(
+          { error: "Adresse e-mail manquante pour l'utilisateur" },
+          { status: 400 }
+        );
+      }
 
       // Créer un nouvel utilisateur dans la base de données
       user = await prisma.user.create({

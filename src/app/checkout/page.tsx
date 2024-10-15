@@ -12,6 +12,8 @@ export default function Checkout() {
   const { cart } = useCart();
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isGuest, setIsGuest] = useState<boolean>(false); // Nouveau state pour l'invité
+  const [showAuthOptions, setShowAuthOptions] = useState<boolean>(false); // Pour afficher les options d'auth
   const removeItemFromCart = useRemoveFromCart();
   const { openSignIn } = useClerk();
   const { userId } = useAuth();
@@ -30,27 +32,32 @@ export default function Checkout() {
       .reduce((acc, item) => acc + Number(item.price), 0);
 
     setTotalAmount(Number(total.toFixed(2))); // Sans ajouter deliveryCost ici
-    console.log(total);
   }, [cart]);
+
+  // Afficher les options de connexion ou de continuer en tant qu'invité
+  function handleAuthOptions() {
+    setShowAuthOptions(true);
+  }
 
   async function checkout() {
     setLoading(true);
 
-    if (!userId) {
-      openSignIn();
+    if (!userId && !isGuest) {
+      handleAuthOptions(); // Affiche les options de connexion ou d'invité
       setLoading(false);
       return;
     }
 
     try {
-      const userResponse = await fetch(`/api/users/${userId}`);
-      const userData = await userResponse.json();
+      if (!isGuest && userId) {
+        const userResponse = await fetch(`/api/users/${userId}`);
+        const userData = await userResponse.json();
 
-      // Vérifiez si l'utilisateur existe dans votre base de données
-      if (!userData || userData.message === "Utilisateur non trouvé") {
-        openSignIn();
-        setLoading(false);
-        return;
+        if (!userData || userData.message === "Utilisateur non trouvé") {
+          openSignIn();
+          setLoading(false);
+          return;
+        }
       }
 
       if (outOfStockProduct) {
@@ -66,7 +73,6 @@ export default function Checkout() {
 
       const products = cart.flat();
 
-      // Vérifiez si le prix est défini pour chaque produit
       for (const product of products) {
         if (product.price === undefined) {
           console.error(`Prix non défini pour : ${product.title}`);
@@ -74,14 +80,16 @@ export default function Checkout() {
         }
       }
 
-      // Ajouter les frais de livraison ici à la somme totale pour la requête
-
       const response = await fetch(`/api/checkout_sessions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ products, userId, deliveryCost }),
+        body: JSON.stringify({
+          products,
+          userId: isGuest ? null : userId,
+          deliveryCost,
+        }), // Si invité, pas d'userId
       });
 
       const data = await response.json();
@@ -141,7 +149,6 @@ export default function Checkout() {
         <div className="flex items-center justify-end px-2 gap-8 w-full border border-black bg-white sticky bottom-0">
           <div className="flex flex-col gap-4">
             <p>Frais de livraison: {deliveryCost},00 €</p>
-            {/* Ajouter les frais de livraison ici */}
             <span>Total: {totalAmount + deliveryCost},00 €</span>
           </div>
           <button
@@ -155,6 +162,33 @@ export default function Checkout() {
           </button>
         </div>
       </div>
+
+      {/* Modal pour les options de connexion/invité */}
+      {showAuthOptions && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-md">
+            <h3 className="mb-4 rounded-xl">
+              Se connecter ou continuer en tant qu&apos;invité
+            </h3>
+            <button
+              onClick={() => openSignIn()}
+              className="bg-black text-white rounded-xl px-4 py-2 mr-4"
+            >
+              Se connecter
+            </button>
+            <button
+              onClick={() => {
+                setIsGuest(true);
+                setShowAuthOptions(false);
+                checkout(); // Continuer en tant qu'invité
+              }}
+              className="bg-gray-500 text-white rounded-xl px-4 py-2"
+            >
+              Continuer en tant qu&apos;invité
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

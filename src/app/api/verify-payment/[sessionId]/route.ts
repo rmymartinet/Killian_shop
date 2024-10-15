@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { sendEmail } from "@/lib/sendemail"; // Assure-toi d'avoir créé cette fonction d'envoi d'email
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -22,22 +23,54 @@ export async function GET(request: Request, { params }: { params: Params }) {
     // Récupérer la session de paiement de Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+    // Récupérer l'adresse e-mail depuis la session Stripe
+    const customerEmail = session.customer_email;
+
+    if (!customerEmail) {
+      return NextResponse.json(
+        { error: "Customer email is required" },
+        { status: 400 }
+      );
+    }
+
+    // Vérifier si l'utilisateur existe déjà dans la base de données par son e-mail
+    let user = await prisma.user.findUnique({
+      where: { email: customerEmail },
+    });
+
+    // Si l'utilisateur n'existe pas, le créer
+    if (!user) {
+      console.log(
+        "Utilisateur non trouvé, création d'un nouvel utilisateur..."
+      );
+
+      // Créer un nouvel utilisateur avec l'e-mail de Stripe
+      user = await prisma.user.create({
+        data: {
+          email: customerEmail,
+          clerkId: "",
+        },
+      });
+
+      console.log("Nouvel utilisateur créé:", user);
+    } else {
+      console.log("Utilisateur existant:", user);
+    }
+
     // Vérifier si le paiement est réussi
     const paymentStatus = session.payment_status;
 
     if (paymentStatus === "paid") {
-      // Mettre à jour la base de données pour marquer la commande comme payée
+      const productIds = JSON.parse(session.metadata?.product_id ?? "[]");
+      const quantities = JSON.parse(session.metadata?.quantity ?? "[]");
 
-      const userId = session.metadata?.user_id; // Add null check using '?'
-      const productIds = JSON.parse(session.metadata?.product_id ?? "[]"); // Add null check using '?' and provide a default value
-      const quantities = JSON.parse(session.metadata?.quantity ?? "[]"); // Add null check using '?' and provide a default value
-
-      // Add null check for userId
-      if (userId !== undefined) {
-        // Appel de la fonction pour mettre à jour le stock et enregistrer l'achat
-        await updateStockAndRecordPurchase(userId, productIds, quantities);
-        console.log("Stock mis à jour et achat enregistré");
-      }
+      await updateStockAndRecordPurchase(
+        user.id, // Utiliser l'ID de l'utilisateur récupéré ou créé
+        productIds,
+        quantities,
+        customerEmail
+      );
+      console.log("Stock mis à jour et achat enregistré");
     }
 
     return NextResponse.json({ success: true, paymentStatus });
@@ -53,18 +86,19 @@ export async function GET(request: Request, { params }: { params: Params }) {
 async function updateStockAndRecordPurchase(
   userId: string,
   productIds: string[],
-  quantities: number[]
+  quantities: number[],
+  userEmail: string
 ) {
+  // Mise à jour du stock et enregistrement de l'achat
   for (let i = 0; i < productIds.length; i++) {
     const productId = productIds[i];
     const quantity = quantities[i];
 
-    // Vérifiez que quantity est un nombre valide
     if (typeof quantity !== "number" || quantity <= 0) {
       console.error(
         `Quantité invalide pour le produit ${productId}: ${quantity}`
       );
-      continue; // Ignorez cet itération si la quantité est invalide
+      continue;
     }
 
     // Mettre à jour le stock
@@ -72,7 +106,7 @@ async function updateStockAndRecordPurchase(
       where: { id: productId },
       data: {
         quantity: {
-          decrement: quantity, // Décrémentez le stock
+          decrement: quantity,
         },
       },
     });
@@ -82,27 +116,26 @@ async function updateStockAndRecordPurchase(
       where: { id: productId },
     });
 
-    try {
-      if (product) {
-        // Vérification de l'existence du prix
-        if (product.price === undefined) {
-          throw new Error("Le prix du produit n'est pas défini.");
-        }
+    if (product && product.price !== undefined) {
+      // Enregistrer l'achat dans l'historique
+      await prisma.purchase.create({
+        data: {
+          clerkId: userId,
+          originalId: productId,
+          quantity: quantity,
+          totalPrice: product.price * quantity,
+        },
+      });
 
-        // Enregistrer l'achat de l'utilisateur (historique)
-        await prisma.purchase.create({
-          data: {
-            clerkId: userId,
-            originalId: productId,
-            quantity: quantity,
-            totalPrice: product.price * quantity,
-          },
-        });
-      } else {
-        console.error(`Produit non trouvé pour l'ID: ${productId}`);
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'enregistrement de l'achat:", error);
+      const emailContent = `
+        <h1>Merci pour votre achat !</h1>
+        <p>Vous avez acheté ${quantity} exemplaire(s) de ${product.title}.</p>
+        <p>Total: ${product.price * quantity} €</p>
+      `;
+      await sendEmail(userEmail, "Confirmation d'achat", emailContent);
+      console.log("Email de confirmation envoyé à", userEmail);
+    } else {
+      console.error(`Produit non trouvé pour l'ID: ${productId}`);
     }
   }
 }
