@@ -72,7 +72,7 @@ const PorductDetails = ({
               }
             }}
             className={`cursor-pointer rounded-[8px] bg-black text-white py-2 grid place-content-center font-semibold w-full ${
-              isProductInCart || isEnoughtStock === false ? "opacity-40" : ""
+              isEnoughtStock === false ? "opacity-40" : ""
             }`}
           >
             <span>Ajouter au panier</span>
