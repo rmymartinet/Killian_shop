@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Footer = () => {
   return (
     <footer className="flex flex-wrap gap-20 lg:justify-between h-screen bg-black text-white p-10 md:p-20 mt-40 w-[100vdw]">
@@ -53,9 +55,15 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <span>Expédition & Retour</span>
-          <span>Tout droit réservé</span>
-          <span>CGV</span>
+          <Link href="expedition_retour" className="cursor-pointer">
+            Expédition & Retour
+          </Link>
+          <Link href="/tout_droit_reserve" className="cursor-pointer">
+            Tout droit réservé
+          </Link>
+          <Link href="conditions_general_de_vente" className="cursor-pointer">
+            CGV
+          </Link>
         </div>
       </div>
     </footer>

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Contact = () => {
   return (
     <div className="flex flex-col justify-between mt-40 md:p-10 lg:p-20">
@@ -24,9 +26,15 @@ const Contact = () => {
         </div>
         <div className="self-start md:self-end flex gap-40">
           <div className="flex flex-col gap-2">
-            <span className="cursor-pointer">Expédition & Retour</span>
-            <span className="cursor-pointer">Tout droit réservé</span>
-            <span className="cursor-pointer">CGV</span>
+            <Link href="expedition_retour" className="cursor-pointer">
+              Expédition & Retour
+            </Link>
+            <Link href="/tout_droit_reserve" className="cursor-pointer">
+              Tout droit réservé
+            </Link>
+            <Link href="conditions_general_de_vente" className="cursor-pointer">
+              CGV
+            </Link>
           </div>
         </div>
       </div>
