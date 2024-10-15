@@ -66,14 +66,12 @@ const LoadingPage = ({
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-[100dvw]">
       {h1Refs.map((ref, index) => (
         <h1
           key={index}
           ref={ref}
-          className={`text-black text-8xl flex flex-col ${
-            width < 498 ? "text-[8.7vw]" : "text-[8vw]"
-          } uppercase font-medium z-50 opacity-0`}
+          className="text-black text-8xl flex flex-col text-[8vw] uppercase font-medium z-50 opacity-0"
           style={{ lineHeight: "1" }}
         >
           sois fier de tes sapes
