@@ -24,4 +24,28 @@ model Pants {
   material     String
   imageUrls    String[] @map("imageUrls")
   imageDetails String[] @map("imageDetails")
+  quantity     Int
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchases Purchase[]
+}
+
+model Purchase {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId    String
+  originalId String   @db.ObjectId
+  quantity   Int
+  totalPrice Int
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [clerkId], references: [clerkId], onDelete: Cascade) // Relation vers User
 }

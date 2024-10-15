@@ -1,5 +1,6 @@
 "use client";
 
+import { ClerkProvider } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import "../app/globals.css";
@@ -32,23 +33,34 @@ export default function RootLayout({
   }, [width]);
 
   return (
-    <html lang="fr">
-      <body className={`antialiased`}>
-        {isAnimated ? (
-          <LoadingPage setIsAnimated={setIsAnimated} />
-        ) : (
-          <>
-            <div className="px-2">
-              {isMobile ? <MobileNav /> : <Nav />}
-              <CartProvider>
-                {children}
-                <CartSideBar />
-              </CartProvider>
-            </div>
-            {pathname !== "/contact" && pathname !== "/checkout" && <Footer />}
-          </>
-        )}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="fr">
+        <body className={`antialiased`}>
+          {isAnimated ? (
+            <LoadingPage setIsAnimated={setIsAnimated} />
+          ) : (
+            <>
+              <div className="px-2">
+                {pathname !== "/success" &&
+                pathname !== "/cancel" &&
+                isMobile ? (
+                  <MobileNav />
+                ) : (
+                  <Nav />
+                )}
+                <CartProvider>
+                  {children}
+                  <CartSideBar />
+                </CartProvider>
+              </div>
+              {pathname !== "/contact" &&
+                pathname !== "/checkout" &&
+                pathname !== "/success" &&
+                pathname !== "/cancel" && <Footer />}
+            </>
+          )}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
