@@ -94,7 +94,7 @@ const CartSideBar = () => {
           ))
         ) : (
           <div className="p-5 pt-10 h-full">
-            <p>Your cart is empty.</p>
+            <p>Votre panier est vide</p>
           </div>
         )}
       </div>

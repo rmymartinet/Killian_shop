@@ -134,7 +134,7 @@ export default function Checkout() {
             </>
           ) : (
             <div className="flex flex-1 items-center justify-center">
-              <p>Your cart is empty</p>
+              <p>Votre panier est vide</p>
             </div>
           )}
         </div>
