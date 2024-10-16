@@ -6,16 +6,20 @@ import { BiErrorCircle } from "react-icons/bi";
 
 const PaymentFailed = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [paymentFailed, setPaymentFailed] = useState<boolean>(false);
+  const [paymentStatus, setPaymentStatus] = useState<
+    "pending" | "success" | "failed"
+  >("pending");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  // Récupération du session_id dans l'URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
     setSessionId(sessionId);
   }, []);
 
+  // Vérification du paiement
   useEffect(() => {
     const verifyPayment = async () => {
       if (!sessionId) return;
@@ -24,17 +28,14 @@ const PaymentFailed = () => {
         const response = await fetch(`/api/verify-payment/${sessionId}`);
         const data = await response.json();
 
-        console.log("Payment verification data:", data);
-
-        if (!data.success || data.paymentStatus !== "unpaid") {
-          setPaymentFailed(false);
-          setError(data.error || "Payment failed.");
+        if (data.success && data.paymentStatus === "paid") {
+          setPaymentStatus("success"); // Paiement réussi
         } else {
-          setPaymentFailed(true);
+          setPaymentStatus("failed"); // Paiement échoué ou non complété
+          setError(data.error || "Payment failed.");
         }
       } catch (error) {
-        console.error("Error during payment verification:", error);
-        setPaymentFailed(true);
+        setPaymentStatus("failed");
         setError("An error occurred during payment verification.");
       }
     };
@@ -42,30 +43,33 @@ const PaymentFailed = () => {
     verifyPayment();
   }, [sessionId]);
 
+  // Redirection après un échec de paiement
   useEffect(() => {
-    if (paymentFailed) {
+    if (paymentStatus === "failed") {
       const timeoutId = setTimeout(() => {
         router.push("/");
       }, 5000);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [paymentFailed, router]);
-
-  useEffect(() => {
-    console.log("Payment failed:", paymentFailed);
-  }, [paymentFailed]);
+  }, [paymentStatus, router]);
 
   return (
     <main className="-mt-20 grid h-screen place-content-center">
       <div className="flex flex-col items-center gap-8 text-center">
-        {paymentFailed === null && (
+        {paymentStatus === "pending" && (
           <div>
             <h1>Payment Verification in Progress...</h1>
             <p>We are checking the status of your payment. Please wait.</p>
           </div>
         )}
-        {paymentFailed === true && (
+        {paymentStatus === "success" && (
+          <div>
+            <h1>Payment Verified</h1>
+            <p>Your payment was successfully verified.</p>
+          </div>
+        )}
+        {paymentStatus === "failed" && (
           <>
             <div>
               <BiErrorCircle size={40} className="text-red-600" />
@@ -85,12 +89,6 @@ const PaymentFailed = () => {
               </p>
             </div>
           </>
-        )}
-        {paymentFailed === false && (
-          <div>
-            <h1>Payment Verified</h1>
-            <p>Your payment was successfully verified.</p>
-          </div>
         )}
         {error && <p className="text-red-600">{error}</p>}
       </div>

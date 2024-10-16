@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { sendEmail } from "@/lib/sendemail"; // Assure-toi d'avoir créé cette fonction d'envoi d'email
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -73,10 +72,18 @@ export async function GET(request: Request, { params }: { params: Params }) {
         customerEmail
       );
 
-      return NextResponse.json({ success: true, paymentStatus });
+      return NextResponse.json({
+        success: true,
+        paymentStatus,
+        message: "Payment verified successfully",
+      });
     }
+
+    return NextResponse.json({
+      success: false,
+      message: "Payment not completed",
+    });
   } catch (error) {
-    console.error("Error processing the request:", error);
     return NextResponse.json(
       { error: "Error processing the request" },
       { status: 500 }
@@ -125,14 +132,6 @@ async function updateStockAndRecordPurchase(
           email: userEmail,
         },
       });
-
-      // Envoyer un e-mail de confirmation
-      const emailContent = `
-        <h1>Merci pour votre achat !</h1>
-        <p>Vous avez acheté ${quantity} exemplaire(s) de ${product.title}.</p>
-        <p>Total: ${product.price * quantity} €</p>
-      `;
-      await sendEmail(userEmail, "Confirmation d'achat", emailContent);
     }
   }
 }
