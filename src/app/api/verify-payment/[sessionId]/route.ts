@@ -6,11 +6,11 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 interface Params {
-  sessionId: string; // Type pour sessionId
+  sessionId: string;
 }
 
 export async function GET(request: Request, { params }: { params: Params }) {
-  const { sessionId } = params; // Récupération de l'ID de session
+  const { sessionId } = params;
 
   if (!sessionId) {
     return NextResponse.json(
@@ -23,68 +23,69 @@ export async function GET(request: Request, { params }: { params: Params }) {
     // Récupérer la session de paiement de Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    // Récupérer l'adresse e-mail depuis la session Stripe
-    const customerEmail = session.customer_email;
-
-    if (!customerEmail) {
-      return NextResponse.json(
-        { error: "Customer email is required" },
-        { status: 400 }
-      );
-    }
-
-    // Vérifier si l'utilisateur existe déjà dans la base de données par son e-mail
-    let user = await prisma.user.findUnique({
-      where: { email: customerEmail },
-    });
-
-    // Si l'utilisateur n'existe pas, le créer
-    if (!user) {
-      console.log(
-        "Utilisateur non trouvé, création d'un nouvel utilisateur..."
-      );
-
-      // Créer un nouvel utilisateur avec l'e-mail de Stripe
-      user = await prisma.user.create({
-        data: {
-          email: customerEmail,
-          clerkId: "",
-        },
-      });
-
-      console.log("Nouvel utilisateur créé:", user);
-    } else {
-      console.log("Utilisateur existant:", user);
-    }
-
-    // Vérifier si le paiement est réussi
     const paymentStatus = session.payment_status;
 
     if (paymentStatus === "paid") {
+      // Récupérer les détails du client et de l'adresse
+      const customerEmail = session.customer_details?.email;
+      const customerAddress = session.customer_details?.address;
+
+      if (!customerEmail) {
+        return NextResponse.json(
+          { error: "Customer email is required" },
+          { status: 400 }
+        );
+      }
+
+      // Récupérer l'ID utilisateur de Clerk depuis les métadonnées de la session
+      const clerkUserId = session.metadata?.user_id || undefined;
+
+      // Vérifier si l'utilisateur existe déjà dans la base de données par son e-mail
+      let user = await prisma.user.findUnique({
+        where: { email: customerEmail },
+      });
+
+      // Si l'utilisateur n'existe pas, le créer
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            clerkId: clerkUserId,
+            email: customerEmail,
+            addressLine1: customerAddress?.line1,
+            addressLine2: customerAddress?.line2,
+            addressCity: customerAddress?.city,
+            addressState: customerAddress?.state,
+            addressPostalCode: customerAddress?.postal_code,
+            addressCountry: customerAddress?.country,
+          },
+        });
+      }
+
+      // Récupérer les informations sur les produits achetés
       const productIds = JSON.parse(session.metadata?.product_id ?? "[]");
       const quantities = JSON.parse(session.metadata?.quantity ?? "[]");
 
+      // Mise à jour du stock et enregistrement de l'achat
       await updateStockAndRecordPurchase(
-        user.id, // Utiliser l'ID de l'utilisateur récupéré ou créé
+        clerkUserId,
         productIds,
         quantities,
         customerEmail
       );
-      console.log("Stock mis à jour et achat enregistré");
-    }
 
-    return NextResponse.json({ success: true, paymentStatus });
+      return NextResponse.json({ success: true, paymentStatus });
+    }
   } catch (error) {
-    console.error("Error retrieving session:", error);
+    console.error("Error processing the request:", error);
     return NextResponse.json(
-      { error: "Error retrieving session" },
+      { error: "Error processing the request" },
       { status: 500 }
     );
   }
 }
 
 async function updateStockAndRecordPurchase(
-  userId: string,
+  userId: string | undefined,
   productIds: string[],
   quantities: number[],
   userEmail: string
@@ -95,10 +96,7 @@ async function updateStockAndRecordPurchase(
     const quantity = quantities[i];
 
     if (typeof quantity !== "number" || quantity <= 0) {
-      console.error(
-        `Quantité invalide pour le produit ${productId}: ${quantity}`
-      );
-      continue;
+      continue; // Ignore les quantités invalides
     }
 
     // Mettre à jour le stock
@@ -120,22 +118,21 @@ async function updateStockAndRecordPurchase(
       // Enregistrer l'achat dans l'historique
       await prisma.purchase.create({
         data: {
-          clerkId: userId,
+          clerkId: userId || "guest",
           originalId: productId,
           quantity: quantity,
           totalPrice: product.price * quantity,
+          email: userEmail,
         },
       });
 
+      // Envoyer un e-mail de confirmation
       const emailContent = `
         <h1>Merci pour votre achat !</h1>
         <p>Vous avez acheté ${quantity} exemplaire(s) de ${product.title}.</p>
         <p>Total: ${product.price * quantity} €</p>
       `;
       await sendEmail(userEmail, "Confirmation d'achat", emailContent);
-      console.log("Email de confirmation envoyé à", userEmail);
-    } else {
-      console.error(`Produit non trouvé pour l'ID: ${productId}`);
     }
   }
 }
