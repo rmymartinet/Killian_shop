@@ -6,7 +6,7 @@ import { BiErrorCircle } from "react-icons/bi";
 
 const PaymentFailed = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [paymentFailed, setPaymentFailed] = useState<boolean | null>(null);
+  const [paymentFailed, setPaymentFailed] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
