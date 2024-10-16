@@ -20,11 +20,17 @@ async function getActiveProducts() {
 export async function POST(request: NextRequest) {
   try {
     const { products, userId, deliveryCost } = await request.json();
+
+    // Log uniquement en mode développement
+    if (process.env.NODE_ENV === "development") {
+      console.log("USER ID:", userId);
+    }
+
     const checkoutProducts: Data[] = products;
     const activeProducts = await getActiveProducts();
 
     const checkoutStripeProducts: Stripe.Checkout.SessionCreateParams.LineItem[] =
-      []; // Type défini ici
+      [];
 
     for (const product of checkoutProducts) {
       const stripeProduct = activeProducts.find(
@@ -33,18 +39,14 @@ export async function POST(request: NextRequest) {
       );
 
       if (stripeProduct) {
-        // Vérifier si default_price est défini et est une chaîne
         if (typeof stripeProduct.default_price === "string") {
           checkoutStripeProducts.push({
-            price: stripeProduct.default_price, // On passe l'ID du prix
+            price: stripeProduct.default_price,
             quantity: product.quantity,
           });
         } else {
-          console.error(`Prix non défini pour : ${product.title}`);
           return NextResponse.json(
-            {
-              error: `Prix non défini pour ${product.title}`,
-            },
+            { error: `Prix non défini pour ${product.title}` },
             { status: 400 }
           );
         }
@@ -59,16 +61,12 @@ export async function POST(request: NextRequest) {
           images: [product.imageUrls[0]],
         });
 
-        // Assurez-vous que prod.default_price est une chaîne
         if (typeof prod.default_price === "string") {
           checkoutStripeProducts.push({
-            price: prod.default_price, // On passe l'ID du prix
+            price: prod.default_price,
             quantity: product.quantity,
           });
         } else {
-          console.error(
-            `Prix non défini pour le produit créé : ${product.title}`
-          );
           return NextResponse.json(
             {
               error: `Erreur lors de la création du produit : ${product.title}`,
@@ -79,12 +77,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Création de la session de paiement
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
     const productIds = products.map((product: Data) => product.id);
     const quantity = products.map((product: Data) => product.quantity);
-    // Convertir finalAmount en centimes
     const deliveryPrice = Math.round(deliveryCost * 100);
 
     checkoutStripeProducts.push({
@@ -104,6 +100,7 @@ export async function POST(request: NextRequest) {
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/cancel?session_id={CHECKOUT_SESSION_ID}`,
       billing_address_collection: "required",
+      customer_creation: "always",
       shipping_address_collection: {
         allowed_countries: ["FR"],
       },
@@ -114,13 +111,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log("Metadata sent:", {
-      product_ids: JSON.stringify(productIds),
-      user_id: userId,
-      quantity: JSON.stringify(quantity),
-    });
+    // Log des metadata uniquement en mode développement
+    if (process.env.NODE_ENV === "development") {
+      console.log("Metadata sent:", {
+        product_ids: JSON.stringify(productIds),
+        user_id: userId,
+        quantity: JSON.stringify(quantity),
+      });
+    }
 
-    // Retourner l'URL pour rediriger l'utilisateur vers Stripe Checkout
     return NextResponse.json({
       url: session.url,
     });

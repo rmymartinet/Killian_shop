@@ -12,7 +12,6 @@ const PorductDetails = ({
   addToCart,
 }: ProductDetailsProps) => {
   const { cart } = useCart();
-
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [isEnoughtStock, setIsEnoughtStock] = useState(false);
 
@@ -32,9 +31,7 @@ const PorductDetails = ({
       (filteredDataById[0].quantity ?? 0) > 0
     ) {
       setIsEnoughtStock(true);
-      console.log("Stock insuffisant");
     }
-    console.log(isEnoughtStock);
   }, [filteredDataById, isEnoughtStock]);
 
   return (

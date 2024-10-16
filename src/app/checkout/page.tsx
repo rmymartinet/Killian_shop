@@ -17,13 +17,12 @@ export default function Checkout() {
   const removeItemFromCart = useRemoveFromCart();
   const { openSignIn } = useClerk();
   const { userId } = useAuth();
-
-  const deliveryCost = 5;
-
   const { data } = useFilteredData();
   const allProducts = cart.flat().map((item) => item.id);
   const compare = data.filter((item) => allProducts.includes(item.id));
   const outOfStockProduct = compare.find((item) => item.quantity === 0);
+
+  const deliveryCost = 5;
 
   // Calculer le montant total basé sur le panier sans ajouter les frais de livraison ici
   useEffect(() => {
