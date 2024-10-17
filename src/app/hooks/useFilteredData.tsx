@@ -23,7 +23,7 @@ export function useFilteredData(filter?: string) {
         let filteredData = responseData;
         if (filter) {
           filteredData = responseData.filter(
-            (item) => item.category === filter
+            (item: { category: string }) => item.category === filter
           );
         }
         setData(filteredData);
