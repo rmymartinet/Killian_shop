@@ -25,6 +25,7 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
 function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;
 }
+export const dynamic = "force-dynamic";
 
 export const GET = async () => {
   try {
