@@ -9,7 +9,9 @@ export function useFilteredData(filter?: string) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get<Data[]>("/api/products");
+        const response = await axios.get<Data[]>(
+          `/api/products?timestamp=${Date.now()}`
+        );
         let filteredData = response.data;
         if (filter) {
           filteredData = response.data.filter(
