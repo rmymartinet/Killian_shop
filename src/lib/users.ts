@@ -1,40 +1,58 @@
-import prisma from "./prisma";
+import prisma from "@/lib/prisma";
+import { User } from "@/types/dataTypes";
 
-export const addUserToDatabase = async (
-  clerkId: string,
-  name: string,
-  email: string
-) => {
-  try {
-    const user = await prisma.user.upsert({
-      where: { clerkId },
-      update: {
-        name,
+export async function upsertUser({
+  email,
+  addressLine1,
+  addressLine2,
+  addressCity,
+  addressState,
+  addressPostalCode,
+  addressCountry,
+}: User) {
+  if (!email) throw new Error("Email requis");
+
+  let user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    // Créer un nouvel utilisateur
+    user = await prisma.user.create({
+      data: {
         email,
-      },
-      create: {
-        clerkId,
-        name,
-        email,
+        addressLine1,
+        addressLine2,
+        addressCity,
+        addressState,
+        addressPostalCode,
+        addressCountry,
       },
     });
-
-    return user;
-  } catch (err) {
-    console.error("Une erreure lors de la connexion", err);
-    throw new Error(`Une erreur lors de la connexion : ${err}`);
-  }
-};
-
-export const getUserById = async (clerkId: string) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { clerkId },
+  } else {
+    // Mettre à jour les informations de l'utilisateur
+    user = await prisma.user.update({
+      where: { email },
+      data: {
+        addressLine1,
+        addressLine2,
+        addressCity,
+        addressState,
+        addressPostalCode,
+        addressCountry,
+      },
     });
-
-    return user;
-  } catch (err) {
-    console.error("Une erreur lors de la connexion", err);
-    throw new Error(`Une erreur lors de la connexion : ${err}`);
   }
-};
+
+  return user;
+}
+
+export async function existingUser({ email }: { email: string }) {
+  if (!email) throw new Error("Email requis");
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+
+  return user;
+}
