@@ -19,16 +19,9 @@ async function getActiveProducts() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { products, userId, deliveryCost } = await request.json();
-
-    // Log uniquement en mode développement
-    if (process.env.NODE_ENV === "development") {
-      console.log("USER ID:", userId);
-    }
-
+    const { products, currentUserEmail, deliveryCost } = await request.json();
     const checkoutProducts: Data[] = products;
     const activeProducts = await getActiveProducts();
-
     const checkoutStripeProducts: Stripe.Checkout.SessionCreateParams.LineItem[] =
       [];
 
@@ -78,7 +71,6 @@ export async function POST(request: NextRequest) {
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
     const productIds = products.map((product: Data) => product.id);
     const quantity = products.map((product: Data) => product.quantity);
     const deliveryPrice = Math.round(deliveryCost * 100);
@@ -99,6 +91,7 @@ export async function POST(request: NextRequest) {
       mode: "payment",
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/cancel?session_id={CHECKOUT_SESSION_ID}`,
+      customer_email: currentUserEmail,
       billing_address_collection: "required",
       customer_creation: "always",
       shipping_address_collection: {
@@ -106,16 +99,15 @@ export async function POST(request: NextRequest) {
       },
       metadata: {
         product_id: JSON.stringify(productIds),
-        user_id: userId,
         quantity: JSON.stringify(quantity),
+        customer_email: currentUserEmail,
       },
     });
 
     // Log des metadata uniquement en mode développement
     if (process.env.NODE_ENV === "development") {
       console.log("Metadata sent:", {
-        product_ids: JSON.stringify(productIds),
-        user_id: userId,
+        product_id: JSON.stringify(productIds),
         quantity: JSON.stringify(quantity),
       });
     }
