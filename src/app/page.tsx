@@ -199,6 +199,7 @@ export default function Home() {
               imageUrls={item.imageUrls[currentImageIndex]}
               title={item.title}
               price={item.price}
+              quantity={item.quantity}
             />
           ))}
         </div>
