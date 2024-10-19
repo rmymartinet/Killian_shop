@@ -26,14 +26,14 @@ function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;
 }
 
+//Permet de forcer le chargement dynamique des pages pour afficher les changements de la base de données en temps réel
+export const dynamic = "force-dynamic";
+
 export const GET = async () => {
   try {
     const data = await prisma.pants.findMany();
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
-    console.error("Error fetching pants:", error);
-
-    // Si une erreur de connexion à la base de données se produit
     if (
       error instanceof Error &&
       error.message.includes("Database connection error")
