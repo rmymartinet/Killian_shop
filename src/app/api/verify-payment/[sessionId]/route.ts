@@ -1,4 +1,6 @@
 import prisma from "@/lib/prisma";
+import { upsertUser } from "@/lib/users";
+import { CustomerAddress } from "@/types/dataTypes";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -11,6 +13,8 @@ interface Params {
 export async function GET(request: Request, { params }: { params: Params }) {
   const { sessionId } = params;
 
+  console.log("Session ID:", sessionId);
+
   if (!sessionId) {
     return NextResponse.json(
       { error: "Session ID is required" },
@@ -19,71 +23,84 @@ export async function GET(request: Request, { params }: { params: Params }) {
   }
 
   try {
-    // Récupérer la session de paiement de Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-
     const paymentStatus = session.payment_status;
 
-    if (paymentStatus === "paid") {
-      // Récupérer les détails du client et de l'adresse
-      const customerEmail = session.customer_details?.email;
-      const customerAddress = session.customer_details?.address;
-
-      if (!customerEmail) {
-        return NextResponse.json(
-          { error: "Customer email is required" },
-          { status: 400 }
-        );
-      }
-
-      // Récupérer l'ID utilisateur de Clerk depuis les métadonnées de la session
-      const clerkUserId = session.metadata?.user_id || undefined;
-
-      // Vérifier si l'utilisateur existe déjà dans la base de données par son e-mail
-      let user = await prisma.user.findUnique({
-        where: { email: customerEmail },
-      });
-
-      // Si l'utilisateur n'existe pas, le créer
-      if (!user) {
-        user = await prisma.user.create({
-          data: {
-            clerkId: clerkUserId,
-            email: customerEmail,
-            addressLine1: customerAddress?.line1,
-            addressLine2: customerAddress?.line2,
-            addressCity: customerAddress?.city,
-            addressState: customerAddress?.state,
-            addressPostalCode: customerAddress?.postal_code,
-            addressCountry: customerAddress?.country,
-          },
-        });
-      }
-
-      // Récupérer les informations sur les produits achetés
-      const productIds = JSON.parse(session.metadata?.product_id ?? "[]");
-      const quantities = JSON.parse(session.metadata?.quantity ?? "[]");
-
-      // Mise à jour du stock et enregistrement de l'achat
-      await updateStockAndRecordPurchase(
-        clerkUserId,
-        productIds,
-        quantities,
-        customerEmail
-      );
-
+    if (paymentStatus !== "paid") {
       return NextResponse.json({
-        success: true,
-        paymentStatus,
-        message: "Payment verified successfully",
+        success: false,
+        message: "Payment not completed",
       });
     }
 
+    // Récupérer les détails du client et de l'adresse
+    const customerEmail = session.customer_details?.email;
+    const customerAddress: CustomerAddress =
+      session.customer_details?.address || {};
+
+    if (!customerEmail) {
+      return NextResponse.json(
+        { error: "Customer email is required" },
+        { status: 400 }
+      );
+    }
+
+    // Vérifier et parser les métadonnées des produits
+    const productIds = session.metadata?.product_id
+      ? JSON.parse(session.metadata.product_id)
+      : [];
+    const quantities = session.metadata?.quantity
+      ? JSON.parse(session.metadata.quantity)
+      : [];
+
+    console.log("Product IDs:", productIds);
+    console.log("Quantities:", quantities);
+
+    await updateStockAndRecordPurchase(
+      productIds,
+      quantities,
+      customerEmail,
+      customerAddress
+    );
+
+    const user = await prisma.user.findUnique({
+      where: { email: customerEmail },
+    });
+
+    // Si l'utilisateur existe déjà, ne le mettez pas à jour
+    if (user) {
+      const updatedUser = await upsertUser({
+        email: customerEmail,
+        addressLine1: customerAddress.line1 ?? "",
+        addressLine2: customerAddress.line2 ?? "",
+        addressCity: customerAddress.city ?? "",
+        addressState: customerAddress.state ?? "",
+        addressPostalCode: customerAddress.postal_code ?? "",
+        addressCountry: customerAddress.country ?? "",
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: "Utilisateur trouvé",
+        user: {
+          email: updatedUser.email,
+          addressLine1: updatedUser.addressLine1,
+          addressLine2: updatedUser.addressLine2,
+          addressCity: updatedUser.addressCity,
+          addressState: updatedUser.addressState,
+          addressPostalCode: updatedUser.addressPostalCode,
+          addressCountry: updatedUser.addressCountry,
+        },
+      });
+    }
+
+    // Si l'utilisateur n'est pas trouvé, retourner une réponse sans erreur
     return NextResponse.json({
-      success: false,
-      message: "Payment not completed",
+      success: true,
+      message: "Utilisateur non trouvé, mode invité",
     });
   } catch (error) {
+    console.error("Error processing the request:", error);
     return NextResponse.json(
       { error: "Error processing the request" },
       { status: 500 }
@@ -92,10 +109,10 @@ export async function GET(request: Request, { params }: { params: Params }) {
 }
 
 async function updateStockAndRecordPurchase(
-  userId: string | undefined,
   productIds: string[],
   quantities: number[],
-  userEmail: string
+  userEmail: string,
+  customerAddress: CustomerAddress
 ) {
   // Mise à jour du stock et enregistrement de l'achat
   for (let i = 0; i < productIds.length; i++) {
@@ -125,11 +142,16 @@ async function updateStockAndRecordPurchase(
       // Enregistrer l'achat dans l'historique
       await prisma.purchase.create({
         data: {
-          clerkId: userId || "guest",
           originalId: productId,
           quantity: quantity,
           totalPrice: product.price * quantity,
           email: userEmail,
+          addressLine1: customerAddress.line1 ?? "",
+          addressLine2: customerAddress.line2 ?? "",
+          addressCity: customerAddress.city ?? "",
+          addressState: customerAddress.state ?? "",
+          addressPostalCode: customerAddress.postal_code ?? "",
+          addressCountry: customerAddress.country ?? "",
         },
       });
     }
