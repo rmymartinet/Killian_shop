@@ -21,13 +21,6 @@ export default function Shop() {
 
   return (
     <section className="mt-20">
-      {/* <div className="flex gap-2 px-40">
-        <h1 className="p-2 bg-slate-200 rounded-xl">Filtrer</h1>
-        <div className="p-2 bg-slate-200 rounded-xl flex gap-2 items-center">
-          <p>Trier par</p>
-          <MdOutlineKeyboardArrowRight />
-        </div>
-      </div> */}
       <div className="mt-20 flex justify-center flex-wrap gap-4 w-full">
         {data.map((item: Data) => (
           <ProductCard
