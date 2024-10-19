@@ -1,5 +1,4 @@
 import { Data } from "@/types/dataTypes";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 export function useFilteredData(filter?: string) {
@@ -9,11 +8,16 @@ export function useFilteredData(filter?: string) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get<Data[]>("/api/products");
-        let filteredData = response.data;
+        const response = await fetch("/api/products");
+        if (!response.ok) {
+          throw new Error("Error fetching items");
+        }
+
+        const responseData = await response.json();
+        let filteredData = responseData;
         if (filter) {
-          filteredData = response.data.filter(
-            (item) => item.category === filter
+          filteredData = responseData.filter(
+            (item: Data) => item.category === filter
           );
         }
         setData(filteredData);
