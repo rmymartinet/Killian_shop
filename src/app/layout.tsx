@@ -57,6 +57,7 @@ export default function RootLayout({
                 pathname !== "/checkout" &&
                 pathname !== "/success" &&
                 pathname !== "/cancel" &&
+                pathname !== "/admin" &&
                 pathname !== "/404" && <Footer />}
             </>
           )}
