@@ -31,12 +31,6 @@ const CartSideBar = () => {
   const formattedTotalWithDelivery = totalWithDelivery.toFixed(2);
 
   useGSAP(() => {
-    gsap.set(shoppingContainerRef.current, {
-      x: "200%",
-    });
-  }, []);
-
-  useGSAP(() => {
     gsap.to(shoppingContainerRef.current, {
       x: isShoppingOpen ? "0%" : "200%",
       duration: 0.5,
@@ -57,7 +51,7 @@ const CartSideBar = () => {
   return (
     <div
       ref={shoppingContainerRef}
-      className="fixed top-0 right-0 w-screen lg:w-[400px] h-screen bg-white z-50 flex flex-col shadow-lg pointer-events-auto"
+      className="fixed top-0 right-0 w-screen lg:w-[400px] h-screen translate-x-[200%] bg-white z-50 flex flex-col shadow-lg pointer-events-auto"
     >
       <div className="p-5 cursor-pointer">
         <IoClose onClick={handleCloseClick} size={20} />
