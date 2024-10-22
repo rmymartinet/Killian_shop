@@ -1,6 +1,7 @@
 "use client";
 
 import { Data } from "@/types/dataTypes";
+import { TitleTransition } from "@/utils/Animation";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -175,9 +176,11 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white text-[7.7vw] xl:text-[7.9vw] uppercase mix-blend-difference">
-        sois fier de tes sapes
-      </div>
+      <TitleTransition yposition={300}>
+        <p className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white text-[7.7vw] xl:text-[7.8vw] uppercase mix-blend-difference">
+          sois fier de tes sapes
+        </p>
+      </TitleTransition>
       <div className="w-full lg:px-40 flex flex-col items-start gap-20 mt-40">
         {/* <ScrollBanner /> */}
         <div className="flex flex-col gap-1">
