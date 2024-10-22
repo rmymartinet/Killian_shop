@@ -1,3 +1,4 @@
+import { FILTERS } from "@/utils/constant";
 import { Dispatch, SetStateAction } from "react";
 
 export interface Data {
@@ -53,3 +54,5 @@ export interface CustomerAddress {
   postal_code?: string | null;
   country?: string | null;
 }
+
+export type FilterType = (typeof FILTERS)[keyof typeof FILTERS];
