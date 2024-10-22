@@ -175,7 +175,7 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white md:text-[7.5vw] xl:text-[8vw] uppercase mix-blend-difference">
+      <div className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white text-[7.7vw] xl:text-[7.9vw] uppercase mix-blend-difference">
         sois fier de tes sapes
       </div>
       <div className="w-full lg:px-40 flex flex-col items-start gap-20 mt-40">
