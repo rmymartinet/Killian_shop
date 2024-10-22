@@ -1,77 +1,66 @@
-import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import useWindow from "../hooks/useWindow";
 
-// Constantes pour les opacités selon le breakpoint
-const OPACITIES_DESKTOP = Array.from({ length: 9 }, (_, i) =>
-  Math.max(90 - i * 10, 5)
-);
-const OPACITIES_TABLET = Array.from({ length: 20 }, (_, i) =>
-  Math.max(95 - i * 6, 5)
-);
-const OPACITIES_MOBILE = Array.from({ length: 30 }, (_, i) =>
-  Math.max(95 - i * 3, 5)
-);
+const OPACITIES = {
+  desktop: Array.from({ length: 9 }, (_, i) => Math.max(90 - i * 10, 5)),
+  tablet: Array.from({ length: 20 }, (_, i) => Math.max(95 - i * 6, 5)),
+  mobile: Array.from({ length: 30 }, (_, i) => Math.max(95 - i * 3, 5)),
+};
 
 const LoadingPage = ({
   setIsAnimated,
 }: {
   setIsAnimated: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const h1Refs = useRef<(HTMLHeadingElement | null)[]>([]);
   const { width } = useWindow();
 
-  // Fonction pour déterminer le nombre de <h1> et les opacités à afficher en fonction de la largeur de la fenêtre
-  const getHeadingData = (width: number) => {
-    if (width > 1024) {
-      return {
-        numberOfHeadings: OPACITIES_DESKTOP.length,
-        opacities: OPACITIES_DESKTOP,
-      };
-    }
-    if (width > 498 && width <= 1024) {
-      return {
-        numberOfHeadings: OPACITIES_TABLET.length,
-        opacities: OPACITIES_TABLET,
-      };
-    }
-    return {
-      numberOfHeadings: OPACITIES_MOBILE.length,
-      opacities: OPACITIES_MOBILE,
-    };
-  };
+  // Détermination du nombre de <h1> et des opacités en fonction de la largeur de la fenêtre
+  const { numberOfHeadings, opacities } =
+    width > 1024
+      ? {
+          numberOfHeadings: OPACITIES.desktop.length,
+          opacities: OPACITIES.desktop,
+        }
+      : width > 498
+      ? {
+          numberOfHeadings: OPACITIES.tablet.length,
+          opacities: OPACITIES.tablet,
+        }
+      : {
+          numberOfHeadings: OPACITIES.mobile.length,
+          opacities: OPACITIES.mobile,
+        };
 
-  // Obtenir le nombre de <h1> et les opacités appropriées
-  const { numberOfHeadings, opacities } = getHeadingData(width);
+  // Références pour chaque <h1>
 
-  // Créer des références pour chaque <h1>
-  const h1Refs = Array.from({ length: numberOfHeadings }).map(() =>
-    React.createRef<HTMLHeadingElement>()
-  );
-
-  useGSAP(() => {
-    h1Refs.forEach((ref, index) => {
-      gsap.to(ref.current, {
+  useEffect(() => {
+    h1Refs.current.forEach((ref, index) => {
+      gsap.set(ref, { yPercent: index % 2 === 0 ? -100 : 100 });
+      gsap.to(ref, {
         opacity: opacities[index] / 100,
         yPercent: 0,
         duration: 0.5,
         ease: "power3.inOut",
         onComplete: () => {
-          if (index === h1Refs.length - 1) {
+          if (index === numberOfHeadings - 1) {
             setIsAnimated(false);
           }
         },
       });
     });
-  }, []);
+  }, [opacities, numberOfHeadings, setIsAnimated]);
 
   return (
     <div className="min-h-screen w-[100dvw]">
-      {h1Refs.map((ref, index) => (
+      {Array.from({ length: numberOfHeadings }).map((_, index) => (
         <h1
           key={index}
-          ref={ref}
-          className="text-black text-8xl flex flex-col text-[8vw] uppercase font-medium z-50 opacity-0"
+          ref={(el) => {
+            h1Refs.current[index] = el; // Affectation sans retour de valeur
+          }}
+          className="text-black text-8xl flex flex-col text-[8vw] uppercase font-medium z-50 opacity-1"
           style={{ lineHeight: "1" }}
         >
           sois fier de tes sapes
