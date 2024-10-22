@@ -49,6 +49,12 @@ const PaymentSuccess = () => {
     }
   }, [paymentVerified, router]);
 
+  useEffect(() => {
+    if (!sessionId) {
+      router.push("/");
+    }
+  }, [sessionId]);
+
   return (
     <main className="-mt-20 grid h-screen place-content-center">
       <div className="flex flex-col items-center gap-8 text-center">
