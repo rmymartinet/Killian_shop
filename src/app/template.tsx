@@ -47,7 +47,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
               </h1>
             ))}
           {width > 498 &&
-            width < 1024 &&
+            width <= 1024 &&
             OPACITIES_TABLET.map((opacity, index) => (
               <h1
                 key={index}
