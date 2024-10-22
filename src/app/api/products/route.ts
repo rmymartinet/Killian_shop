@@ -51,3 +51,102 @@ export const GET = async () => {
     });
   }
 };
+
+export const POST = async (req: Request) => {
+  try {
+    const {
+      category,
+      title,
+      price,
+      length,
+      imageUrls,
+      imageDetails,
+      waistline,
+      weight,
+      material,
+      quantity,
+    } = await req.json();
+    const data = await prisma.pants.create({
+      data: {
+        category,
+        title,
+        price,
+        length,
+        imageUrls,
+        imageDetails,
+        waistline,
+        weight,
+        material,
+        quantity,
+      },
+    });
+    return new NextResponse(JSON.stringify(data), { status: 201 });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Database connection error")
+    ) {
+      return new NextResponse(
+        JSON.stringify({ error: "Database connection error" }),
+        { status: 500 }
+      );
+    }
+
+    // Pour toute autre erreur, renvoie un message d'erreur générique
+    const message = getErrorMessage(error);
+    return new NextResponse(JSON.stringify({ error: message }), {
+      status: 500,
+    });
+  }
+};
+
+export const DELETE = async (req: Request) => {
+  try {
+    const { id } = await req.json();
+
+    const data = await prisma.pants.delete({
+      where: {
+        id: id,
+      },
+    });
+    return new NextResponse(JSON.stringify(data), { status: 200 });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Database connection error")
+    ) {
+      return new NextResponse(
+        JSON.stringify({ error: "Database connection error" }),
+        { status: 500 }
+      );
+    }
+
+    // Pour toute autre erreur, renvoie un message d'erreur générique
+    const message = getErrorMessage(error);
+    return new NextResponse(JSON.stringify({ error: message }), {
+      status: 500,
+    });
+  }
+};
+
+export const PUT = async (req: Request) => {
+  try {
+    const { id, title, price, quantity } = await req.json();
+
+    const updatedItem = await prisma.pants.update({
+      where: { id },
+      data: {
+        title,
+        price: parseFloat(price),
+        quantity: parseInt(quantity, 10),
+      },
+    });
+
+    return new NextResponse(JSON.stringify(updatedItem), { status: 200 });
+  } catch (error) {
+    return new NextResponse(
+      JSON.stringify({ error: "Erreur lors de la mise à jour de l'article" }),
+      { status: 500 }
+    );
+  }
+};
