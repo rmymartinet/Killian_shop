@@ -1,6 +1,7 @@
 "use client";
 
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import "../app/globals.css";
@@ -33,7 +34,11 @@ export default function RootLayout({
   }, [width]);
 
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: [dark],
+      }}
+    >
       <html lang="fr">
         <body className={`antialiased`}>
           {isAnimated ? (
@@ -49,8 +54,7 @@ export default function RootLayout({
                   )
                 ) : null}
                 <CartProvider>
-                  {children}
-                  <CartSideBar />
+                  {children} <CartSideBar />
                 </CartProvider>
               </div>
               {pathname !== "/contact" &&

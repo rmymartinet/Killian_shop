@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       url: session.url,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Erreur lors de la création de la session" },
       { status: 500 }
