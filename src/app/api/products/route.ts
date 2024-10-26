@@ -54,32 +54,20 @@ export const GET = async () => {
 
 export const POST = async (req: Request) => {
   try {
-    const {
-      category,
-      title,
-      price,
-      length,
-      imageUrls,
-      imageDetails,
-      waistline,
-      weight,
-      material,
-      quantity,
-    } = await req.json();
-    const data = await prisma.pants.create({
-      data: {
-        category,
-        title,
-        price,
-        length,
-        imageUrls,
-        imageDetails,
-        waistline,
-        weight,
-        material,
-        quantity,
-      },
-    });
+    const item = await req.json();
+
+    let data;
+
+    if (item.category === "pants") {
+      data = await prisma.pants.create({
+        data: item,
+      });
+    } else if (item.category === "shirts") {
+      data = await prisma.shirts.create({
+        data: item,
+      });
+    }
+
     return new NextResponse(JSON.stringify(data), { status: 201 });
   } catch (error) {
     if (
