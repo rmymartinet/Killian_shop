@@ -46,7 +46,9 @@ export default function RootLayout({
           ) : (
             <>
               <div className="px-2">
-                {pathname !== "/success" && pathname !== "/cancel" ? (
+                {pathname !== "/success" &&
+                pathname !== "/cancel" &&
+                pathname !== "/not-found" ? (
                   isMobile ? (
                     <MobileNav />
                   ) : (
