@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-export default {
+const nextConfig = {
   async headers() {
     return [
       {
@@ -17,3 +17,5 @@ export default {
     domains: ["res.cloudinary.com"],
   },
 };
+
+export default nextConfig;
