@@ -28,7 +28,6 @@ const AddComponent = () => {
       title,
       price: parseInt(price, 10),
       length: parseInt(length, 10),
-      waistline: category === "pants" ? waistline : undefined,
       weight: parseInt(weight, 10),
       material,
       imageUrls: imageUrls.filter((url) => url !== ""),
@@ -36,6 +35,9 @@ const AddComponent = () => {
       quantity: parseInt(quantity, 10),
     };
 
+    if (category === "pants") {
+      Object.assign(newItem, { waistline });
+    }
     try {
       const response = await fetch("/api/products", {
         method: "POST",
@@ -82,7 +84,7 @@ const AddComponent = () => {
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="pants">Pants</option>
-            <option value="tee-shirt">Tee-shirt</option>
+            <option value="shirts">Shirts</option>
           </select>
         </label>
         <label className="flex gap-2 items-center">
