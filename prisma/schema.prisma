@@ -27,6 +27,19 @@ model Pants {
   quantity     Int
 }
 
+model Shirts {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  category     String
+  title        String
+  price        Int
+  length       Int
+  weight       Int
+  material     String
+  imageUrls    String[] @map("imageUrls")
+  imageDetails String[] @map("imageDetails")
+  quantity     Int
+}
+
 model User {
   id                String     @id @default(auto()) @map("_id") @db.ObjectId
   email             String     @unique
