@@ -3,6 +3,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import { useEffect, useState } from "react";
 import "../app/globals.css";
 import CartSideBar from "./_components/CardSideBar";
@@ -40,6 +41,21 @@ export default function RootLayout({
       }}
     >
       <html lang="fr">
+        <head>
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-P0V7F6LH7Q"
+          ></Script>
+          <Script id="google-analytic">
+            {`
+ window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-P0V7F6LH7Q');
+    `}
+          </Script>
+        </head>
         <body className={`antialiased`}>
           {isAnimated ? (
             <LoadingPage setIsAnimated={setIsAnimated} />
