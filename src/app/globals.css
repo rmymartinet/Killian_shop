@@ -9,7 +9,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #fafafa;
+    --background: #ffffff;
     --foreground: #000000;
   }
 }
@@ -51,4 +51,26 @@ body {
 .hide-scrollbar {
   scrollbar-width: none; /* pour Firefox */
   -ms-overflow-style: none; /* pour Internet Explorer et Edge */
+}
+
+.overlay-glassmorphism {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.4px);
+  -webkit-backdrop-filter: blur(7.4px);
+}
+
+.circle-mask {
+  clip-path: circle(141% at 100% 100%);
+}
+
+.smoke-mask {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    33deg,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(255, 255, 255, 0.9472163865546218) 90%,
+    rgba(255, 255, 255, 1) 100%
+  );
 }
