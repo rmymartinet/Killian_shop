@@ -1,37 +1,60 @@
 "use client";
 
 import { Data } from "@/types/dataTypes";
-import { useEffect, useState } from "react";
-import ProductCard from "../_components/ProductCard";
+import { useState } from "react";
 import { useFilteredData } from "../hooks/useFilteredData";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Shop() {
   const { data } = useFilteredData("pants");
-  const IMAGE_CHANGE_INTERVAL = 2000;
-  const TOTAL_IMAGES = 4;
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % TOTAL_IMAGES);
-    }, IMAGE_CHANGE_INTERVAL);
-    return () => clearInterval(interval);
-  }, []);
+  const handleHover = (index: number) => {
+    setHoverIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverIndex(null);
+  };
 
   return (
-    <section className="mt-20">
-      <div className="mt-20 flex justify-center flex-wrap gap-4 w-full">
-        {data.map((item: Data) => (
-          <ProductCard
-            key={item.id}
-            id={item.id}
-            imageUrls={item.imageUrls[currentImageIndex]}
-            title={item.title}
-            price={item.price}
-            quantity={item.quantity}
-          />
-        ))}
+    <section className="mt-20 bg-white">
+      <div className="flex flex-col mt-40 gap-10 px-4 md:px-8">
+        <h1 className="text-lg">Tous [{data.length}]</h1>
+        <div className="flex flex-col lg:grid lg:grid-cols-3 grid-flow-row justify-center gap-4 w-full">
+          {data.map((item: Data, index) => (
+            <div key={item.id} className="flex flex-col gap-6">
+              <div
+                className="p-10 bg-[#fafafa]"
+                onMouseEnter={() => handleHover(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <Link
+                  href={`/products/${item.id}`}
+                  className="text-sm text-black border-b border-black cursor-pointer"
+                >
+                  <Image
+                    src={
+                      hoverIndex === index
+                        ? item.imageUrls[0]
+                        : item.imageDetails[0]
+                    }
+                    alt=""
+                    width={700}
+                    height={700}
+                    className="w-full h-full object-cover"
+                  />
+                </Link>
+              </div>
+              <div>
+                <p className="text-sm font-semibold">{item.title}</p>
+                <p className="text-sm">€{item.price}.00 EUR</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
