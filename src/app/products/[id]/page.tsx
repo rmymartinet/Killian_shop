@@ -26,7 +26,6 @@ interface ProductPageProps {
 const ProductPage = ({ params }: ProductPageProps) => {
   const { id } = params;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [currentImage, setCurrentImage] = useState(0);
   const [isNextActive, setIsNextActive] = useState(false);
   const [isPrevActive, setIsPrevActive] = useState(false);
   const TABLET_BREAKPOINT = 768;
@@ -44,7 +43,6 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const imageDetailsLength = filteredDataById.map(
     (item: Data) => item.imageDetails?.length
   );
-  const imageUrls = filteredDataById[0]?.imageUrls.length || 0;
   const [refs, setRefs] = useState([]);
   // Fonction pour aller à l'image suivante
   const handleNextImage = () => {
@@ -72,14 +70,6 @@ const ProductPage = ({ params }: ProductPageProps) => {
     );
   }, [imageDetailsLength.length]);
 
-  // Carrousel automatique qui change toutes les 2 secondes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % imageUrls);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [imageUrls]);
-
   return (
     <>
       {/* Contenu fixe au centre */}
@@ -97,7 +87,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
                       className="mb-12 mr-14 self-center cursor-pointer"
                       width={400}
                       height={400}
-                      src={item.imageUrls[currentImage]}
+                      src={item.imageUrls[0]}
                       alt=""
                       key={item.id}
                     />
@@ -173,14 +163,14 @@ const ProductPage = ({ params }: ProductPageProps) => {
         )}
       </div>
       <div className="mt-20 min-w-screen overflow-hidden flex md:justify-center items-center">
-        <div className="overflow-x-auto w-full h-full flex md:justify-center gap-4 lg:gap-40">
+        <div className="w-full h-full flex flex-col md:flex-row md:justify-center gap-4 lg:gap-40">
           {data
             .filter((item: Data) => item.id !== id)
             .map((item: Data) => (
               <ProductCard
                 key={item.id}
                 id={item.id}
-                imageUrls={item.imageUrls[currentImage]}
+                imageUrls={item.imageUrls[0]}
                 title={item.title}
                 price={item.price}
               />
