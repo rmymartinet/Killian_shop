@@ -39,7 +39,7 @@ export default function Shop() {
                     src={
                       hoverIndex === index
                         ? item.imageUrls[0]
-                        : item.imageDetails[0]
+                        : item.imageDetails?.[0] ?? ""
                     }
                     alt=""
                     width={700}
