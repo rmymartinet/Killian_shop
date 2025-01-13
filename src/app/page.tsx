@@ -1,205 +1,179 @@
 "use client";
 
 import { Data } from "@/types/dataTypes";
-import { TitleTransition } from "@/utils/Animation";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { IoIosArrowRoundForward } from "react-icons/io";
+import { useEffect, useRef } from "react";
 import ProductCard from "./_components/ProductCard";
 import { useFilteredData } from "./hooks/useFilteredData";
+import gsap from "gsap";
+import Link from "next/link";
 import useWindow from "./hooks/useWindow";
-
-const IMAGE_CHANGE_INTERVAL = 2000;
-const TOTAL_IMAGES = 4;
+import TransitionLink from "./_components/TransitionLinks";
+import Grid from "./_components/Grid";
+import Flex from "./_components/Flex";
 
 export default function Home() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % TOTAL_IMAGES);
-    }, IMAGE_CHANGE_INTERVAL);
-    return () => clearInterval(interval);
-  }, []);
-
+  const gridContainerRef = useRef<HTMLDivElement | null>(null);
   const { data } = useFilteredData("pants");
+  const shopButtonRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const collectionRef = useRef<HTMLDivElement>(null);
   const { width } = useWindow();
 
-  return (
-    <section>
-      <div className="relative flex flex-col items-center justify-center gap-10">
-        <Image
-          className="shadow-xl relative"
-          width={600}
-          height={600}
-          src="/assets/identity.png"
-          alt=""
-        />
+  useEffect(() => {
+    gsap.set(gridContainerRef.current, {
+      x: 0,
+      y: 0,
+      opacity: 0,
+    });
+  }, []);
 
-        {width > 1024 && (
-          <>
-            <Image
-              className="absolute top-[30vh] right-[30vw] "
-              width={150}
-              height={150}
-              src="/assets/custom_jean.png"
-              alt=""
-            />
-            <Image
-              className="absolute top-[5vh] left-[5vw]"
-              width={200}
-              height={200}
-              src="/assets/nike_shoes.png"
-              alt=""
-            />
-            <Image
-              className="absolute -top-[5vh] left-[25vw]"
-              width={120}
-              height={120}
-              src="/assets/brocante.png"
-              alt=""
-            />
-            <Image
-              className="absolute top-[10vh] left-[23vw]"
-              width={200}
-              height={200}
-              src="/assets/erwan.jpg"
-              alt=""
-            />
-            <Image
-              className="absolute top-[5vh] right-[30vw]"
-              width={150}
-              height={150}
-              src="/assets/pants_love.jpg"
-              alt=""
-            />
-            <Image
-              className="absolute top-[10vh] right-[10vw]"
-              width={170}
-              height={170}
-              src="/assets/remy.jpg"
-              alt=""
-            />
-          </>
-        )}
-        {width < 1025 && width > 498 && (
-          <>
-            <Image
-              className="absolute top-[37vh] right-[5vw] -z-10"
-              width={100}
-              height={100}
-              src="/assets/custom_jean.png"
-              alt=""
-            />
-            <Image
-              className="absolute top-[5vh] left-[5vw]"
-              width={100}
-              height={100}
-              src="/assets/nike_shoes.png"
-              alt=""
-            />
-            <Image
-              className="absolute left-[15vw]"
-              width={120}
-              height={120}
-              src="/assets/brocante.png"
-              alt=""
-            />
-            <Image
-              className="absolute top-[15vh] left-[5vw] -z-10"
-              width={200}
-              height={200}
-              src="/assets/erwan.jpg"
-              alt=""
-            />
-            <Image
-              className="absolute top-[0vh] right-[5vw]"
-              width={150}
-              height={150}
-              src="/assets/pants_love.jpg"
-              alt=""
-            />
-            <Image
-              className="absolute top-[15vh] right-[10vw]"
-              width={170}
-              height={170}
-              src="/assets/remy.jpg"
-              alt=""
-            />
-          </>
-        )}
-        {width < 498 && (
-          <>
-            <Image
-              className="absolute top-[25vh] right-[5vw]"
-              width={50}
-              height={50}
-              src="/assets/custom_jean.png"
-              alt=""
-            />
-            <Image
-              className="absolute top-[5vh] left-[5vw]"
-              width={50}
-              height={50}
-              src="/assets/nike_shoes.png"
-              alt=""
-            />
-            <Image
-              className="absolute -top-[5vh] left-[15vw]"
-              width={70}
-              height={70}
-              src="/assets/brocante.png"
-              alt=""
-            />
-            <Image
-              className="absolute top-[20vh] left-[5vw]"
-              width={70}
-              height={70}
-              src="/assets/erwan.jpg"
-              alt=""
-            />
-            <Image
-              className="absolute top-[0vh] right-[5vw]"
-              width={80}
-              height={80}
-              src="/assets/pants_love.jpg"
-              alt=""
-            />
-            <Image
-              className="absolute top-[15vh] right-[10vw]"
-              width={70}
-              height={70}
-              src="/assets/remy.jpg"
-              alt=""
-            />
-          </>
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+
+      const movementFactor = 0.05;
+
+      gsap.to(gridContainerRef.current, {
+        duration: 1,
+        x: clientX * movementFactor,
+        y: clientY * movementFactor,
+        ease: "power1.out",
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    gsap.set(shopButtonRef.current, {
+      opacity: 0,
+      y: 100,
+    });
+
+    gsap.set(titleRef.current, {
+      opacity: 0,
+      y: 100,
+    });
+    gsap
+      .timeline()
+      .to(
+        ".circle-mask",
+        {
+          delay: 0.5,
+          clipPath: "circle(0% at 100% 100%)",
+          duration: 1,
+          ease: "power3.inOut",
+        },
+        "-=0.5"
+      )
+      .to(
+        shopButtonRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.inOut",
+        },
+        "-=1"
+      )
+      .to(
+        titleRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.inOut",
+        },
+        "-=0.9"
+      )
+      .to(
+        gridContainerRef.current,
+        {
+          opacity: 1,
+          duration: 1,
+          ease: "power1.out",
+        },
+        "-=1"
+      );
+  }, []);
+
+  useEffect(() => {
+    if (gridContainerRef.current) {
+      console.log(gridContainerRef.current);
+      const handleScroll = () => {
+        const getBottomShopButton =
+          shopButtonRef.current?.getBoundingClientRect().bottom ?? 0;
+
+        const getTopCollectionRef =
+          collectionRef.current?.getBoundingClientRect().top ?? 0;
+
+        gsap.set(shopButtonRef.current, {
+          zIndex: getTopCollectionRef > getBottomShopButton ? 10 : -10,
+        });
+
+        gsap.to(gridContainerRef.current, {
+          opacity: getTopCollectionRef > getBottomShopButton ? 1 : 0,
+          duration: 1,
+          ease: "power2.out",
+        });
+      };
+
+      window.addEventListener("scroll", handleScroll);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
+
+  return (
+    <section className="overflow-hidden w-screen">
+      <div className="fixed -left-10 w-[120%] h-[120%] smoke-mask circle-mask"></div>
+      <div className="w-full flex flex-col relative h-screen items-center justify-center">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col items-center -z-30">
+          <h1
+            ref={titleRef}
+            className="text-[15vw] w-full grid place-content-center  -z-10"
+          >
+            © S.F.D.T.S
+          </h1>
+        </div>
+        <div
+          ref={shopButtonRef}
+          className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center"
+        >
+          <Link
+            href="/shop"
+            className="px-4 py-2 bg-white rounded-xl cursor-pointer border-2 border-black"
+          >
+            <h1 className="uppercase text-xl font-medium">
+              Collection Disponible
+            </h1>
+          </Link>
+        </div>
+        {width <= 498 ? (
+          <Flex data={data} gridRef={gridContainerRef} />
+        ) : (
+          <Grid data={data} gridRef={gridContainerRef} />
         )}
       </div>
-      <TitleTransition yposition={300}>
-        <p className="absolute top-[20vh] md:top-[40vh] lg:top-[30vh] text-white text-[7.7vw] xl:text-[7.8vw] uppercase mix-blend-difference">
-          sois fier de tes sapes
-        </p>
-      </TitleTransition>
-      <div className="w-full lg:px-40 flex flex-col items-start gap-20 mt-40">
-        {/* <ScrollBanner /> */}
+      <div ref={collectionRef} className="bg-white w-full z-50 p-4 md:p-8">
         <div className="flex flex-col gap-1">
-          <h1 className="text-xl uppercase font-medium">
-            Créations disponibles
-          </h1>
-          <div className="flex items-center gap-4">
-            <Link href="/shop" className="underline cursor-pointer">
-              Voir tous les produits
-            </Link>
-            <IoIosArrowRoundForward />
-          </div>
+          <TransitionLink href="/shop">
+            Collection disponible [{data.length}]
+          </TransitionLink>
         </div>
-        <div className="flex md:justify-center gap-4 w-full h-full overflow-x-auto">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 grid-flow-row justify-center flex-wrap gap-4 w-full px-8">
           {data.map((item: Data) => (
             <ProductCard
               key={item.id}
               id={item.id}
-              imageUrls={item.imageUrls[currentImageIndex]}
+              imageUrls={item.imageUrls[0]}
               title={item.title}
               price={item.price}
               quantity={item.quantity}
