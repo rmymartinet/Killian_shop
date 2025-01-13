@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Contact = () => {
   return (
-    <div className="flex flex-col justify-between mt-40 md:p-10 lg:p-20">
+    <div className="flex flex-col justify-between mt-40 md:p-10 lg:p-20 z-50">
       <h2 className="text-5xl md:text-6xl lg:text-8xl">Contactez-moi</h2>
       <div className="flex flex-col items-center md:items-start md:flex-row justify-between gap-72 mt-20">
         <div className="flex flex-col self-start gap-4">
