@@ -13,12 +13,10 @@ export default function Nav() {
   const { user, isLoaded } = useUser();
 
   return (
-    <nav className="flex justify-start items-center pt-10 p-5 mb-40">
+    <nav className="flex fixed p-5 inset-0 items-center h-max z-50">
       <div className="bg-black text-white flex gap-10 p-5 rounded-2xl text-md font-semibold shadow-xl">
-        <TransitionLink href="/" label="Accueil" />
-        <TransitionLink href="/shop" label="Shop" />
-        <TransitionLink href="/marque" label="Marque" />
-        <TransitionLink href="/contact" label="Contact" />
+        <Link href="/">Home</Link>
+        <Link href="/shop">Shop</Link>
         {isLoaded && user?.publicMetadata.role === "admin" && (
           <TransitionLink href="/admin" label="Admin" />
         )}

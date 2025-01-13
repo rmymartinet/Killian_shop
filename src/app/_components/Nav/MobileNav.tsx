@@ -40,7 +40,7 @@ export default function MobileNav() {
   }, [isCLicked]);
   return (
     <>
-      <nav className="w-full flex items-center justify-between py-10">
+      <nav className="w-full flex items-center justify-between py-10 px-2">
         <div
           onClick={() => handleClickMenu()}
           className="text-white flex flex-col gap-2 cursor-pointer"
@@ -73,16 +73,6 @@ export default function MobileNav() {
             setIsClicked={setIsClicked}
             href="/shop"
             label="Shop"
-          />
-          <TransitionLink
-            setIsClicked={setIsClicked}
-            href="/marque"
-            label="Marque"
-          />
-          <TransitionLink
-            setIsClicked={setIsClicked}
-            href="/contact"
-            label="Contact"
           />
         </div>
         <Link
