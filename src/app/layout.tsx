@@ -13,6 +13,8 @@ import MobileNav from "./_components/Nav/MobileNav";
 import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
 import useWindow from "./hooks/useWindow";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 
 export default function RootLayout({
   children,
@@ -21,9 +23,7 @@ export default function RootLayout({
 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isAnimated, setIsAnimated] = useState(true);
-
   const { width } = useWindow();
-
   const pathname = usePathname();
 
   useEffect(() => {
@@ -34,11 +34,19 @@ export default function RootLayout({
     }
   }, [width]);
 
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+    });
+
+    lenis.on("scroll", () => {});
+  }, []);
   return (
     <ClerkProvider
       appearance={{
         baseTheme: [dark],
       }}
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       <html lang="fr">
         <head>
@@ -57,32 +65,26 @@ export default function RootLayout({
           </Script>
         </head>
         <body className={`antialiased`}>
-          {isAnimated ? (
-            <LoadingPage setIsAnimated={setIsAnimated} />
-          ) : (
-            <>
-              <div className="px-2">
-                {pathname !== "/success" &&
-                pathname !== "/cancel" &&
-                pathname !== "/not-found" ? (
-                  isMobile ? (
-                    <MobileNav />
-                  ) : (
-                    <Nav />
-                  )
-                ) : null}
-                <CartProvider>
-                  {children} <CartSideBar />
-                </CartProvider>
-              </div>
-              {pathname !== "/contact" &&
-                pathname !== "/checkout" &&
-                pathname !== "/success" &&
-                pathname !== "/cancel" &&
-                pathname !== "/admin" &&
-                pathname !== "/404" && <Footer />}
-            </>
-          )}
+          <>
+            {pathname !== "/success" &&
+            pathname !== "/cancel" &&
+            pathname !== "/not-found" ? (
+              isMobile ? (
+                <MobileNav />
+              ) : (
+                <Nav />
+              )
+            ) : null}
+            <CartProvider>
+              {children} <CartSideBar />
+            </CartProvider>
+            {pathname !== "/contact" &&
+              pathname !== "/checkout" &&
+              pathname !== "/success" &&
+              pathname !== "/cancel" &&
+              pathname !== "/admin" &&
+              pathname !== "/404" && <Footer />}
+          </>
         </body>
       </html>
     </ClerkProvider>
