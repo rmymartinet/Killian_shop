@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import "../app/globals.css";
 import CartSideBar from "./_components/CardSideBar";
 import Footer from "./_components/Footer";
-import LoadingPage from "./_components/Loading";
 import MobileNav from "./_components/Nav/MobileNav";
 import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
@@ -22,7 +21,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [isMobile, setIsMobile] = useState(false);
-  const [isAnimated, setIsAnimated] = useState(true);
   const { width } = useWindow();
   const pathname = usePathname();
 
