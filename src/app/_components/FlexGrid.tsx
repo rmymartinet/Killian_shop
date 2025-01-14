@@ -1,7 +1,7 @@
 import { Data } from "@/types/dataTypes";
 import Image from "next/image";
 
-const Flex = ({
+const FlexGrid = ({
   data,
   gridRef,
 }: {
@@ -198,4 +198,4 @@ const Flex = ({
   );
 };
 
-export default Flex;
+export default FlexGrid;
