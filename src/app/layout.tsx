@@ -12,6 +12,7 @@ import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
 import useWindow from "./hooks/useWindow";
 import Lenis from "lenis";
+import { motion, AnimatePresence, easeIn } from "framer-motion";
 import "lenis/dist/lenis.css";
 
 export default function RootLayout({
@@ -38,6 +39,42 @@ export default function RootLayout({
 
     lenis.on("scroll", () => {});
   }, []);
+
+  useEffect(() => {
+    // Faire défiler vers le haut à chaque changement de page
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  const anim = (variants: any) => {
+    return {
+      initial: "initial",
+      animate: "enter",
+      exit: "exit",
+      variants,
+    };
+  };
+
+  const opacity = {
+    initial: {
+      opacity: 0,
+    },
+
+    enter: {
+      opacity: 1,
+
+      transition: {
+        duration: 0.5,
+        delay: 0.5,
+        easeIn,
+      },
+    },
+
+    exit: {
+      opacity: 0,
+      easeIn,
+    },
+  };
+
   return (
     <ClerkProvider>
       <html lang="fr">
@@ -58,24 +95,28 @@ export default function RootLayout({
         </head>
         <body className={`antialiased`}>
           <>
-            {pathname !== "/success" &&
-            pathname !== "/cancel" &&
-            pathname !== "/not-found" ? (
-              isMobile ? (
-                <MobileNav />
-              ) : (
-                <Nav />
-              )
-            ) : null}
-            <CartProvider>
-              {children} <CartSideBar />
-            </CartProvider>
-            {pathname !== "/contact" &&
-              pathname !== "/checkout" &&
-              pathname !== "/success" &&
+            <AnimatePresence mode="wait">
+              {pathname !== "/success" &&
               pathname !== "/cancel" &&
-              pathname !== "/admin" &&
-              pathname !== "/404" && <Footer />}
+              pathname !== "/not-found" ? (
+                isMobile ? (
+                  <MobileNav />
+                ) : (
+                  <Nav />
+                )
+              ) : null}
+              <CartProvider>
+                <motion.div key={pathname} {...anim(opacity)}>
+                  {children} <CartSideBar />
+                </motion.div>
+              </CartProvider>
+              {pathname !== "/contact" &&
+                pathname !== "/checkout" &&
+                pathname !== "/success" &&
+                pathname !== "/cancel" &&
+                pathname !== "/admin" &&
+                pathname !== "/404" && <Footer />}
+            </AnimatePresence>
           </>
         </body>
       </html>

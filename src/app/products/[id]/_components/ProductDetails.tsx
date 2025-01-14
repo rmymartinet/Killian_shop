@@ -26,6 +26,10 @@ const PorductDetails = ({
   }, [filteredDataById, cart]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (
       filteredDataById.length > 0 &&
       (filteredDataById[0].quantity ?? 0) > 0
