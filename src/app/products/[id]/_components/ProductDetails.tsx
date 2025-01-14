@@ -57,7 +57,6 @@ const PorductDetails = ({
             onClick={() => {
               setIsShoppingOpen(true);
               if (!isProductInCart) {
-                // On ajoute le produit au panier seulement s'il n'y est pas déjà
                 addToCart({ ...filteredDataById[0] });
               } else {
                 Swal.fire({
