@@ -1,13 +1,13 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import { useCart } from "../context/CartContext";
 import { useRemoveFromCart } from "../hooks/useRemoveFromCart";
+import { openAnimation } from "@/utils/cartSideBar/OpenAnimation";
 
 const CartSideBar = () => {
   const { cart, isShoppingOpen, setIsShoppingOpen } = useCart();
@@ -30,23 +30,13 @@ const CartSideBar = () => {
   const formattedTotalWithoutDelivery = totalWithoutDelivery.toFixed(2);
   const formattedTotalWithDelivery = totalWithDelivery.toFixed(2);
 
-  useGSAP(() => {
-    gsap.to(shoppingContainerRef.current, {
-      x: isShoppingOpen ? "0%" : "200%",
-      duration: 0.5,
-      ease: "power3.out",
-    });
-
-    if (isShoppingOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [isShoppingOpen]);
-
   const handleCloseClick = () => {
     setIsShoppingOpen(false);
   };
+
+  useGSAP(() => {
+    openAnimation(shoppingContainerRef, isShoppingOpen);
+  }, [isShoppingOpen]);
 
   return (
     <div
