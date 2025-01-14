@@ -26,7 +26,7 @@ const Grid = ({
             src={data[2]?.imageDetails ? data[2].imageDetails[1] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
@@ -45,7 +45,7 @@ const Grid = ({
             src={data[0]?.imageDetails ? data[0].imageDetails[0] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
@@ -64,7 +64,7 @@ const Grid = ({
             src={data[0]?.imageDetails ? data[0].imageDetails[3] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
@@ -83,7 +83,7 @@ const Grid = ({
             src={data[1]?.imageDetails ? data[1].imageDetails[1] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
@@ -102,7 +102,7 @@ const Grid = ({
             src={data[1]?.imageDetails ? data[1].imageDetails[2] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
@@ -121,7 +121,7 @@ const Grid = ({
             src={data[2]?.imageDetails ? data[2].imageDetails[2] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
@@ -140,7 +140,7 @@ const Grid = ({
             src={data[2]?.imageDetails ? data[2].imageDetails[0] : ""}
             width={300}
             height={300}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-3/4"
           />
           <div>
             <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">

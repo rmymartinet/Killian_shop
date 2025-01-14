@@ -1,23 +1,25 @@
 "use client";
 
 import { Data } from "@/types/dataTypes";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProductCard from "./_components/ProductCard";
 import { useFilteredData } from "./hooks/useFilteredData";
 import gsap from "gsap";
 import Link from "next/link";
 import useWindow from "./hooks/useWindow";
-import TransitionLink from "./_components/TransitionLinks";
 import Grid from "./_components/Grid";
 import Flex from "./_components/Flex";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function Home() {
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
   const { data } = useFilteredData("pants");
-  const shopButtonRef = useRef<HTMLDivElement>(null);
+  const shopButtonRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const collectionRef = useRef<HTMLDivElement>(null);
   const { width } = useWindow();
+  const [isHovered, setIsHovered] = useState(false);
+  const arrowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.set(gridContainerRef.current, {
@@ -131,6 +133,23 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    gsap.timeline().to(arrowRef.current, {
+      x: isHovered ? 10 : 0,
+      duration: 0.5,
+      ease: "power1.out",
+    });
+  }, [isHovered]);
+
+  const handleOnMouseEnter = () => {
+    setIsHovered(true);
+    console.log(isHovered);
+  };
+
+  const handleOnMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return (
     <section className="overflow-hidden w-screen">
       <div className="fixed -left-10 w-[120%] h-[120%] smoke-mask circle-mask"></div>
@@ -145,15 +164,20 @@ export default function Home() {
         </div>
         <div
           ref={shopButtonRef}
+          onMouseEnter={handleOnMouseEnter}
+          onMouseLeave={handleOnMouseLeave}
           className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center"
         >
           <Link
             href="/shop"
-            className="px-4 py-2 bg-white rounded-xl cursor-pointer border-2 border-black"
+            className="px-4 py-2 bg-white flex items-center gap-4 rounded-xl cursor-pointer border-2 border-black"
           >
             <h1 className="uppercase text-xl font-medium">
               Collection Disponible
             </h1>
+            <div ref={arrowRef}>
+              <IoIosArrowRoundForward className="text-3xl" />
+            </div>
           </Link>
         </div>
         {width <= 498 ? (
@@ -164,9 +188,7 @@ export default function Home() {
       </div>
       <div ref={collectionRef} className="bg-white w-full z-50 p-4 md:p-8">
         <div className="flex flex-col gap-1">
-          <TransitionLink href="/shop">
-            Collection disponible [{data.length}]
-          </TransitionLink>
+          <Link href="/shop">Collection disponible [{data.length}]</Link>
         </div>
         <div className="flex flex-col lg:grid lg:grid-cols-3 grid-flow-row justify-center flex-wrap gap-4 w-full px-8">
           {data.map((item: Data) => (
