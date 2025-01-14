@@ -1,6 +1,6 @@
 import { Data } from "@/types/dataTypes";
 import Image from "next/image";
-import Link from "next/link";
+import TransitionLink from "./TransitionLinks";
 
 const ProductCard = ({
   imageUrls,
@@ -18,8 +18,8 @@ const ProductCard = ({
         isOutOfStock ? "opacity-50 blur-[1px]" : ""
       }`}
     >
-      <Link href={`/products/${id}`}>
-        <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center">
+        <TransitionLink href={`/products/${id}`}>
           <div className="lg:w-[25vw]">
             <Image
               className="self-center pr-10 w-full h-full object-cover cursor-pointer"
@@ -29,14 +29,13 @@ const ProductCard = ({
               alt={title || "Produit"}
             />
           </div>
-          <Link
-            href={`/products/${id}`}
-            className="text-sm text-black border-b border-black cursor-pointer"
-          >
-            {title}
-          </Link>
-        </div>
-      </Link>
+        </TransitionLink>
+        <TransitionLink
+          label={title}
+          href={`/products/${id}`}
+          className="text-sm text-black border-b border-black cursor-pointer"
+        />
+      </div>
     </div>
   );
 };
