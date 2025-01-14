@@ -7,7 +7,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 
 export default function MobileNav() {
-  const [isCLicked, setIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   const menuRef = useRef(null);
 
   const handleClickMenu = () => {
@@ -18,12 +18,24 @@ export default function MobileNav() {
   };
 
   useEffect(() => {
-    gsap.set(menuRef.current, { x: "-100%" });
+    gsap.set(menuRef.current, { y: "100%" });
   }, []);
 
+  useEffect(() => {
+    if (isClicked) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isClicked]);
+
   useGSAP(() => {
-    setupMobileAnimation(isCLicked, menuRef);
-  }, [isCLicked]);
+    setupMobileAnimation(isClicked, menuRef);
+  }, [isClicked]);
 
   return (
     <>
@@ -43,17 +55,18 @@ export default function MobileNav() {
 
       <nav
         ref={menuRef}
-        className="flex justify-center items-center h-screen fixed top-0 left-0 bg-black text-white w-full z-50"
+        className="flex flex-col gap-6 items-center w-screen h-max fixed inset-0 p-6 bg-black text-white z-50"
         aria-hidden="true"
       >
-        <button
-          onClick={handleClickCloseMenu}
-          className="absolute top-10 right-10"
-          aria-label="Close menu"
-        >
-          <IoCloseOutline size={25} />
-        </button>
-        <div className="bg-black text-white grid grid-rows-4 place-items-start gap-10 rounded-2xl text-4xl font-semibold shadow-xl">
+        <div className="flex items-center justify-between w-full">
+          <button onClick={handleClickCloseMenu} aria-label="Close menu">
+            <IoCloseOutline size={25} />
+          </button>
+          <Link href="/checkout" onClick={handleClickCloseMenu}>
+            <FaShoppingCart size={20} aria-label="Checkout" />
+          </Link>
+        </div>
+        <div className="bg-black text-white gap-10 rounded-2xl text-3xl font-semibold shadow-xl flex">
           <Link onClick={handleClickCloseMenu} href="/">
             Home
           </Link>
@@ -61,13 +74,6 @@ export default function MobileNav() {
             Shop
           </Link>
         </div>
-        <Link
-          href="/checkout"
-          className="absolute top-40 flex w-full justify-between px-10"
-          onClick={handleClickCloseMenu}
-        >
-          <FaShoppingCart size={20} aria-label="Checkout" />
-        </Link>
       </nav>
     </>
   );
