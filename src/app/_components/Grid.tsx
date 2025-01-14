@@ -11,7 +11,7 @@ const Grid = ({
   return (
     <div
       ref={gridRef}
-      className="fixed -top-[10%]  -left-[20%] w-[120%] h-screen md:h-[120%] -z-20 grid grid-cols-8 grid-rows-6 border-dashed border border-gray-300"
+      className="fixed -top-[10%]  -left-[20%] w-[120%] h-screen md:h-[120%] -z-20 grid grid-cols-8 grid-rows-6 border-dashed border border-gray-200"
     >
       {Array.from({ length: 8 * 6 }).map((_, index) => (
         <div
