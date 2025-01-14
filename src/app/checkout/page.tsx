@@ -167,37 +167,44 @@ export default function Checkout() {
   }
 
   return (
-    <section className="fixed top-0 left-0 h-[100dvh] w-[100dvw] -z-10">
-      <div className="flex flex-col items-center justify-end w-full overflow-hidden h-full">
-        <div className="grid grid-flow-col md:flex border border-black w-full h-[60%] overflow-x-auto whitespace-nowrap">
+    <section>
+      <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-40 justify-center w-full overflow-hidden mt-[10vh] md:mt-[30vh] h-full px-4 md:px-20">
+        <div className="flex flex-col w-full gap-10 overflow-y-auto whitespace-nowrap">
           {cart.length > 0 ? (
             <>
               {cart.flat().map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col justify-center items-center w-max border-r border-black h-full"
+                  className="flex items-start gap-10 pb-4 border-b border-black h-[20vh] w-full"
                 >
-                  <Image
-                    width={300}
-                    height={300}
-                    objectFit="contain"
-                    src={item.imageUrls[0]}
-                    alt={item.title}
-                  />
-                  <div className="flex flex-col items-center justify-center gap-8 flex-1 w-full">
-                    <h3 className="text-md text-center font-normal">
-                      {item.title}
-                    </h3>
-                    <p className="text-base text-center font-normal">
-                      {item.price} €
-                    </p>
+                  <div className="bg-[#fafafa] h-full">
+                    <Image
+                      width={300}
+                      height={300}
+                      src={item.imageUrls[0]}
+                      alt={item.title}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
-                  <button
-                    onClick={() => removeItemFromCart(item.id)}
-                    className="text-red-500 mb-2 cursor-pointer text-sm"
-                  >
-                    Supprimer
-                  </button>
+                  <div className="flex flex-col justify-between h-full w-full">
+                    <div className="flex items-center justify-between w-full">
+                      <h3 className="text-md text-center font-normal">
+                        {item.title}
+                      </h3>
+                      <p className="text-base text-center font-normal">
+                        {item.price} €
+                      </p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p>Quantité : 1</p>
+                      <button
+                        onClick={() => removeItemFromCart(item.id)}
+                        className="underline mb-2 cursor-pointer text-sm"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </>
@@ -207,14 +214,21 @@ export default function Checkout() {
             </div>
           )}
         </div>
-        <div className="flex items-center justify-end px-2 gap-8 w-full border border-black bg-white sticky bottom-0">
+        <div className="flex flex-col px-2 gap-8 w-full bg-white sticky bottom-0">
           <div className="flex flex-col gap-4">
-            <p>Frais de livraison: {deliveryCost},00 €</p>
-            <span>Total: {totalAmount + deliveryCost},00 €</span>
+            <div className="flex items-center justify-between">
+              <p>Frais de livraison: </p>
+              <p>{deliveryCost},00 €</p>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <p>Total:</p>
+              <p>{totalAmount + deliveryCost},00 €</p>
+            </div>
           </div>
           <button
             onClick={checkout}
-            className={`cursor-pointer bg-black px-4 py-3 text-white ${
+            className={`cursor-pointer bg-black px-4 py-3 w-full text-white ${
               cart.length === 0 ? "cursor-not-allowed opacity-50" : ""
             }`}
             disabled={loading || cart.length === 0}
@@ -223,7 +237,6 @@ export default function Checkout() {
           </button>
         </div>
       </div>
-
       {/* Modal pour les options de connexion/invité */}
       {showAuthOptions && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
