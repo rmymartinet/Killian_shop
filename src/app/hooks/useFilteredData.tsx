@@ -14,6 +14,7 @@ export function useFilteredData(filter?: string) {
         }
 
         const responseData = await response.json();
+
         let filteredData = responseData;
         if (filter) {
           filteredData = responseData.filter(
