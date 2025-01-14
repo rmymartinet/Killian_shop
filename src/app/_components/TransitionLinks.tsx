@@ -1,43 +1,29 @@
 "use client";
 import { TransitionLinkProps } from "@/types/dataTypes";
-import { animatePageOut } from "@/utils/Animation";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const TransitionLink = ({
   href,
   label,
-  setIsClicked,
   children,
+  className,
 }: TransitionLinkProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
-    if (setIsClicked) {
-      setIsClicked(false);
-    }
-
-    if (isTransitioning) return;
-
-    if (pathname !== href) {
-      setIsTransitioning(true);
-      animatePageOut(href, router, () => {
-        setIsTransitioning(false);
-      });
-    }
+    setIsClicked(true);
   };
 
+  useEffect(() => {
+    isClicked && window.scrollTo(0, 0);
+  }, [isClicked]);
+
   return (
-    <button
-      className="text-white hover:text-gray-300 w-full"
-      onClick={handleClick}
-      disabled={isTransitioning}
-    >
+    <Link href={href} className={className} onClick={handleClick}>
       {label}
       {children}
-    </button>
+    </Link>
   );
 };
 

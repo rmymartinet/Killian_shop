@@ -34,6 +34,7 @@ export interface TransitionLinkProps {
   label?: string;
   children?: React.ReactNode;
   setIsClicked?: Dispatch<SetStateAction<boolean>>;
+  className?: string;
 }
 
 export interface User {
