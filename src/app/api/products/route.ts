@@ -31,8 +31,14 @@ export const dynamic = "force-dynamic";
 
 export const GET = async () => {
   try {
-    const data = await prisma.pants.findMany();
-    return new NextResponse(JSON.stringify(data), { status: 200 });
+    const pantsData = await prisma.pants.findMany();
+    const shirtsData = await prisma.shirts.findMany();
+
+    const combinedData = [...pantsData, ...shirtsData];
+
+    return new NextResponse(JSON.stringify(combinedData), {
+      status: 200,
+    });
   } catch (error) {
     if (
       error instanceof Error &&
