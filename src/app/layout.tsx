@@ -12,17 +12,18 @@ import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
 import useWindow from "./hooks/useWindow";
 import Lenis from "lenis";
-import { motion, AnimatePresence, easeIn } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import "lenis/dist/lenis.css";
+import { anim } from "@/utils/pageTransition/pageTransition";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
   const { width } = useWindow();
-  const pathname = usePathname();
 
   useEffect(() => {
     if (width < 768) {
@@ -41,30 +42,8 @@ export default function RootLayout({
   }, []);
 
   useEffect(() => {
-    // Faire défiler vers le haut à chaque changement de page
     window.scrollTo(0, 0);
   }, [pathname]);
-
-  const anim = () => {
-    return {
-      initial: {
-        opacity: 0,
-      },
-      animate: {
-        opacity: 1,
-
-        transition: {
-          duration: 0.5,
-          delay: 0.5,
-          easeIn,
-        },
-      },
-      exit: {
-        opacity: 0,
-        easeIn,
-      },
-    };
-  };
 
   return (
     <ClerkProvider>
