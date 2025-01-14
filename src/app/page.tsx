@@ -13,13 +13,16 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function Home() {
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
-  const { data } = useFilteredData("pants");
+  const { data } = useFilteredData();
   const shopButtonRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const collectionRef = useRef<HTMLDivElement>(null);
   const { width } = useWindow();
   const [isHovered, setIsHovered] = useState(false);
   const arrowRef = useRef<HTMLDivElement>(null);
+
+ 
+
 
   useEffect(() => {
     gsap.set(gridContainerRef.current, {
