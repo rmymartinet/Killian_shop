@@ -1,127 +1,52 @@
-import { Data } from "@/types/dataTypes";
-import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface AccordionProps {
-  data: Data[];
+  isOpen: boolean; // Indique si l'accordéon est ouvert
+  title: string;
+  description: string;
+  onClick: () => void; // Fonction appelée au clic
 }
 
-const Accordion = ({ data }: AccordionProps) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
-  useGSAP(() => {
-    contentRefs.current.forEach((content, index) => {
-      if (content) {
-        if (activeIndex === index) {
-          gsap.to(content, {
-            height: "auto",
-            duration: 0.5,
-            opacity: 1,
-            ease: "power2.Out",
-          });
-        } else {
-          gsap.to(content, {
-            height: 0,
-            duration: 0.5,
-            opacity: 0,
-            ease: "power2.Out",
-          });
-        }
+const Accordion = ({ isOpen, title, description, onClick }: AccordionProps) => {
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  // Animation de l'ouverture et de la fermeture
+  useEffect(() => {
+    if (contentRef.current) {
+      if (isOpen) {
+        gsap.to(contentRef.current, {
+          height: "auto",
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      } else {
+        gsap.to(contentRef.current, {
+          height: 0,
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        });
       }
-    });
-  }, [activeIndex]);
-
-  const toggleAccordion = (index: number) => {
-    setActiveIndex(activeIndex === index ? 0 : index);
-  };
-
-  const isStringOrNumber = data[0] && (data[0]?.waistline ?? "").length > 5;
+    }
+  }, [isOpen]);
 
   return (
-    <div className="flex flex-col mt-10">
-      {/* Section Longueur */}
-      <div className="border-t-[1px] border-b-[1px] border-black w-full">
-        <div
-          className="flex justify-between items-center py-2 px-2 cursor-pointer"
-          onClick={() => toggleAccordion(0)}
-        >
-          <h4>Longueur</h4>
-          <span>{activeIndex === 0 ? "-" : "+"}</span>
-        </div>
-        <div
-          ref={(el) => {
-            contentRefs.current[0] = el;
-          }}
-          style={{ height: 0, overflow: "hidden", opacity: 0 }}
-        >
-          <div className="py-2 px-2">
-            <p>Le pantalon mesure : {data[0]?.length} cm</p>
-          </div>
-        </div>
+    <div className="border-b-[1px] border-black w-full">
+      <div
+        className="flex justify-between items-center py-2 px-2 cursor-pointer"
+        onClick={onClick}
+      >
+        <h4>{title}</h4>
+        <span>{isOpen ? "-" : "+"}</span>
       </div>
-
-      {/* Section Tour de taille */}
-      <div className="border-b-[1px] border-black w-full">
-        <div
-          className="flex justify-between items-center py-2 px-2 cursor-pointer"
-          onClick={() => toggleAccordion(1)}
-        >
-          <h4>Tour de taille</h4>
-          <span>{activeIndex === 1 ? "-" : "+"}</span>
-        </div>
-        <div
-          ref={(el) => {
-            contentRefs.current[1] = el;
-          }}
-          style={{ height: 0, overflow: "hidden", opacity: 0 }}
-        >
-          <div className="py-2 px-2">
-            <p>
-              {data[0]?.waistline} {isStringOrNumber ? "" : "cm"}
-            </p>
-          </div>
-        </div>
-      </div>
-      {/* Section Poids */}
-      <div className="border-b-[1px] border-black w-full">
-        <div
-          className="flex justify-between items-center py-2 px-2 cursor-pointer"
-          onClick={() => toggleAccordion(2)}
-        >
-          <h4>Poids</h4>
-          <span>{activeIndex === 1 ? "-" : "+"}</span>
-        </div>
-        <div
-          ref={(el) => {
-            contentRefs.current[2] = el;
-          }}
-          style={{ height: 0, overflow: "hidden", opacity: 0 }}
-        >
-          <div className="py-2 px-2">
-            <p>Le pantalon à un poids de {data[0]?.weight} g</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Section Matériaux */}
-      <div className="border-b-[1px] border-black w-full">
-        <div
-          className="flex justify-between items-center py-2 px-2 cursor-pointer"
-          onClick={() => toggleAccordion(3)}
-        >
-          <h4>Matériaux</h4>
-          <span>{activeIndex === 2 ? "-" : "+"}</span>
-        </div>
-        <div
-          ref={(el) => {
-            contentRefs.current[3] = el;
-          }}
-          style={{ height: 0, overflow: "hidden", opacity: 0 }}
-        >
-          <div className="py-2 px-2">
-            <p>{data[0]?.material}</p>
-          </div>
+      <div
+        ref={contentRef}
+        style={{ height: 0, overflow: "hidden", opacity: 0 }}
+      >
+        <div className="py-2 px-2">
+          <p>{description}</p>
         </div>
       </div>
     </div>

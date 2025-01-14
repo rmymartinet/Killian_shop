@@ -4,10 +4,10 @@ import { Data } from "@/types/dataTypes";
 import { useState } from "react";
 import { useFilteredData } from "../hooks/useFilteredData";
 import Image from "next/image";
-import Link from "next/link";
+import TransitionLink from "../_components/TransitionLinks";
 
 export default function Shop() {
-  const { data } = useFilteredData("pants");
+  const { data } = useFilteredData();
 
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
@@ -20,7 +20,7 @@ export default function Shop() {
   };
 
   return (
-    <section className="mt-20 bg-white">
+    <section className="mt-20 bg-white min-h-[100vh]">
       <div className="flex flex-col mt-40 gap-10 px-4 md:px-8">
         <h1 className="text-lg">Tous [{data.length}]</h1>
         <div className="flex flex-col lg:grid lg:grid-cols-3 grid-flow-row justify-center gap-4 w-full">
@@ -31,7 +31,7 @@ export default function Shop() {
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={handleMouseLeave}
               >
-                <Link
+                <TransitionLink
                   href={`/products/${item.id}`}
                   className="text-sm text-black border-b border-black cursor-pointer"
                 >
@@ -46,7 +46,7 @@ export default function Shop() {
                     height={700}
                     className="w-full h-full object-cover"
                   />
-                </Link>
+                </TransitionLink>
               </div>
               <div>
                 <p className="text-sm font-semibold">{item.title}</p>

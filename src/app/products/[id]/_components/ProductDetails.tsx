@@ -14,6 +14,7 @@ const PorductDetails = ({
   const { cart } = useCart();
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [isEnoughtStock, setIsEnoughtStock] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     if (filteredDataById.length > 0) {
@@ -37,6 +38,34 @@ const PorductDetails = ({
       setIsEnoughtStock(true);
     }
   }, [filteredDataById, isEnoughtStock]);
+
+  const isStringOrNumber =
+    filteredDataById[0] && (filteredDataById[0]?.waistline ?? "").length > 5;
+
+  const accordionData = [
+    {
+      title: "Longueur",
+      description: `Le pantalon mesure : ${filteredDataById[0]?.length} cm`,
+    },
+    {
+      title: "Tour de taille",
+      description: `${filteredDataById[0]?.waistline} ${
+        isStringOrNumber ? "" : "cm"
+      }`,
+    },
+    {
+      title: "Poids",
+      description: `Le pantalon à un poids de ${filteredDataById[0]?.weight} g`,
+    },
+    {
+      title: "Matériaux",
+      description: `${filteredDataById[0]?.material}`,
+    },
+  ];
+
+  const handleToggleAccordion = (index: number) => {
+    setActiveIndex(index === activeIndex ? -1 : index);
+  };
 
   return (
     <div className="p-2 md:p-10 lg:p-16 rounded-xl relative lg:mt-0 flex flex-col justify-between">
@@ -93,7 +122,16 @@ const PorductDetails = ({
         </div>
       </div>
 
-      <Accordion data={filteredDataById} />
+      {filteredDataById.length > 0 &&
+        accordionData.map((data, index) => (
+          <Accordion
+            key={index}
+            isOpen={activeIndex === index}
+            title={data.title}
+            description={data.description}
+            onClick={() => handleToggleAccordion(index)} // Gestion du clic
+          />
+        ))}
     </div>
   );
 };

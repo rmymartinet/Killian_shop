@@ -73,7 +73,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
   return (
     <>
       {/* Contenu fixe au centre */}
-      <div className="mt-20 flex justify-center w-full md:px-10">
+      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]">
         {/* Affichage pour les écrans desktop */}
         {width > DESKTOP_BREAKPOINT && <ProductLabels />}
         <div className="flex flex-col lg:gap-10 bg-white lg:mx-10 rounded-xl shadow-lg">
@@ -96,7 +96,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
               </div>
             )}
 
-            <div className="flex justify-center items-center relative min-h-[50vh]">
+            <div className="flex justify-center items-center relative">
               {/* Bouton pour aller à l'image suivante */}
               <div
                 onClick={handleNextImage}
