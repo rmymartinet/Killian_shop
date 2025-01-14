@@ -47,32 +47,23 @@ export default function RootLayout({
 
   const anim = () => {
     return {
-      initial: "initial",
-      animate: "enter",
-      exit: "exit",
-      opacity,
-    };
-  };
+      initial: {
+        opacity: 0,
+      },
+      animate: {
+        opacity: 1,
 
-  const opacity = {
-    initial: {
-      opacity: 0,
-    },
-
-    enter: {
-      opacity: 1,
-
-      transition: {
-        duration: 0.5,
-        delay: 0.5,
+        transition: {
+          duration: 0.5,
+          delay: 0.5,
+          easeIn,
+        },
+      },
+      exit: {
+        opacity: 0,
         easeIn,
       },
-    },
-
-    exit: {
-      opacity: 0,
-      easeIn,
-    },
+    };
   };
 
   return (
