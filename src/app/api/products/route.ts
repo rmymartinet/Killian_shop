@@ -32,11 +32,11 @@ export const dynamic = "force-dynamic";
 export const GET = async () => {
   try {
     const pantsData = await prisma.pants.findMany();
-    const shirtsData = await prisma.shirts.findMany();
+    // const shirtsData = await prisma.shirts.findMany();
 
-    const combinedData = [...pantsData, ...shirtsData];
+    // const combinedData = [...pantsData, ...shirtsData];
 
-    return new NextResponse(JSON.stringify(combinedData), {
+    return new NextResponse(JSON.stringify(pantsData), {
       status: 200,
     });
   } catch (error) {
