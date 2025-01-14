@@ -166,11 +166,11 @@ export default function Home() {
           ref={shopButtonRef}
           onMouseEnter={handleOnMouseEnter}
           onMouseLeave={handleOnMouseLeave}
-          className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center"
+          className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center overflow-hidden "
         >
           <Link
             href="/shop"
-            className="px-4 py-2 bg-white flex items-center gap-4 rounded-xl cursor-pointer border-2 border-black"
+            className="px-4 py-2 bg-white flex items-center gap-4 rounded-xl cursor-pointer border-2 border-black z-10"
           >
             <h1 className="uppercase text-xl font-medium">
               Collection Disponible
