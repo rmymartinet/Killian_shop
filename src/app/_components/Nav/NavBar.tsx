@@ -28,17 +28,17 @@ export default function Nav() {
           className="w-full h-full object-contain"
         />
       </div>
-      {/* <div className="flex items-center gap-20 p-5">
-        <SignedOut>
+      <div className="flex items-center gap-20 p-5">
+        {/* <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
           <UserButton />
-        </SignedIn>
+        </SignedIn> */}
         <Link href="/checkout">
           <FaShoppingCart size={20} />
         </Link>
-      </div> */}
+      </div>
     </nav>
   );
 }
