@@ -46,7 +46,7 @@ export default function MobileNav() {
           <div className="h-[2px] w-6 bg-black" />
           <div className="h-[2px] w-6 bg-black" />
         </div>
-        <Link href="/checkout">
+        <Link href="/checkout" onClick={handleClickCloseMenu}>
           <FaShoppingCart onClick={() => handleClickCloseMenu()} size={20} />
         </Link>
       </nav>
@@ -62,8 +62,12 @@ export default function MobileNav() {
           <IoCloseOutline size={25} />
         </div>
         <div className="bg-black text-white grid grid-rows-4 place-items-start gap-10 rounded-2xl text-4xl  font-semibold shadow-xl">
-          <Link href="/">Home</Link>
-          <Link href="/shop">Shop</Link>
+          <Link onClick={handleClickCloseMenu} href="/">
+            Home
+          </Link>
+          <Link onClick={handleClickCloseMenu} href="/shop">
+            Shop
+          </Link>
         </div>
         <Link
           href={"/checkout"}
