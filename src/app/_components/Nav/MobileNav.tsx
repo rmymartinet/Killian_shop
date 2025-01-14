@@ -1,11 +1,9 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
-import TransitionLink from "../TransitionLinks";
 
 export default function MobileNav() {
   const [isCLicked, setIsClicked] = useState(false);
@@ -64,27 +62,19 @@ export default function MobileNav() {
           <IoCloseOutline size={25} />
         </div>
         <div className="bg-black text-white grid grid-rows-4 place-items-start gap-10 rounded-2xl text-4xl  font-semibold shadow-xl">
-          <TransitionLink
-            setIsClicked={setIsClicked}
-            href="/"
-            label="Accueil"
-          />
-          <TransitionLink
-            setIsClicked={setIsClicked}
-            href="/shop"
-            label="Shop"
-          />
+          <Link href="/">Home</Link>
+          <Link href="/shop">Shop</Link>
         </div>
         <Link
           href={"/checkout"}
           className="absolute top-40 flex w-full justify-between px-10"
         >
-          <SignedOut>
+          {/* <SignedOut>
             <SignInButton />
           </SignedOut>
           <SignedIn>
             <UserButton />
-          </SignedIn>
+          </SignedIn> */}
           <FaShoppingCart onClick={() => handleClickCloseMenu()} size={20} />
         </Link>
       </nav>
