@@ -1,7 +1,6 @@
 "use client";
 
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useState } from "react";
@@ -40,12 +39,7 @@ export default function RootLayout({
     lenis.on("scroll", () => {});
   }, []);
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: [dark],
-      }}
-      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-    >
+    <ClerkProvider>
       <html lang="fr">
         <head>
           <Script
