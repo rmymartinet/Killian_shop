@@ -31,7 +31,7 @@ const AdminPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-20">
+    <div className="min-h-screen flex flex-col items-center justify-center gap-20 mt-[30vh]">
       <Filter setFilter={setFilter} currentFilter={filter} />
       {filter === FILTERS.AJOUTER && <AddComponent />}
       {filter === FILTERS.SUPPRIMER && <DeleteComponent />}
