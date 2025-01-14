@@ -45,12 +45,12 @@ export default function RootLayout({
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const anim = (variants: any) => {
+  const anim = () => {
     return {
       initial: "initial",
       animate: "enter",
       exit: "exit",
-      variants,
+      opacity,
     };
   };
 
@@ -106,7 +106,7 @@ export default function RootLayout({
                 )
               ) : null}
               <CartProvider>
-                <motion.div key={pathname} {...anim(opacity)}>
+                <motion.div key={pathname} {...anim()}>
                   {children} <CartSideBar />
                 </motion.div>
               </CartProvider>
