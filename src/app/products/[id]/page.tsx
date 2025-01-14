@@ -80,7 +80,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
           <div className="flex justify-center">
             {/* Affichage de l'image principale pour les écrans tablet et desktop */}
             {width > TABLET_BREAKPOINT && (
-              <div className="flex flex-col justify-center items-center relative rounded-bl-xl rounded-tl-xl ">
+              <div className="flex flex-col justify-center items-center relative rounded-bl-xl rounded-tl-xl">
                 <div className="p-4 rounded-xl">
                   {filteredDataById.map((item: Data) => (
                     <Image
@@ -96,7 +96,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
               </div>
             )}
 
-            <div className="flex justify-center items-center relative">
+            <div className="flex justify-center items-center relative min-h-[50vh]">
               {/* Bouton pour aller à l'image suivante */}
               <div
                 onClick={handleNextImage}
