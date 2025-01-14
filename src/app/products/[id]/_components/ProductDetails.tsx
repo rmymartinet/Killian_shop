@@ -4,6 +4,7 @@ import { ProductDetailsProps } from "@/types/dataTypes";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Accordion from "./Accordion";
+import Link from "next/link";
 
 const PorductDetails = ({
   datas,
@@ -73,7 +74,7 @@ const PorductDetails = ({
           >
             <span>Ajouter au panier</span>
           </button>
-          <TransitionLink href={"/checkout"}>
+          <Link href={"/checkout"}>
             <div
               onClick={() => {
                 setIsShoppingOpen(false);
@@ -85,7 +86,7 @@ const PorductDetails = ({
             >
               <span>Acheter maintenant</span>
             </div>
-          </TransitionLink>
+          </Link>
         </div>
       </div>
 
