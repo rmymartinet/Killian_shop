@@ -19,7 +19,7 @@ async function getActiveProducts() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { products, currentUserEmail, deliveryCost } = await request.json();
+    const { products, deliveryCost } = await request.json();
     const checkoutProducts: Data[] = products;
     const activeProducts = await getActiveProducts();
     const checkoutStripeProducts: Stripe.Checkout.SessionCreateParams.LineItem[] =
@@ -91,7 +91,6 @@ export async function POST(request: NextRequest) {
       mode: "payment",
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/cancel?session_id={CHECKOUT_SESSION_ID}`,
-      customer_email: currentUserEmail,
       billing_address_collection: "required",
       customer_creation: "always",
       shipping_address_collection: {
@@ -100,7 +99,6 @@ export async function POST(request: NextRequest) {
       metadata: {
         product_id: JSON.stringify(productIds),
         quantity: JSON.stringify(quantity),
-        customer_email: currentUserEmail,
       },
     });
 
