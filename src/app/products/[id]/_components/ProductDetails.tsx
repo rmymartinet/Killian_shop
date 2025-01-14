@@ -73,7 +73,7 @@ const PorductDetails = ({
           >
             <span>Ajouter au panier</span>
           </button>
-          <Link href={"/checkout"}>
+          <Link href={"/checkout"} className="w-full">
             <div
               onClick={() => {
                 setIsShoppingOpen(false);
@@ -81,7 +81,7 @@ const PorductDetails = ({
                   addToCart({ ...filteredDataById[0] });
                 }
               }}
-              className="rounded-[8px] bg-black text-white py-2 grid place-content-center font-semibold w-full"
+              className="rounded-[8px] bg-black text-white py-2 grid place-content-center font-semibold w-full "
             >
               <span>Acheter maintenant</span>
             </div>
