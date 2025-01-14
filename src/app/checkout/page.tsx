@@ -1,9 +1,7 @@
 "use client";
 
-import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {} from "react-icons/cg";
 import Swal from "sweetalert2";
 import { useCart } from "../context/CartContext";
 import { useFilteredData } from "../hooks/useFilteredData";
