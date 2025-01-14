@@ -14,10 +14,10 @@ export default function Checkout() {
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [isGuest, setIsGuest] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>(""); // Pour stocker l'email entré par l'utilisateur
+  const [email, setEmail] = useState<string>("");
   const [guestModal, setGuestModal] = useState<boolean>(false);
   const [showAuthOptions, setShowAuthOptions] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<string | null>(null); // Utiliser une chaîne pour les messages d'erreur
+  const [emailError, setEmailError] = useState<string | null>(null);
   const removeItemFromCart = useRemoveFromCart();
   const { openSignIn } = useClerk();
   const { data } = useFilteredData();
@@ -181,7 +181,7 @@ export default function Checkout() {
                     <Image
                       width={300}
                       height={300}
-                      src={item.imageUrls[0]}
+                      src={item?.imageDetails?.[0] ?? ""}
                       alt={item.title}
                       className="w-full h-full object-contain"
                     />

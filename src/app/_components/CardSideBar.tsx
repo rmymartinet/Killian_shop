@@ -70,7 +70,7 @@ const CartSideBar = () => {
                 height={10}
                 layout="responsive"
                 objectFit="contain"
-                src={item.imageUrls[0]}
+                src={item?.imageDetails?.[0] ?? ""}
                 alt={item.title}
               />
               <div className="flex-1">
