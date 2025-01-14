@@ -24,9 +24,9 @@ export default function Icon() {
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover", // Assure que l'image couvre le conteneur
+            objectFit: "cover",
           }}
-          src="https://res.cloudinary.com/dnkhbxpji/image/upload/v1727261092/2_xecw7d.png" // Utilisez le chemin complet si nécessaire
+          src="https://res.cloudinary.com/dnkhbxpji/image/upload/v1736885315/Capture_d_e%CC%81cran_le_2025-01-14_a%CC%80_21.08.30_nmtszc.png"
           alt="Icône personnalisée"
         />
       </div>
