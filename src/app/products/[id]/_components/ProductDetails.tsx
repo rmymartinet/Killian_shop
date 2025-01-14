@@ -1,4 +1,3 @@
-import TransitionLink from "@/app/_components/TransitionLinks";
 import { useCart } from "@/app/context/CartContext";
 import { ProductDetailsProps } from "@/types/dataTypes";
 import { useEffect, useState } from "react";
