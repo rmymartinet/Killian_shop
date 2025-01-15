@@ -6,80 +6,27 @@ import Swal from "sweetalert2";
 import { useCart } from "../context/CartContext";
 import { useFilteredData } from "../hooks/useFilteredData";
 import { useRemoveFromCart } from "../hooks/useRemoveFromCart";
+import { DELEVERYCOST } from "@/utils/constant";
+import { usePayment } from "../hooks/usePayment";
 
 export default function Checkout() {
   const { cart } = useCart();
+  const { data } = useFilteredData();
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const removeItemFromCart = useRemoveFromCart();
-  const { data } = useFilteredData();
   const allProducts = cart.flat().map((item) => item.id);
+  const removeItemFromCart = useRemoveFromCart();
   const compare = data.filter((item) => allProducts.includes(item.id));
   const outOfStockProduct = compare.find((item) => item.quantity === 0);
 
-  const deliveryCost = 5;
-
-  // Calculer le montant total basé sur le panier sans ajouter les frais de livraison ici
   useEffect(() => {
     const total = cart
       .flat()
       .reduce((acc, item) => acc + Number(item.price), 0);
-
     setTotalAmount(Number(total.toFixed(2)));
   }, [cart]);
 
-  async function checkout() {
-    setLoading(true);
-
-    try {
-      // Vérification du stock
-      if (outOfStockProduct) {
-        Swal.fire({
-          title: "Erreur!",
-          text: `Stock insuffisant pour : ${outOfStockProduct.title} Veillez à retirer cet article de votre panier`,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        setLoading(false);
-        throw new Error("Stock insuffisant");
-      }
-
-      // Vérification des prix pour les passer à la session de paiement
-      const products = cart.flat();
-
-      if (products.some((product) => product.price === undefined)) {
-        console.error("Un ou plusieurs produits n'ont pas de prix défini.");
-        setLoading(false);
-        return;
-      }
-
-      // Création de la session de paiement
-      const response = await fetch(`/api/checkout_sessions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          products,
-          deliveryCost,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data?.url) {
-        const url = data.url;
-        setLoading(false);
-        window.location.href = url;
-      }
-    } catch (error) {
-      console.error(
-        "Erreur lors de la création de la session de paiement :",
-        error
-      );
-      setLoading(false);
-    }
-  }
+  const { checkout } = usePayment(setLoading, outOfStockProduct);
 
   return (
     <section>
@@ -133,12 +80,12 @@ export default function Checkout() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <p>Frais de livraison: </p>
-              <p>{deliveryCost},00 €</p>
+              <p>{DELEVERYCOST},00 €</p>
             </div>
 
             <div className="flex items-center justify-between">
               <p>Total:</p>
-              <p>{totalAmount + deliveryCost},00 €</p>
+              <p>{totalAmount + DELEVERYCOST},00 €</p>
             </div>
           </div>
           <button

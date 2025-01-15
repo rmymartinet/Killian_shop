@@ -1,13 +1,7 @@
-import { Data } from "@/types/dataTypes";
+import { Data, StripeProduct } from "@/types/dataTypes";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-
-interface StripeProduct {
-  id: string;
-  name: string;
-  active: boolean;
-}
 
 async function getActiveProducts() {
   const stripeProducts = await stripe.products.list();

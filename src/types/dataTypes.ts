@@ -83,3 +83,9 @@ export interface CartContextProps {
   isShoppingOpen: boolean;
   setIsShoppingOpen: (isShoppingOpen: boolean) => void;
 }
+
+export interface StripeProduct {
+  id: string;
+  name: string;
+  active: boolean;
+}
