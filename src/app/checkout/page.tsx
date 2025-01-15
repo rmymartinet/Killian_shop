@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import { useCart } from "../context/CartContext";
 import { useFilteredData } from "../hooks/useFilteredData";
 import { useRemoveFromCart } from "../hooks/useRemoveFromCart";
 import { DELEVERYCOST } from "@/utils/constant";
 import { usePayment } from "../hooks/usePayment";
+import { Data } from "@/types/dataTypes";
 
 export default function Checkout() {
   const { cart } = useCart();
@@ -16,8 +16,9 @@ export default function Checkout() {
   const [loading, setLoading] = useState<boolean>(false);
   const allProducts = cart.flat().map((item) => item.id);
   const removeItemFromCart = useRemoveFromCart();
-  const compare = data.filter((item) => allProducts.includes(item.id));
-  const outOfStockProduct = compare.find((item) => item.quantity === 0);
+  const isProductOutOfStock: Data | undefined = data
+    .filter((item) => allProducts.includes(item.id))
+    .find((item) => item.quantity === 1);
 
   useEffect(() => {
     const total = cart
@@ -26,7 +27,7 @@ export default function Checkout() {
     setTotalAmount(Number(total.toFixed(2)));
   }, [cart]);
 
-  const { checkout } = usePayment(setLoading, outOfStockProduct);
+  const { checkout } = usePayment(setLoading, isProductOutOfStock);
 
   return (
     <section>

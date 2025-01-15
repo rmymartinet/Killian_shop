@@ -1,10 +1,11 @@
 import Swal from "sweetalert2";
 import { useCart } from "../context/CartContext";
 import { DELEVERYCOST } from "@/utils/constant";
+import { Data } from "@/types/dataTypes";
 
 export function usePayment(
-  setLoading: (arg0: boolean) => void,
-  outOfStockProduct: any
+  setLoading: (value: boolean) => void,
+  outOfStockProduct: Data | undefined
 ) {
   const { cart } = useCart();
 
