@@ -26,8 +26,8 @@ function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;
 }
 
-// //Permet de forcer le chargement dynamique des pages pour afficher les changements de la base de données en temps réel
-// export const dynamic = "force-dynamic";
+//Permet de forcer le chargement dynamique des pages pour afficher les changements de la base de données en temps réel
+export const dynamic = "force-dynamic";
 
 export const GET = async () => {
   try {
