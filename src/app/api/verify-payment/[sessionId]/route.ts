@@ -13,8 +13,6 @@ interface Params {
 export async function GET(request: Request, { params }: { params: Params }) {
   const { sessionId } = params;
 
-  console.log("Session ID:", sessionId);
-
   if (!sessionId) {
     return NextResponse.json(
       { error: "Session ID is required" },
@@ -33,7 +31,6 @@ export async function GET(request: Request, { params }: { params: Params }) {
       });
     }
 
-    // Récupérer les détails du client et de l'adresse
     const customerEmail = session.customer_details?.email;
     const customerAddress: CustomerAddress =
       session.customer_details?.address || {};
@@ -45,16 +42,12 @@ export async function GET(request: Request, { params }: { params: Params }) {
       );
     }
 
-    // Vérifier et parser les métadonnées des produits
     const productIds = session.metadata?.product_id
       ? JSON.parse(session.metadata.product_id)
       : [];
     const quantities = session.metadata?.quantity
       ? JSON.parse(session.metadata.quantity)
       : [];
-
-    console.log("Product IDs:", productIds);
-    console.log("Quantities:", quantities);
 
     await updateStockAndRecordPurchase(
       productIds,
@@ -67,7 +60,6 @@ export async function GET(request: Request, { params }: { params: Params }) {
       where: { email: customerEmail },
     });
 
-    // Si l'utilisateur existe déjà, ne le mettez pas à jour
     if (user) {
       const updatedUser = await upsertUser({
         email: customerEmail,
@@ -94,7 +86,6 @@ export async function GET(request: Request, { params }: { params: Params }) {
       });
     }
 
-    // Si l'utilisateur n'est pas trouvé, retourner une réponse sans erreur
     return NextResponse.json({
       success: true,
       message: "Utilisateur non trouvé, mode invité",
@@ -120,10 +111,9 @@ async function updateStockAndRecordPurchase(
     const quantity = quantities[i];
 
     if (typeof quantity !== "number" || quantity <= 0) {
-      continue; // Ignore les quantités invalides
+      continue;
     }
 
-    // Mettre à jour le stock
     await prisma.pants.update({
       where: { id: productId },
       data: {
@@ -133,13 +123,11 @@ async function updateStockAndRecordPurchase(
       },
     });
 
-    // Obtenir le prix du produit
     const product = await prisma.pants.findUnique({
       where: { id: productId },
     });
 
     if (product && product.price !== undefined) {
-      // Enregistrer l'achat dans l'historique
       await prisma.purchase.create({
         data: {
           originalId: productId,
