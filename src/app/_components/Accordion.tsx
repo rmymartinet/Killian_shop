@@ -1,6 +1,5 @@
 import { AccordionProps } from "@/types/dataTypes";
 import { animateAccordion } from "@/utils/common/animateAccordion";
-import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
 
 const Accordion = ({ isOpen, title, description, onClick }: AccordionProps) => {

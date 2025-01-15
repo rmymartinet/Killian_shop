@@ -1,7 +1,5 @@
 "use client";
 
-import { useCart } from "@/app/context/CartContext";
-import { useAddToCart } from "@/app/hooks/useAddToCart";
 import { useFilteredData } from "@/app/hooks/useFilteredData";
 import useWindow from "@/app/hooks/useWindow";
 import { Data } from "@/types/dataTypes";
@@ -10,7 +8,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { createRef, useEffect, useState } from "react";
 import ProductLabels from "./_components/ProductLabels";
 import ThumbnailImagesList from "./_components/ThumbnailImagesList";
-import ProductDetailsCard from "./_components/ProductCard";
 import { DESKTOP_BREAKPOINT } from "@/utils/responsive";
 import CatalogProductCard from "@/app/_components/CatalogProductCard";
 import ProductCard from "./_components/ProductCard";

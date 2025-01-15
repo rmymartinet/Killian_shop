@@ -1,4 +1,4 @@
-import { Data, ThumbnailImagesListProps } from "@/types/dataTypes";
+import { ThumbnailImagesListProps } from "@/types/dataTypes";
 import Image from "next/image";
 
 const ThumbnailImagesList = ({
