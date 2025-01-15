@@ -3,19 +3,15 @@ import ProductCarousel from "./ProductCarousel";
 import PorductDetails from "./ProductDetails";
 import Image from "next/image";
 import { TABLET_BREAKPOINT } from "@/utils/responsive";
-import { useCart } from "@/app/context/CartContext";
-import { Data, ProductDetailsCardProps } from "@/types/dataTypes";
-import { useAddToCart } from "@/app/hooks/useAddToCart";
+import { Data, ProductCardProps } from "@/types/dataTypes";
 
-const ProductDetailsCard = ({
+const ProductCard = ({
   filteredDataById,
   currentImageIndex,
   setCurrentImageIndex,
   imageDetailsLength,
-}: ProductDetailsCardProps) => {
+}: ProductCardProps) => {
   const { width } = useWindow();
-  const { setIsShoppingOpen } = useCart();
-  const addToCart = useAddToCart();
   const datas = filteredDataById[0];
 
   return (
@@ -44,14 +40,9 @@ const ProductDetailsCard = ({
           imageDetailsLength={imageDetailsLength}
         />
       </div>
-      <PorductDetails
-        datas={datas}
-        filteredDataById={filteredDataById}
-        setIsShoppingOpen={setIsShoppingOpen}
-        addToCart={addToCart}
-      />
+      <PorductDetails datas={datas} filteredDataById={filteredDataById} />
     </div>
   );
 };
 
-export default ProductDetailsCard;
+export default ProductCard;

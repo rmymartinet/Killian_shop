@@ -2,7 +2,7 @@
 
 import { Data } from "@/types/dataTypes";
 import { useRef } from "react";
-import ProductCard from "./_components/ProductCard";
+import ProductCard from "./_components/CatalogProductCard";
 import { useFilteredData } from "./hooks/useFilteredData";
 import TransitionLink from "./_components/TransitionLinks";
 import Header from "./_components/Home/Header";

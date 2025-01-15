@@ -2,19 +2,19 @@ import { useCart } from "@/app/context/CartContext";
 import { ProductDetailsProps } from "@/types/dataTypes";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import Accordion from "./Accordion";
+import Accordion from "../../../_components/Accordion";
 import Link from "next/link";
+import { useAddToCart } from "@/app/hooks/useAddToCart";
 
 const PorductDetails = ({
   datas,
-  setIsShoppingOpen,
   filteredDataById,
-  addToCart,
 }: ProductDetailsProps) => {
   const { cart } = useCart();
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [isEnoughtStock, setIsEnoughtStock] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const addToCart = useAddToCart();
 
   useEffect(() => {
     if (filteredDataById.length > 0) {
@@ -84,7 +84,6 @@ const PorductDetails = ({
           <button
             disabled={isEnoughtStock === false}
             onClick={() => {
-              setIsShoppingOpen(true);
               if (!isProductInCart) {
                 addToCart({ ...filteredDataById[0] });
               } else {
@@ -105,7 +104,6 @@ const PorductDetails = ({
           <Link href={"/checkout"} className="w-full">
             <div
               onClick={() => {
-                setIsShoppingOpen(false);
                 if (filteredDataById.length > 0) {
                   addToCart({ ...filteredDataById[0] });
                 }
@@ -125,7 +123,7 @@ const PorductDetails = ({
               isOpen={activeIndex === index}
               title={data.title}
               description={data.description}
-              onClick={() => handleToggleAccordion(index)} // Gestion du clic
+              onClick={() => handleToggleAccordion(index)}
             />
           ))}
       </div>
