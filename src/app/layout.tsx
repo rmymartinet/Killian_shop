@@ -67,7 +67,7 @@ export default function RootLayout({
                 )
               ) : null}
               <CartProvider>
-                <motion.div key={pathname} {...anim()}>
+                <motion.div key={`${pathname}-${Date.now()}`} {...anim()}>
                   {children} <CartSideBar />
                 </motion.div>
               </CartProvider>

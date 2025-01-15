@@ -38,7 +38,7 @@ export default function MobileNav() {
   }, [isClicked]);
 
   useEffect(() => {
-    gsap.set(menuRef.current, { y: "100%" });
+    gsap.set(menuRef.current, { y: "-100%" });
   }, []);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function MobileNav() {
       </header>
       <nav
         ref={menuRef}
-        className="flex flex-col gap-6 items-center w-screen h-max fixed inset-0 p-6 bg-black text-white z-40 pt-40"
+        className="flex flex-col -translate-y-[100%] gap-6 items-center w-screen h-max fixed inset-0 p-6 bg-black text-white z-40 pt-40"
         aria-hidden="true"
       >
         <div className="bg-black text-white gap-10 rounded-2xl text-3xl font-semibold shadow-xl flex">
