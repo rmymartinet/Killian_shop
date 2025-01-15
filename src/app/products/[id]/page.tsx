@@ -70,6 +70,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
                 imageUrls={item.imageUrls[0]}
                 title={item.title}
                 price={item.price}
+                quantity={item.quantity}
               />
             ))}
         </div>
