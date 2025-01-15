@@ -1,4 +1,4 @@
-import { Data } from "@/types/dataTypes";
+import { CartContextProps, Data } from "@/types/dataTypes";
 import {
   ReactNode,
   createContext,
@@ -31,13 +31,6 @@ const getUserId = () => {
 const generateUUID = () => {
   return "guest_" + Math.random().toString(36).substr(2, 9);
 };
-
-interface CartContextProps {
-  cart: Data[];
-  setCart: React.Dispatch<React.SetStateAction<Data[]>>;
-  isShoppingOpen: boolean;
-  setIsShoppingOpen: (isShoppingOpen: boolean) => void;
-}
 
 // Créer le contexte du panier
 const CartContext = createContext<CartContextProps | undefined>(undefined);

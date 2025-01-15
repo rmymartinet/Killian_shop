@@ -19,9 +19,7 @@ export interface Data {
 
 export interface ProductDetailsProps {
   datas: Data;
-  setIsShoppingOpen: (value: boolean) => void;
   filteredDataById: Data[];
-  addToCart: (value: Data) => void;
 }
 
 export interface CardProps {
@@ -72,9 +70,16 @@ export interface ThumbnailImagesListProps {
   setCurrentImageIndex: (value: number) => void;
 }
 
-export interface ProductDetailsCardProps {
+export interface ProductCardProps {
   filteredDataById: Data[];
   currentImageIndex: number;
   setCurrentImageIndex: (index: number) => void;
   imageDetailsLength: number[];
+}
+
+export interface CartContextProps {
+  cart: Data[];
+  setCart: React.Dispatch<React.SetStateAction<Data[]>>;
+  isShoppingOpen: boolean;
+  setIsShoppingOpen: (isShoppingOpen: boolean) => void;
 }

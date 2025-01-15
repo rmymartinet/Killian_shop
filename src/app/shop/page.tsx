@@ -8,7 +8,6 @@ import TransitionLink from "../_components/TransitionLinks";
 
 export default function Shop() {
   const { data } = useFilteredData();
-
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   const handleHover = (index: number) => {
