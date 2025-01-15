@@ -64,3 +64,17 @@ export interface AccordionProps {
   description: string;
   onClick: () => void; // Fonction appelée au clic
 }
+
+export interface ThumbnailImagesListProps {
+  data: Data[];
+  refs: React.RefObject<HTMLDivElement>[];
+  currentImageIndex: number;
+  setCurrentImageIndex: (value: number) => void;
+}
+
+export interface ProductDetailsCardProps {
+  filteredDataById: Data[];
+  currentImageIndex: number;
+  setCurrentImageIndex: (index: number) => void;
+  imageDetailsLength: number[];
+}

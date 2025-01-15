@@ -1,19 +1,12 @@
-import { Data } from "@/types/dataTypes";
+import { Data, ThumbnailImagesListProps } from "@/types/dataTypes";
 import Image from "next/image";
 
-interface ImagesListProps {
-  data: Data[];
-  refs: React.RefObject<HTMLDivElement>[];
-  currentImageIndex: number;
-  setCurrentImageIndex: (value: number) => void;
-}
-
-const ImagesList = ({
+const ThumbnailImagesList = ({
   data,
   refs,
   currentImageIndex,
   setCurrentImageIndex,
-}: ImagesListProps) => {
+}: ThumbnailImagesListProps) => {
   return (
     <div className="h-max mb-2 mt-20 w-max flex flex-col justify-center gap-4 bg-black rounded-xl py-2 px-16 ">
       {Array.isArray(data[0]?.imageDetails) &&
@@ -39,4 +32,4 @@ const ImagesList = ({
   );
 };
 
-export default ImagesList;
+export default ThumbnailImagesList;

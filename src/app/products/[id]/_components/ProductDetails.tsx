@@ -27,10 +27,6 @@ const PorductDetails = ({
   }, [filteredDataById, cart]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
     if (
       filteredDataById.length > 0 &&
       (filteredDataById[0].quantity ?? 0) > 0
@@ -69,7 +65,7 @@ const PorductDetails = ({
 
   return (
     <div className="p-2 md:p-10 lg:p-16 rounded-xl relative lg:mt-0 flex flex-col justify-between">
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 border-2 border-red-400">
         <div className="w-full flex justify-between">
           <div>
             <span className="uppercase text-slate-400 text-sm md:text-base">
