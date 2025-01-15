@@ -143,6 +143,12 @@ const FlexGrid = ({
           <div>
             <p className="font-light text-[0.5rem]">100% unique</p>
             <p className="font-light text-[0.5rem]">100% recyclable</p>
+            <p className="font-light text-[0.5rem]">100% unique</p>
+            <p className="font-light text-[0.5rem]">100% recyclable</p>
+            <p className="font-light text-[0.5rem]">100% unique</p>
+            <p className="font-light text-[0.5rem]">100% recyclable</p>
+            <p className="font-light text-[0.5rem]">100% unique</p>
+            <p className="font-light text-[0.5rem]">100% recyclable</p>
           </div>
         </div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200"></div>

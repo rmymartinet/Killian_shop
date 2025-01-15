@@ -19,7 +19,6 @@ const Grid = ({
           className="border border-dashed border-gray-200 "
         ></div>
       ))}
-
       <div className="col-start-4 p-2 row-start-2 border border-dashed border-gray-200 h-full justify-between flex flex-col col-span-1 row-span-1">
         <p className="font-light text-[0.5rem]">100% unique</p>
         <p className="font-light text-[0.5rem]">100% recyclable</p>
@@ -30,7 +29,6 @@ const Grid = ({
         <p className="font-light text-[0.5rem]">100% unique</p>
         <p className="font-light text-[0.5rem]">100% recyclable</p>
       </div>
-
       {data[0] && (
         <div className="col-start-1 p-2 row-start-3 border border-dashed border-gray-200 h-full justify-between flex flex-col col-span-1 row-span-1">
           <Image
