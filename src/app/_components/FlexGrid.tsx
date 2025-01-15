@@ -115,12 +115,12 @@ const FlexGrid = ({
           )}
         </div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200">
-          {data[2] && (
+          {data[0] && (
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
                 src={
-                  data[2] && data[2].imageDetails ? data[2].imageDetails[3] : ""
+                  data[0] && data[0].imageDetails ? data[0].imageDetails[1] : ""
                 }
                 width={300}
                 height={300}
@@ -139,7 +139,12 @@ const FlexGrid = ({
         </div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200"></div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200"></div>
-        <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200"></div>
+        <div className="flex shrink-0 flex-col w-full h-full items-center justify-center  px-2 py-1 border-dashed border border-gray-200">
+          <div>
+            <p className="font-light text-[0.5rem]">100% unique</p>
+            <p className="font-light text-[0.5rem]">100% recyclable</p>
+          </div>
+        </div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200"></div>
       </div>
       <div className="flex shrink-0 flex-col h-[150px] w-[150px]">
