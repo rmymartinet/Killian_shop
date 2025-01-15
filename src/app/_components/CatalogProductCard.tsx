@@ -2,7 +2,7 @@ import { Data } from "@/types/dataTypes";
 import Image from "next/image";
 import TransitionLink from "./TransitionLinks";
 
-const ProductCard = ({
+const CatalogProductCard = ({
   imageUrls,
   id,
   title,
@@ -40,4 +40,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default CatalogProductCard;
