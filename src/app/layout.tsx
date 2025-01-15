@@ -3,7 +3,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "../app/globals.css";
 import CartSideBar from "./_components/CardSideBar";
 import Footer from "./_components/Footer";
