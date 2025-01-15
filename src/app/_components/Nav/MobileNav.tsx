@@ -52,7 +52,6 @@ export default function MobileNav() {
           <FaShoppingCart size={20} aria-label="Checkout" />
         </Link>
       </header>
-
       <nav
         ref={menuRef}
         className="flex flex-col gap-6 items-center w-screen h-max fixed inset-0 p-6 bg-black text-white z-50"
