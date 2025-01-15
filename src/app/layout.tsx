@@ -22,16 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isMobile, setIsMobile] = useState(false);
   const { width } = useWindow();
-
-  useEffect(() => {
-    if (width < 768) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  }, [width]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -63,13 +54,13 @@ export default function RootLayout({
     `}
           </Script>
         </head>
-        <body className={`antialiased`}>
+        <body className={`antialiased `}>
           <>
             <AnimatePresence mode="wait">
               {pathname !== "/success" &&
               pathname !== "/cancel" &&
               pathname !== "/not-found" ? (
-                isMobile ? (
+                width <= 498 ? (
                   <MobileNav />
                 ) : (
                   <Nav />
