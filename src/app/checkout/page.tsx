@@ -31,7 +31,7 @@ export default function Checkout() {
 
   return (
     <section>
-      <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-40 justify-center w-full overflow-hidden mt-[10vh] md:mt-[30vh] h-full px-4 md:px-20">
+      <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-40 justify-center w-full overflow-hidden mt-[20vh] md:mt-[30vh] h-full px-4 md:px-20">
         <div className="flex flex-col w-full gap-10 overflow-y-auto whitespace-nowrap">
           {cart.length > 0 ? (
             <>

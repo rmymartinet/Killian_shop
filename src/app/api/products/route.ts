@@ -26,16 +26,16 @@ function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;
 }
 
-//Permet de forcer le chargement dynamique des pages pour afficher les changements de la base de données en temps réel
-export const dynamic = "force-dynamic";
+// //Permet de forcer le chargement dynamique des pages pour afficher les changements de la base de données en temps réel
+// export const dynamic = "force-dynamic";
 
 export const GET = async () => {
   try {
     const pantsData = await prisma.pants.findMany();
     const shirtsData = await prisma.shirts.findMany();
-    const combinedData = [...pantsData, ...shirtsData];
+    // const combinedData = [...pantsData, ...shirtsData];
 
-    return new NextResponse(JSON.stringify(combinedData), {
+    return new NextResponse(JSON.stringify(pantsData), {
       status: 200,
     });
   } catch (error) {
