@@ -2,10 +2,10 @@
 
 import { Data } from "@/types/dataTypes";
 import { useRef } from "react";
-import ProductCard from "./_components/CatalogProductCard";
 import { useFilteredData } from "./hooks/useFilteredData";
 import TransitionLink from "./_components/TransitionLinks";
 import Header from "./_components/Home/Header";
+import CatalogProductCard from "./_components/CatalogProductCard";
 
 export default function Home() {
   const collectionRef = useRef<HTMLDivElement>(null);
@@ -23,7 +23,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col lg:grid lg:grid-cols-3 grid-flow-row justify-center flex-wrap gap-4 w-full px-8">
           {data.map((item: Data) => (
-            <ProductCard
+            <CatalogProductCard
               key={item.id}
               id={item.id}
               imageUrls={item.imageUrls[0]}
