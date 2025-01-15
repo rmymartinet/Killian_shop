@@ -121,17 +121,18 @@ const PorductDetails = ({
           </Link>
         </div>
       </div>
-
-      {filteredDataById.length > 0 &&
-        accordionData.map((data, index) => (
-          <Accordion
-            key={index}
-            isOpen={activeIndex === index}
-            title={data.title}
-            description={data.description}
-            onClick={() => handleToggleAccordion(index)} // Gestion du clic
-          />
-        ))}
+      <div className="mt-8">
+        {filteredDataById.length > 0 &&
+          accordionData.map((data, index) => (
+            <Accordion
+              key={index}
+              isOpen={activeIndex === index}
+              title={data.title}
+              description={data.description}
+              onClick={() => handleToggleAccordion(index)} // Gestion du clic
+            />
+          ))}
+      </div>
     </div>
   );
 };
