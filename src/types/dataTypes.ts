@@ -57,3 +57,10 @@ export interface CustomerAddress {
 }
 
 export type FilterType = (typeof FILTERS)[keyof typeof FILTERS];
+
+export interface AccordionProps {
+  isOpen: boolean; // Indique si l'accordéon est ouvert
+  title: string;
+  description: string;
+  onClick: () => void; // Fonction appelée au clic
+}
