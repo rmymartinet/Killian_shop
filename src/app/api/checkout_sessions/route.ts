@@ -13,7 +13,8 @@ async function getActiveProducts() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { products, deliveryCost } = await request.json();
+    const { products, DELEVERYCOST } = await request.json();
+
     const checkoutProducts: Data[] = products;
     const activeProducts = await getActiveProducts();
     const checkoutStripeProducts: Stripe.Checkout.SessionCreateParams.LineItem[] =
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const productIds = products.map((product: Data) => product.id);
     const quantity = products.map((product: Data) => product.quantity);
-    const deliveryPrice = Math.round(deliveryCost * 100);
+    const deliveryPrice = Math.round(DELEVERYCOST * 100);
 
     checkoutStripeProducts.push({
       price_data: {
@@ -96,18 +97,20 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Log des metadata uniquement en mode développement
     if (process.env.NODE_ENV === "development") {
       console.log("Metadata sent:", {
         product_id: JSON.stringify(productIds),
         quantity: JSON.stringify(quantity),
       });
     }
-
     return NextResponse.json({
       url: session.url,
     });
-  } catch {
+  } catch (error) {
+    console.error(
+      "Erreur lors de la création de la session de paiement :",
+      error
+    );
     return NextResponse.json(
       { error: "Erreur lors de la création de la session" },
       { status: 500 }
