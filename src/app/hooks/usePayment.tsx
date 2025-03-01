@@ -13,10 +13,10 @@ export function usePayment(
     setLoading(true);
 
     try {
-      if (outOfStockProduct) {
+      if (outOfStockProduct === undefined) {
         Swal.fire({
           title: "Erreur!",
-          text: `Stock insuffisant pour : ${outOfStockProduct.title} Veillez à retirer cet article de votre panier`,
+          text: "Stock insuffisant pour un produit. Veillez à retirer cet article de votre panier",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -46,18 +46,16 @@ export function usePayment(
           DELEVERYCOST,
         }),
       });
-
       const data = await response.json();
-
       if (data?.url) {
         const url = data.url;
         setLoading(false);
         window.location.href = url;
       }
-    } catch (e) {
+    } catch (error) {
       console.error(
         "Erreur lors de la création de la session de paiement :",
-        e
+        error
       );
       setLoading(false);
     }
