@@ -7,16 +7,14 @@ import { useState } from "react";
 
 export default function ProductCard({
   id,
-  imageUrls,
-  imageDetails,
+  imageFace,
   title,
   price,
   quantity,
   imageEnsemble,
 }: {
   id: string;
-  imageUrls: string[];
-  imageDetails?: string[];
+  imageFace: string;
   title: string;
   price: number;
   quantity?: number;
@@ -26,11 +24,11 @@ export default function ProductCard({
   const isOutOfStock = quantity === 0;
 
   // Image à afficher selon hover
-  const mainImage = imageUrls[0];
-  const detailImage = imageEnsemble || (imageDetails && imageDetails[0]) || mainImage;
+  const mainImage = imageFace;
+  const detailImage = imageEnsemble || mainImage;
 
   return (
-    <div className="flex flex-col gap-4 h-full w-full max-w-lg max-h-lg">
+    <div className="flex flex-col gap-4 h-full w-full max-w-lg max-h-lg min-w-[200px] min-h-[200px]">
       <div
         className="p-6 bg-[#fafafa] relative flex-1 min-h-0"
         onMouseEnter={() => setHover(true)}

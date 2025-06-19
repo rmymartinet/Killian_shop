@@ -9,8 +9,7 @@ export default function ProductGrid({ data }: { data: Data[] }) {
         <ProductCard
           key={item.id}
           id={item.id}
-          imageUrls={Array.isArray(item.imageUrls) ? item.imageUrls : [item.imageUrls].filter(Boolean)}
-          imageDetails={Array.isArray(item.imageDetails) ? item.imageDetails : item.imageDetails ? [item.imageDetails] : undefined}
+          imageFace={item.imageFace || ""}
           title={item.title}
           price={item.price}
           quantity={item.quantity}

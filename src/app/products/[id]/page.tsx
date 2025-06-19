@@ -80,8 +80,8 @@ const ProductPage = ({ params }: ProductPageProps) => {
               <ProductCard
                 key={item.id}
                 id={item.id}
-                imageUrls={[item.imageUrls]}
-                imageDetails={item.imageDetails ? [item.imageDetails] : undefined}
+                imageFace={item.imageFace || ""}
+                imageEnsemble={item.imageEnsemble}
                 title={item.title}
                 price={item.price}
                 quantity={item.quantity}
