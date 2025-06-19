@@ -15,6 +15,16 @@ export interface Data {
   imageWidth?: number;
   imageHeight?: number;
   quantity?: number;
+  
+  // Nouveaux champs d'images spécifiques
+  imageFace?: string;
+  imageCoteDroit?: string;
+  imageCoteGauche?: string;
+  imageDos?: string;
+  imageDessus?: string;
+  imageEnsemble?: string;
+  imageDetaillee?: string;
+  imageEtiquette?: string;
 }
 
 export interface ProductDetailsProps {

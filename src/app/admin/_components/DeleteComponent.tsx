@@ -54,26 +54,30 @@ const DeleteComponent = () => {
   if (loading) return <div>Chargement des articles...</div>;
 
   return (
-    <div className="rounded-xl bg-white shadow-lg w-3/4 flex flex-col gap-10 items-center p-5">
-      <h1 className="text-xl text-red-500 font-semibold">
+    <div className="rounded-xl bg-white shadow-lg w-full max-w-4xl flex flex-col gap-6 items-center p-3 sm:p-5">
+      <h1 className="text-lg sm:text-xl text-red-500 font-semibold text-center">
         Supprimer des articles
       </h1>
       {items.length === 0 ? (
-        <p>Aucun article disponible.</p>
+        <p className="text-sm sm:text-base text-gray-500 text-center">Aucun article disponible.</p>
       ) : (
-        <ul className="w-full flex flex-col gap-4">
+        <ul className="w-full flex flex-col gap-3 sm:gap-4 px-2 sm:px-4">
           {items.map((item) => (
             <li
               key={item.id}
-              className="flex justify-between items-center border-b pb-2"
+              className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b pb-3 sm:pb-4"
             >
-              <div>
-                <strong>{item.title}</strong> - {item.price}€ - {item.quantity}{" "}
-                pièces
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                <strong className="text-sm sm:text-base">{item.title}</strong>
+                <div className="flex gap-3 text-sm sm:text-base text-gray-600">
+                  <span>{item.price}€</span>
+                  <span>•</span>
+                  <span>{item.quantity} pièces</span>
+                </div>
               </div>
               <button
                 onClick={() => handleDelete(item.id)}
-                className="bg-red-500 text-white p-2 rounded"
+                className="bg-red-500 text-white p-2 rounded text-sm sm:text-base w-full sm:w-auto hover:bg-red-600 transition-colors"
               >
                 Supprimer
               </button>

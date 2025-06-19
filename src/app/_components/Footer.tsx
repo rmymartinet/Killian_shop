@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col-reverse md:flex-row gap-20 lg:justify-between md:items-end bg-white px-4 md:px-10 py-5 pt-[15vh]">
+    <footer className="flex flex-col-reverse md:flex-row gap-20 lg:justify-between md:items-end bg-white px-4 md:px-10 py-5">
       <div className="flex flex-col  gap-4">
         <a
           href="https://www.instagram.com/sfdts.fr/"

@@ -9,8 +9,8 @@ import { createRef, useEffect, useState } from "react";
 import ProductLabels from "./_components/ProductLabels";
 import ThumbnailImagesList from "./_components/ThumbnailImagesList";
 import { DESKTOP_BREAKPOINT } from "@/utils/responsive";
-import CatalogProductCard from "@/app/_components/CatalogProductCard";
-import ProductCard from "./_components/ProductCard";
+import ProductCardDetails from "./_components/ProductCardDetails";
+import ProductCard from "@/app/_components/ProductCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,12 +20,25 @@ interface ProductPageProps {
   };
 }
 
+export interface ProductCardProps {
+  id: string;
+  imageUrls: string[];
+  imageDetails?: string[];
+  title: string;
+  price?: number;
+  quantity?: number;
+}
+
 const ProductPage = ({ params }: ProductPageProps) => {
   const { id } = params;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [refs, setRefs] = useState([]);
   const { width } = useWindow();
   const { data }: { data: Data[]; loading: boolean } = useFilteredData("pants");
+
+
+  console.log("DAAATA",data); 
+
 
   const filteredDataById = data.filter((item: Data) => item.id === id);
   const imageDetailsLength = filteredDataById.map(
@@ -44,7 +57,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
     <>
       <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]">
         {width > DESKTOP_BREAKPOINT && <ProductLabels />}
-        <ProductCard
+        <ProductCardDetails
           filteredDataById={filteredDataById}
           currentImageIndex={currentImageIndex}
           setCurrentImageIndex={setCurrentImageIndex}
@@ -59,15 +72,16 @@ const ProductPage = ({ params }: ProductPageProps) => {
           />
         )}
       </div>
-      <div className="mt-20 min-w-screen overflow-hidden flex md:justify-center items-center">
+      <div className="mt-20 min-w-screen  flex md:justify-center items-center">
         <div className="w-full h-full flex flex-col md:flex-row md:justify-center gap-4 lg:gap-40">
           {data
             .filter((item: Data) => item.id !== id)
             .map((item: Data) => (
-              <CatalogProductCard
+              <ProductCard
                 key={item.id}
                 id={item.id}
-                imageUrls={item.imageUrls[0]}
+                imageUrls={[item.imageUrls]}
+                imageDetails={item.imageDetails ? [item.imageDetails] : undefined}
                 title={item.title}
                 price={item.price}
                 quantity={item.quantity}

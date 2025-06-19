@@ -22,9 +22,17 @@ model Pants {
   waistline    String
   weight       Int
   material     String
-  imageUrls    String[] @map("imageUrls")
-  imageDetails String[] @map("imageDetails")
   quantity     Int
+  
+  // Images spécifiques
+  imageFace       String  // Vue de face (image principale)
+  imageCoteDroit  String? // Vue côté droit
+  imageCoteGauche String? // Vue côté gauche
+  imageDos        String? // Vue de dos
+  imageDessus     String? // Vue du dessus
+  imageEnsemble   String? // Vue d'ensemble (pour hover)
+  imageDetaillee  String? // Vue détaillée
+  imageEtiquette  String? // Composition/Étiquette
 }
 
 model Shirts {
@@ -35,9 +43,17 @@ model Shirts {
   length       Int
   weight       Int
   material     String
-  imageUrls    String[] @map("imageUrls")
-  imageDetails String[] @map("imageDetails")
   quantity     Int
+  
+  // Images spécifiques
+  imageFace       String  // Vue de face (image principale)
+  imageCoteDroit  String? // Vue côté droit
+  imageCoteGauche String? // Vue côté gauche
+  imageDos        String? // Vue de dos
+  imageDessus     String? // Vue du dessus
+  imageEnsemble   String? // Vue d'ensemble (pour hover)
+  imageDetaillee  String? // Vue détaillée
+  imageEtiquette  String? // Composition/Étiquette
 }
 
 model User {

@@ -9,7 +9,7 @@ type FilterProps = {
 
 const Filter = ({ setFilter, currentFilter }: FilterProps) => {
   return (
-    <div className="flex gap-10 text-xl">
+    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-10 w-full sm:w-auto">
       <FilterButton
         label="Ajouter"
         filter={FILTERS.AJOUTER}

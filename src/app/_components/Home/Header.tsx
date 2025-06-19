@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { IoIosArrowRoundForward } from "react-icons/io";
-
+import { IoIosArrowRoundDown } from "react-icons/io";
 import { useFilteredData } from "@/app/hooks/useFilteredData";
 import useWindow from "@/app/hooks/useWindow";
 import { animateArrowOnHover } from "@/utils/common/animateArrowOnHover";
@@ -37,7 +36,7 @@ const Header = ({
   };
 
   useGSAP(() => {
-    setupAnimations(gridContainerRef, shopButtonRef, titleRef);
+    setupAnimations(shopButtonRef, titleRef);
   }, []);
 
   useEffect(() => {
@@ -52,10 +51,13 @@ const Header = ({
 
   return (
     <div className="w-full flex flex-col relative h-screen items-center justify-center">
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col items-center -z-30">
+      <div className="absolute w-full h-full z-10">
+       
+      </div>
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col items-center -z-30 blur-[0px]">
         <h1
           ref={titleRef}
-          className="text-[15vw] w-full grid place-content-center  -z-10"
+          className="text-[15vw] w-full grid place-content-center -z-10"
         >
           © S.F.D.T.S
         </h1>
@@ -66,17 +68,16 @@ const Header = ({
         onMouseLeave={handleOnMouseLeave}
         className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center overflow-hidden "
       >
-        <TransitionLink
-          href="/shop"
-          className="px-4 py-2 bg-white flex items-center gap-4 rounded-xl cursor-pointer border-2 border-black z-10"
+        <div
+          className="px-4 py-2 bg-white flex items-center gap-4 rounded-xl cursor-pointer border-2 border-black"
         >
           <h1 className="uppercase text-xl font-medium">
-            Collection Disponible
+            Voir la collection
           </h1>
           <div ref={arrowRef}>
-            <IoIosArrowRoundForward className="text-3xl" />
+            <IoIosArrowRoundDown className="text-3xl animate-bounce animate-infinite animate-duration-1000 ease-in-out" />
           </div>
-        </TransitionLink>
+        </div>
       </div>
       {width <= 498 ? (
         <FlexGrid data={data} gridRef={gridContainerRef} />

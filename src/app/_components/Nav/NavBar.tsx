@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignUpButton, SignInButton, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
 import TransitionLink from "../TransitionLinks";
@@ -9,9 +9,10 @@ export default function Nav() {
 
   return (
     <nav className="flex justify-between fixed p-5 inset-0 items-center h-max z-50">
-      <div className="bg-black text-white flex gap-10 p-5 rounded-2xl text-md font-semibold shadow-xl">
+      <div className="flex gap-10 text-xl">
         <TransitionLink href="/" label="Home" />
         <TransitionLink href="/shop" label="Shop" />
+        <TransitionLink href="/contact" label="Contact" />
         {isLoaded && user?.publicMetadata.role === "admin" && (
           <TransitionLink href="/admin" label="Admin" />
         )}
@@ -25,7 +26,16 @@ export default function Nav() {
           className="w-full h-full object-contain"
         />
       </div>
-      <div className="flex items-center gap-20 p-5">
+      <div className="flex items-center gap-20 p-5 text-xl">
+        <SignedOut>
+          <SignInButton>
+            Se connecter
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <TransitionLink href="/profile" label="Mon compte" />
+          <UserButton />
+        </SignedIn>
         <Link href="/checkout">
           <FaShoppingCart size={20} />
         </Link>

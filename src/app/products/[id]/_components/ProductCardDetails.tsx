@@ -5,7 +5,7 @@ import Image from "next/image";
 import { TABLET_BREAKPOINT } from "@/utils/responsive";
 import { Data, ProductCardProps } from "@/types/dataTypes";
 
-const ProductCard = ({
+const ProductCardDetails = ({
   filteredDataById,
   currentImageIndex,
   setCurrentImageIndex,
@@ -45,4 +45,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+    export default ProductCardDetails ;

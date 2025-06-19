@@ -16,11 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "lenis/dist/lenis.css";
 import { anim } from "@/utils/pageTransition/pageTransition";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { width } = useWindow();
 
@@ -36,6 +32,46 @@ export default function RootLayout({
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {pathname !== "/success" &&
+        pathname !== "/cancel" &&
+        pathname !== "/not-found" ? (
+          width <= 498 ? (
+            <MobileNav key="mobile-nav" />
+          ) : (
+            <Nav key="desktop-nav" />
+          )
+        ) : null}
+      </AnimatePresence>
+      
+      <CartProvider>
+        <AnimatePresence mode="wait">
+          <motion.div key={pathname} {...anim()}>
+            {children}
+          </motion.div>
+        </AnimatePresence>
+        <CartSideBar />
+      </CartProvider>
+      
+      <AnimatePresence mode="wait">
+        {pathname !== "/contact" &&
+          pathname !== "/checkout" &&
+          pathname !== "/success" &&
+          pathname !== "/cancel" &&
+          pathname !== "/admin" &&
+          pathname !== "/404" && <Footer key="footer" />}
+      </AnimatePresence>
+    </>
+  );
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <ClerkProvider>
       <html lang="fr">
@@ -54,31 +90,8 @@ export default function RootLayout({
     `}
           </Script>
         </head>
-        <body className={`antialiased `}>
-          <>
-            <AnimatePresence mode="wait">
-              {pathname !== "/success" &&
-              pathname !== "/cancel" &&
-              pathname !== "/not-found" ? (
-                width <= 498 ? (
-                  <MobileNav />
-                ) : (
-                  <Nav />
-                )
-              ) : null}
-              <CartProvider>
-                <motion.div key={pathname} {...anim()}>
-                  {children} <CartSideBar />
-                </motion.div>
-              </CartProvider>
-              {pathname !== "/contact" &&
-                pathname !== "/checkout" &&
-                pathname !== "/success" &&
-                pathname !== "/cancel" &&
-                pathname !== "/admin" &&
-                pathname !== "/404" && <Footer />}
-            </AnimatePresence>
-          </>
+        <body className={`antialiased`}>
+          <ClientLayout>{children}</ClientLayout>
         </body>
       </html>
     </ClerkProvider>

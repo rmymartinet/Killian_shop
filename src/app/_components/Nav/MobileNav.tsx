@@ -4,6 +4,7 @@ import gsap from "gsap";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 
 export default function MobileNav() {
   const [isClicked, setIsClicked] = useState(false);
@@ -11,6 +12,7 @@ export default function MobileNav() {
   const lineBottomRef = useRef(null);
   const menuRef = useRef(null);
   const iconBucketRef = useRef(null);
+  const { user, isLoaded } = useUser();
 
   const handleClickMenu = () => {
     setIsClicked(!isClicked);
@@ -87,13 +89,31 @@ export default function MobileNav() {
         className="flex flex-col -translate-y-[100%] gap-6 items-center w-screen h-max fixed inset-0 p-6 bg-black text-white z-40 pt-40"
         aria-hidden="true"
       >
-        <div className="bg-black text-white gap-10 rounded-2xl text-3xl font-semibold shadow-xl flex">
+        <div className="bg-black text-white gap-10 rounded-2xl text-3xl font-semibold shadow-xl flex flex-col items-center">
           <Link onClick={handleClickCloseMenu} href="/">
             Home
           </Link>
           <Link onClick={handleClickCloseMenu} href="/shop">
             Shop
           </Link>
+          <Link onClick={handleClickCloseMenu} href="/contact">
+            Contact
+          </Link>
+          {isLoaded && user?.publicMetadata.role === "admin" && (
+            <Link onClick={handleClickCloseMenu} href="/admin">
+              Admin
+            </Link>
+          )}
+          <SignedIn>
+            <Link onClick={handleClickCloseMenu} href="/profile">
+              Mon compte
+            </Link>
+          </SignedIn>
+          <SignedOut>
+            <SignInButton>
+              <span className="text-white text-2xl">Se connecter</span>
+            </SignInButton>
+          </SignedOut>
         </div>
       </nav>
     </>

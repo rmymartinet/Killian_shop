@@ -32,13 +32,94 @@ export const dynamic = "force-dynamic";
 export const GET = async () => {
   try {
     const pantsData = await prisma.pants.findMany();
-    // const shirtsData = await prisma.shirts.findMany();
-    // const combinedData = [...pantsData, ...shirtsData];
+    const shirtsData = await prisma.shirts.findMany();
+    
+    // Traitement des données pour créer imageUrls et imageDetails
+    const processedPantsData = pantsData.map((item: any) => {
+      // Vérifier si c'est l'ancienne structure
+      if (item.imageUrls && Array.isArray(item.imageUrls)) {
+        return {
+          ...item,
+          imageUrls: item.imageUrls,
+          imageDetails: item.imageDetails || []
+        };
+      }
+      
+      // Nouvelle structure - créer imageUrls et imageDetails
+      const imageUrls = [
+        item.imageFace,
+        item.imageCoteDroit,
+        item.imageCoteGauche,
+        item.imageDos,
+        item.imageDessus,
+        item.imageEnsemble,
+        item.imageDetaillee,
+        item.imageEtiquette
+      ].filter(Boolean);
+      
+      const imageDetails = [
+        item.imageCoteDroit,
+        item.imageCoteGauche,
+        item.imageDos,
+        item.imageDessus,
+        item.imageEnsemble,
+        item.imageDetaillee,
+        item.imageEtiquette
+      ].filter(Boolean);
+      
+      return {
+        ...item,
+        imageUrls,
+        imageDetails
+      };
+    });
+    
+    const processedShirtsData = shirtsData.map((item: any) => {
+      // Vérifier si c'est l'ancienne structure
+      if (item.imageUrls && Array.isArray(item.imageUrls)) {
+        return {
+          ...item,
+          imageUrls: item.imageUrls,
+          imageDetails: item.imageDetails || []
+        };
+      }
+      
+      // Nouvelle structure - créer imageUrls et imageDetails
+      const imageUrls = [
+        item.imageFace,
+        item.imageCoteDroit,
+        item.imageCoteGauche,
+        item.imageDos,
+        item.imageDessus,
+        item.imageEnsemble,
+        item.imageDetaillee,
+        item.imageEtiquette
+      ].filter(Boolean);
+      
+      const imageDetails = [
+        item.imageCoteDroit,
+        item.imageCoteGauche,
+        item.imageDos,
+        item.imageDessus,
+        item.imageEnsemble,
+        item.imageDetaillee,
+        item.imageEtiquette
+      ].filter(Boolean);
+      
+      return {
+        ...item,
+        imageUrls,
+        imageDetails
+      };
+    });
+    
+    const combinedData = [...processedPantsData, ...processedShirtsData];
 
-    return new NextResponse(JSON.stringify(pantsData), {
+    return new NextResponse(JSON.stringify(combinedData), {
       status: 200,
     });
   } catch (error) {
+    console.error("Erreur API GET:", error);
     if (
       error instanceof Error &&
       error.message.includes("Database connection error")
@@ -61,15 +142,36 @@ export const POST = async (req: Request) => {
   try {
     const item = await req.json();
 
+    // Traitement des images pour mapper vers les nouveaux champs
+    const filteredImages = item.images ? item.images.filter((url: string) => url !== "") : [];
+    
+    const processedItem = {
+      ...item,
+      // Mapper les images vers les nouveaux champs
+      imageFace: filteredImages[0] || "",
+      imageCoteDroit: filteredImages[1] || null,
+      imageCoteGauche: filteredImages[2] || null,
+      imageDos: filteredImages[3] || null,
+      imageDessus: filteredImages[4] || null,
+      imageEnsemble: filteredImages[5] || null,
+      imageDetaillee: filteredImages[6] || null,
+      imageEtiquette: filteredImages[7] || null
+    };
+
+    // Supprimer les anciens champs
+    delete processedItem.images;
+    delete processedItem.imageUrls;
+    delete processedItem.imageDetails;
+
     let data;
 
     if (item.category === "pants") {
       data = await prisma.pants.create({
-        data: item,
+        data: processedItem,
       });
     } else if (item.category === "shirts") {
       data = await prisma.shirts.create({
-        data: item,
+        data: processedItem,
       });
     }
 
@@ -95,13 +197,39 @@ export const POST = async (req: Request) => {
 
 export const DELETE = async (req: Request) => {
   try {
-    const { id } = await req.json();
+    const { id, category } = await req.json();
 
-    const data = await prisma.pants.delete({
-      where: {
-        id: id,
-      },
-    });
+    let data;
+
+    if (category === "pants") {
+      data = await prisma.pants.delete({
+        where: {
+          id: id,
+        },
+      });
+    } else if (category === "shirts") {
+      data = await prisma.shirts.delete({
+        where: {
+          id: id,
+        },
+      });
+    } else {
+      // Essayer de supprimer dans les deux tables si la catégorie n'est pas spécifiée
+      try {
+        data = await prisma.pants.delete({
+          where: {
+            id: id,
+          },
+        });
+      } catch {
+        data = await prisma.shirts.delete({
+          where: {
+            id: id,
+          },
+        });
+      }
+    }
+
     return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error) {
     if (
