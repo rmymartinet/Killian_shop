@@ -15,7 +15,7 @@ const ProductCardDetails = ({
   const datas = filteredDataById[0];
 
   return (
-    <div className="flex flex-col lg:gap-10 bg-white lg:mx-10 rounded-xl shadow-lg">
+    <div className="flex flex-col lg:gap-10 bg-white lg:mx-10 rounded-xl shadow-lg md:pr-4">
       <div className="flex justify-center">
         {width > TABLET_BREAKPOINT && (
           <div className="flex flex-col justify-center items-center relative rounded-bl-xl rounded-tl-xl">

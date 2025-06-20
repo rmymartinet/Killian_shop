@@ -12,8 +12,8 @@ const Grid = ({
 }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [visibleGridLines, setVisibleGridLines] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const shouldAnimate = useHomeReload();
-
 
   // Images du loader pour préchargement et animation
   const loaderImages = [
@@ -61,7 +61,7 @@ const Grid = ({
 
   // Étape 3: Animation progressive des lignes de grille (après FLIP)
   useEffect(() => {
-    if (shouldAnimate && imagesLoaded) {
+    if (shouldAnimate && imagesLoaded && !hasAnimated) {
       const totalGridCells = 8 * 6; // 48 cellules
       let intervalId: NodeJS.Timeout;
       
@@ -72,6 +72,7 @@ const Grid = ({
               return prev + 1;
             } else {
               clearInterval(intervalId);
+              setHasAnimated(true); // Marquer comme animé
               return prev;
             }
           });
@@ -82,13 +83,16 @@ const Grid = ({
         clearTimeout(timeoutId);
         if (intervalId) clearInterval(intervalId);
       };
+    } else if (!shouldAnimate && imagesLoaded) {
+      // Si on n'est pas sur la home, afficher toutes les lignes immédiatement
+      setVisibleGridLines(8 * 6);
     }
-  }, [shouldAnimate, imagesLoaded]);
+  }, [shouldAnimate, imagesLoaded, hasAnimated]);
 
   return (
     <div
       ref={gridRef}
-      className="fixed -top-[10%]  -left-[20%] w-[120%] h-screen md:h-[120%] -z-10 grid grid-cols-8 grid-rows-6 border-dashed border border-gray-200"
+      className="fixed -top-[10%]  -left-[20%] w-[120%] h-screen md:h-[120%] z-10 grid grid-cols-8 grid-rows-6 border-dashed border border-gray-200"
     >
       {Array.from({ length: 8 * 6 }).map((_, index) => (
         <div

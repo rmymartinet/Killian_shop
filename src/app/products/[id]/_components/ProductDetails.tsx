@@ -101,7 +101,7 @@ const PorductDetails = ({
           >
             <span>Ajouter au panier</span>
           </button>
-          <Link href={"/checkout"} className="w-full">
+          <Link href={"/choose-auth"} className="w-full">
             <div
               onClick={() => {
                 if (filteredDataById.length > 0) {
