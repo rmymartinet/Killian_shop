@@ -95,7 +95,7 @@ const CartSideBar = () => {
           <p>Total de la commande:</p>
           <p>{formattedTotalWithDelivery} €</p>
         </div>
-        <Link href="/checkout">
+        <Link href="/choose-auth">
           <button
             onClick={() => setIsShoppingOpen(false)}
             className="w-full py-2 text-sm uppercase border border-black bg-white hover:bg-black hover:text-white transition"

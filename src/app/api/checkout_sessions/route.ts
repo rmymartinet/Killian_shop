@@ -1,6 +1,8 @@
 import { Data, StripeProduct } from "@/types/dataTypes";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { auth } from "@clerk/nextjs/server";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 async function getActiveProducts() {
@@ -14,6 +16,30 @@ async function getActiveProducts() {
 export async function POST(request: NextRequest) {
   try {
     const { products, DELEVERYCOST } = await request.json();
+
+    // Récupérer l'utilisateur connecté
+    const { userId } = auth();
+    let customerEmail: string | undefined;
+
+    if (userId) {
+      try {
+        // Appel à l'API Clerk pour récupérer l'utilisateur
+        const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
+        const res = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${CLERK_SECRET_KEY}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.ok) {
+          const user = await res.json();
+          customerEmail = user.email_addresses?.[0]?.email_address;
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération de l'email:", error);
+      }
+    }
 
     const checkoutProducts: Data[] = products;
     const activeProducts = await getActiveProducts();
@@ -81,7 +107,8 @@ export async function POST(request: NextRequest) {
       quantity: 1,
     });
 
-    const session = await stripe.checkout.sessions.create({
+    // Configuration de la session Stripe avec l'email si disponible
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       line_items: checkoutStripeProducts,
       mode: "payment",
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -95,14 +122,25 @@ export async function POST(request: NextRequest) {
         product_id: JSON.stringify(productIds),
         quantity: JSON.stringify(quantity),
       },
-    });
+    };
+
+    // Ajouter l'email du client si disponible
+    if (customerEmail) {
+      sessionConfig.customer_email = customerEmail;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     if (process.env.NODE_ENV === "development") {
       console.log("Metadata sent:", {
         product_id: JSON.stringify(productIds),
         quantity: JSON.stringify(quantity),
       });
+      if (customerEmail) {
+        console.log("Customer email pre-filled:", customerEmail);
+      }
     }
+    
     return NextResponse.json({
       url: session.url,
     });
