@@ -4,11 +4,11 @@ import React, { useState, useRef } from "react";
 
 const imageExamples = [
   { label: "Vue de face", key: "face", example: "/assets/images/face.png" },
+  { label: "Vue d'ensemble", key: "ensemble", example: "/assets/images/ensemble.png" },
+  { label: "Vue du dessus", key: "dessus", example: "/assets/images/dessus.png" },
   { label: "Vue côté droit", key: "cote_droit", example: "/assets/images/cote_droit.png" },
   { label: "Vue côté gauche", key: "cote_gauche", example: "/assets/images/cote_gauche.png" },
   { label: "Vue de dos", key: "dos", example: "/assets/images/dos.png" },
-  { label: "Vue du dessus", key: "dessus", example: "/assets/images/dessus.png" },
-  { label: "Vue d'ensemble", key: "ensemble", example: "/assets/images/ensemble.png" },
   { label: "Vue détaillée", key: "detaillee", example: "/assets/images/detaillee.png" },
   { label: "Composition / Étiquette", key: "etiquette", example: "/assets/images/etiquette.png" },
 ];
@@ -23,6 +23,18 @@ const initialForm = {
   material: "",
   quantity: "",
   images: Array(imageExamples.length).fill("") as string[],
+};
+
+// Mapping des indices pour l'API
+const apiIndexMapping = {
+  face: 0,        // Vue de face va à l'index 0 dans l'API
+  ensemble: 1,    // Vue d'ensemble va à l'index 1 dans l'API
+  dessus: 2,      // Vue du dessus va à l'index 2 dans l'API
+  cote_droit: 3,  // Vue côté droit va à l'index 3 dans l'API
+  cote_gauche: 4, // Vue côté gauche va à l'index 4 dans l'API
+  dos: 5,         // Vue de dos va à l'index 5 dans l'API
+  detaillee: 6,   // Vue détaillée va à l'index 6 dans l'API
+  etiquette: 7    // Composition/Étiquette va à l'index 7 dans l'API
 };
 
 const AddWizard = () => {
@@ -78,36 +90,53 @@ const AddWizard = () => {
     setLoading(true);
     setError(null);
     try {
-      const filteredImages = form.images.filter((url) => url !== "");
-      const newItem: any = {
-        ...form,
-        price: parseInt(form.price, 10),
-        length: parseInt(form.length, 10),
-        weight: parseInt(form.weight, 10),
-        quantity: parseInt(form.quantity, 10),
-        // Mapper les images vers les nouveaux champs spécifiques
-        imageFace: filteredImages[0] || "",
-        imageCoteDroit: filteredImages[1] || null,
-        imageCoteGauche: filteredImages[2] || null,
-        imageDos: filteredImages[3] || null,
-        imageDessus: filteredImages[4] || null,
-        imageEnsemble: filteredImages[5] || null,
-        imageDetaillee: filteredImages[6] || null,
-        imageEtiquette: filteredImages[7] || null
+      // Réorganiser les images selon l'ordre attendu par l'API
+      const reorderedImages = Array(8).fill(null);
+      form.images.forEach((url, index) => {
+        if (url === "") return;
+        
+        // Trouver la clé correspondante dans imageExamples
+        const key = imageExamples[index].key;
+        // Utiliser le mapping pour trouver l'index correct dans l'API
+        const apiIndex = apiIndexMapping[key as keyof typeof apiIndexMapping];
+        reorderedImages[apiIndex] = url;
+      });
+      
+      // Log détaillé pour voir l'ordre des images
+      console.log("Images dans le formulaire:", form.images);
+      console.log("Images réorganisées pour l'API:", reorderedImages);
+      
+      // S'assurer que les valeurs numériques sont bien des nombres
+      const newItem = {
+        title: form.title.trim(),
+        category: form.category,
+        price: Number(form.price),
+        length: Number(form.length),
+        weight: Number(form.weight),
+        quantity: Number(form.quantity),
+        material: form.material.trim(),
+        images: reorderedImages,
+        ...(form.category === "pants" ? { waistline: form.waistline.trim() } : {})
       };
       
       console.log("Données envoyées:", newItem);
-      console.log("filteredImages:", filteredImages);
       
-      if (form.category === "pants") newItem.waistline = form.waistline;
-      else delete newItem.waistline;
-      delete newItem.images;
       const response = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newItem),
       });
-      if (!response.ok) throw new Error("Erreur lors de l'ajout de l'article");
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erreur détaillée:", errorData);
+        throw new Error(
+          errorData.details?.[0]?.message || 
+          errorData.error || 
+          "Erreur lors de l'ajout de l'article"
+        );
+      }
+      
       setSuccess(true);
       setForm(initialForm);
       setStep(1);
@@ -227,7 +256,7 @@ const AddWizard = () => {
                 <h3 className="font-semibold text-base sm:text-lg">Upload des images</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
                   {imageExamples.map((img, idx) => (
-                    <div key={img.key} className="flex flex-col items-center gap-2 border rounded-lg p-2">
+                    <div key={img.key} className="flex flex-col items-center gap-2 border rounded-lg p-2 border-2 border-red-400">
                       <input
                         type="file"
                         accept="image/*"
@@ -239,10 +268,18 @@ const AddWizard = () => {
                           if (!e.target.files || e.target.files.length === 0) return;
                           const file = e.target.files[0];
                           if (file) {
-                            const url = await uploadToCloudinary(file);
-                            const newImages = [...form.images];
-                            newImages[idx] = url;
-                            setForm({ ...form, images: newImages });
+                            try {
+                              console.log(`Upload de l'image ${idx}:`, file.name);
+                              const url = await uploadToCloudinary(file);
+                              console.log(`URL Cloudinary générée pour ${idx}:`, url);
+                              const newImages = [...form.images];
+                              newImages[idx] = url;
+                              setForm({ ...form, images: newImages });
+                              console.log(`Images mises à jour:`, newImages);
+                            } catch (error) {
+                              console.error(`Erreur upload image ${idx}:`, error);
+                              setError(`Erreur lors de l'upload de l'image ${idx + 1}`);
+                            }
                           }
                         }}
                       />
@@ -335,7 +372,7 @@ const ProductCardPreview = ({ images, title, price }: { images: string[], title:
   
   // Image principale (vue de face) et image de détail (vue d'ensemble)
   const mainImage = images[0] || "/assets/images/face.png";
-  const detailImage = images[5] || images[0] || "/assets/images/ensemble.png"; // Vue d'ensemble est à l'index 5
+  const detailImage = images[1] || images[0] || "/assets/images/ensemble.png"; // Vue d'ensemble est à l'index 1
 
   return (
     <div className="flex flex-col gap-4 h-full w-full max-w-lg max-h-lg">
@@ -378,7 +415,11 @@ const ProductDetailsPreview = ({ images }: { images: string[] }) => {
   // Sélection des images principales uniquement
   const mainImages = [
     { index: 0, image: images[0], label: "Vue de face" },      // imageFace
-    { index: 5, image: images[5], label: "Vue d'ensemble" },   // imageEnsemble
+    { index: 1, image: images[1], label: "Vue d'ensemble" },   // imageEnsemble
+    { index: 2, image: images[2], label: "Vue du dessus" },    // imageDessus
+    { index: 3, image: images[3], label: "Vue côté droit" },   // imageCoteDroit
+    { index: 4, image: images[4], label: "Vue côté gauche" },  // imageCoteGauche
+    { index: 5, image: images[5], label: "Vue de dos" },         // imageDos
     { index: 6, image: images[6], label: "Vue détaillée" },    // imageDetaillee
     { index: 7, image: images[7], label: "Étiquette" }         // imageEtiquette
   ];
