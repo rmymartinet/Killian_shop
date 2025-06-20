@@ -1,6 +1,11 @@
 import { Data } from "@/types/dataTypes";
 import Image from "next/image";
 
+// Fonction d'aide pour récupérer une image de manière sûre
+const getSafeImage = (data: Data[], dataIndex: number, imageIndex: number): string => {
+  return data?.[dataIndex]?.imageDetails?.[imageIndex] || "";
+};
+
 const FlexGrid = ({
   data,
   gridRef,
@@ -17,7 +22,7 @@ const FlexGrid = ({
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={data[0]?.imageDetails ? data[0].imageDetails[3] : ""}
+                src={getSafeImage(data, 0, 3)}
                 width={300}
                 height={300}
                 className="object-cover w-full h-3/4"
@@ -35,23 +40,21 @@ const FlexGrid = ({
         </div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200"></div>
         <div className="flex shrink-0 flex-col w-full h-full items-center justify-center px-2 py-1 border-dashed border border-gray-200">
-          {data[0] && (
+          {data[2] && (
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={
-                  data[2] && data[2].imageDetails ? data[2].imageDetails[1] : ""
-                }
+                src={getSafeImage(data, 2, 1)}
                 width={300}
                 height={300}
                 className="object-cover w-full h-3/4"
               />
               <div>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[0].title}
+                  {data[2].title}
                 </p>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[0].material}
+                  {data[2].material}
                 </p>
               </div>
             </div>
@@ -70,9 +73,7 @@ const FlexGrid = ({
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={
-                  data[0] && data[0].imageDetails ? data[0].imageDetails[0] : ""
-                }
+                src={getSafeImage(data, 0, 0)}
                 width={300}
                 height={300}
                 className="object-cover w-full h-3/4"
@@ -96,19 +97,17 @@ const FlexGrid = ({
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={
-                  data[2] && data[2].imageDetails ? data[2].imageDetails[2] : ""
-                }
+                src={getSafeImage(data, 2, 2)}
                 width={300}
                 height={300}
                 className="object-cover w-full h-3/4"
               />
               <div>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[1].title}
+                  {data[2].title}
                 </p>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[1].material}
+                  {data[2].material}
                 </p>
               </div>
             </div>
@@ -119,19 +118,17 @@ const FlexGrid = ({
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={
-                  data[0] && data[0].imageDetails ? data[0].imageDetails[1] : ""
-                }
+                src={getSafeImage(data, 0, 1)}
                 width={300}
                 height={300}
                 className="object-contain w-full h-full"
               />
               <div>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[1].title}
+                  {data[0].title}
                 </p>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[1].material}
+                  {data[0].material}
                 </p>
               </div>
             </div>
@@ -162,9 +159,7 @@ const FlexGrid = ({
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={
-                  data[1] && data[1].imageDetails ? data[1].imageDetails[2] : ""
-                }
+                src={getSafeImage(data, 1, 2)}
                 width={300}
                 height={300}
                 className="object-cover w-full h-3/4"
@@ -186,19 +181,17 @@ const FlexGrid = ({
             <div className="p-2 h-full justify-between flex flex-col">
               <Image
                 alt=""
-                src={
-                  data[2] && data[2].imageDetails ? data[2].imageDetails[0] : ""
-                }
+                src={getSafeImage(data, 2, 0)}
                 width={300}
                 height={300}
                 className="object-cover w-full h-3/4"
               />
               <div>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[1].title}
+                  {data[2].title}
                 </p>
                 <p className="font-light text-[0.375rem] md:text-[0.5rem] lg:text-[0.688rem]">
-                  {data[1].material}
+                  {data[2].material}
                 </p>
               </div>
             </div>

@@ -3,18 +3,22 @@ import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { ProductSchema } from "@/schemas/product.schema";
+import Stripe from "stripe";
+
+// Initialisation de Stripe
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2024-06-20",
+  typescript: true,
+});
 
 // Define an interface for items that have image properties
 interface ProductImageItem {
   imageFace?: string | null;
-  imageCoteDroit?: string | null;
-  imageCoteGauche?: string | null;
-  imageDos?: string | null;
-  imageDessus?: string | null;
+  imageDetaillee1?: string | null;
+  imageDetaillee2?: string | null;
+  imageDetaillee3?: string | null;
   imageEnsemble?: string | null;
-  imageDetaillee?: string | null;
-  imageEtiquette?: string | null;
-  [key: string]: unknown; // Allow other properties
+  [key: string]: unknown;
 }
 
 type ErrorWithMessage = {
@@ -43,6 +47,11 @@ function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;
 }
 
+// Fonction d'aide pour sécuriser les URLs d'images
+function getSafeImageUrl(url: string | null | undefined): string {
+  return (url && typeof url === 'string' && url.trim() !== '') ? url : "";
+}
+
 // Middleware de vérification d'authentification admin
 async function verifyAdminAuth(req: NextRequest) {
   const { userId } = getAuth(req);
@@ -60,29 +69,26 @@ export const GET = async () => {
   try {
     const pantsData = await prisma.pants.findMany();
     const shirtsData = await prisma.shirts.findMany();
+
+    console.log("PANTS DATA",pantsData)
+    console.log("SHIRTS DATA",shirtsData)
     
     // Traitement des données pour créer imageUrls et imageDetails
     const processedPantsData = pantsData.map((item: ProductImageItem) => {
       const imageUrls = [
-        item.imageFace,
-        item.imageCoteDroit,
-        item.imageCoteGauche,
-        item.imageDos,
-        item.imageDessus,
-        item.imageEnsemble,
-        item.imageDetaillee,
-        item.imageEtiquette
+        getSafeImageUrl(item.imageFace),
+        getSafeImageUrl(item.imageEnsemble),
       ].filter(Boolean);
       
       const imageDetails = [
-        item.imageCoteDroit,
-        item.imageCoteGauche,
-        item.imageDos,
-        item.imageDessus,
-        item.imageEnsemble,
-        item.imageDetaillee,
-        item.imageEtiquette
+        getSafeImageUrl(item.imageEnsemble),
+        getSafeImageUrl(item.imageDetaillee1),
+        getSafeImageUrl(item.imageDetaillee2),
+        getSafeImageUrl(item.imageDetaillee3),
       ].filter(Boolean);
+
+      console.log("IMAGE URLS",imageUrls)
+      console.log("IMAGE DETAILS",imageDetails)
       
       return {
         ...item,
@@ -93,24 +99,18 @@ export const GET = async () => {
     
     const processedShirtsData = shirtsData.map((item: ProductImageItem) => {
       const imageUrls = [
-        item.imageFace,
-        item.imageCoteDroit,
-        item.imageCoteGauche,
-        item.imageDos,
-        item.imageDessus,
-        item.imageEnsemble,
-        item.imageDetaillee,
-        item.imageEtiquette
+        getSafeImageUrl(item.imageFace),
+        getSafeImageUrl(item.imageEnsemble),
+        getSafeImageUrl(item.imageDetaillee1),
+        getSafeImageUrl(item.imageDetaillee2),
+        getSafeImageUrl(item.imageDetaillee3),
       ].filter(Boolean);
       
       const imageDetails = [
-        item.imageCoteDroit,
-        item.imageCoteGauche,
-        item.imageDos,
-        item.imageDessus,
-        item.imageEnsemble,
-        item.imageDetaillee,
-        item.imageEtiquette
+        getSafeImageUrl(item.imageEnsemble),
+        getSafeImageUrl(item.imageDetaillee1),
+        getSafeImageUrl(item.imageDetaillee2),
+        getSafeImageUrl(item.imageDetaillee3),
       ].filter(Boolean);
       
       return {
@@ -169,35 +169,68 @@ export const POST = async (req: NextRequest) => {
       // Utiliser directement les indices du tableau images dans le nouvel ordre
       imageFace: item.images[0] || "",
       imageEnsemble: item.images[1] || null,
-      imageDessus: item.images[2] || null,
-      imageCoteDroit: item.images[3] || null,
-      imageCoteGauche: item.images[4] || null,
-      imageDos: item.images[5] || null,
-      imageDetaillee: item.images[6] || null,
-      imageEtiquette: item.images[7] || null
+      imageDetaillee1: item.images[2] || null,
+      imageDetaillee2: item.images[3] || null,
+      imageDetaillee3: item.images[4] || null,
     };
+
 
 
     delete processedItem.images;
 
 
-    let data;
+    let newProductInDb;
 
     await prisma.$transaction(async (tx) => {
+      // 1. Créer le produit dans la base de données locale
       if (item.category === "pants") {
-        data = await tx.pants.create({
-          data: processedItem,
+        newProductInDb = await tx.pants.create({ data: processedItem });
+      } else if (item.category === "shirts") {
+        newProductInDb = await tx.shirts.create({ data: processedItem });
+      } else {
+        throw new Error("Invalid category");
+      }
+
+      if (!newProductInDb) {
+        throw new Error("Failed to create product in database");
+      }
+
+      // 2. Créer le produit sur Stripe
+      const stripeProduct = await stripe.products.create({
+        name: newProductInDb.title,
+        description: `Matériaux: ${newProductInDb.material}, Poids: ${newProductInDb.weight}g`,
+        images: [processedItem.imageFace]
+      });
+
+      // 3. Créer le prix sur Stripe (en centimes)
+      const stripePrice = await stripe.prices.create({
+        product: stripeProduct.id,
+        unit_amount: newProductInDb.price * 100, // Le prix doit être en centimes
+        currency: 'eur',
+      });
+
+      // 4. Mettre à jour le produit local avec les IDs Stripe
+      const updateData = {
+        stripeProductId: stripeProduct.id,
+        stripePriceId: stripePrice.id,
+      };
+
+      if (item.category === "pants") {
+        await tx.pants.update({
+          where: { id: newProductInDb.id },
+          data: updateData,
         });
       } else if (item.category === "shirts") {
-        data = await tx.shirts.create({
-          data: processedItem,
+        await tx.shirts.update({
+          where: { id: newProductInDb.id },
+          data: updateData,
         });
       }
     });
 
-    console.log("Produit créé avec succès:", data);
+    console.log("Produit créé avec succès dans la BDD et sur Stripe");
 
-    return new NextResponse(JSON.stringify(data), { 
+    return new NextResponse(JSON.stringify(newProductInDb), { 
       status: 201,
       headers: { 'Content-Type': 'application/json' }
     });

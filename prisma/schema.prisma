@@ -26,13 +26,17 @@ model Pants {
   
   // Images spécifiques
   imageFace       String  // Vue de face (image principale)
-  imageCoteDroit  String? // Vue côté droit
-  imageCoteGauche String? // Vue côté gauche
-  imageDos        String? // Vue de dos
-  imageDessus     String? // Vue du dessus
   imageEnsemble   String? // Vue d'ensemble (pour hover)
-  imageDetaillee  String? // Vue détaillée
-  imageEtiquette  String? // Composition/Étiquette
+imageDetaillee1   String?
+imageDetaillee2    String? 
+imageDetaillee3    String? 
+
+
+
+
+  // Champs Stripe
+  stripeProductId String?
+  stripePriceId   String?
 }
 
 model Shirts {
@@ -47,13 +51,14 @@ model Shirts {
   
   // Images spécifiques
   imageFace       String  // Vue de face (image principale)
-  imageCoteDroit  String? // Vue côté droit
-  imageCoteGauche String? // Vue côté gauche
-  imageDos        String? // Vue de dos
-  imageDessus     String? // Vue du dessus
   imageEnsemble   String? // Vue d'ensemble (pour hover)
-  imageDetaillee  String? // Vue détaillée
-  imageEtiquette  String? // Composition/Étiquette
+imageDetaillee1   String?
+imageDetaillee2    String? 
+imageDetaillee3    String? 
+
+  // Champs Stripe
+  stripeProductId String?
+  stripePriceId   String?
 }
 
 model User {

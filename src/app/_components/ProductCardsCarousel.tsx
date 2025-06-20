@@ -7,6 +7,17 @@ interface ProductCardsCarouselProps {
   products: Data[];
 }
 
+// Fonction d'aide pour sécuriser l'accès aux images
+const getSafeImage = (item: Data, imageType: 'face' | 'ensemble'): string => {
+  if (imageType === 'face') {
+    return item.imageFace || "";
+  }
+  if (imageType === 'ensemble') {
+    return item.imageEnsemble || "";
+  }
+  return "";
+};
+
 const getVisibleCount = (width: number) => {
   if (width < 768) return 1;
   if (width < 1024) return 2;
@@ -40,8 +51,8 @@ export default function ProductCardsCarousel({ products }: ProductCardsCarouselP
           >
             <ProductCard
               id={item.id}
-              imageFace={item.imageFace ?? ""}
-              imageEnsemble={item.imageEnsemble}
+              imageFace={getSafeImage(item, 'face')}
+              imageEnsemble={getSafeImage(item, 'ensemble')}
               title={item.title}
               price={item.price}
               quantity={item.quantity}
@@ -71,8 +82,8 @@ export default function ProductCardsCarousel({ products }: ProductCardsCarouselP
             >
               <ProductCard
                 id={item.id}
-                imageFace={item.imageFace ?? ""}
-                imageEnsemble={item.imageEnsemble}
+                imageFace={getSafeImage(item, 'face')}
+                imageEnsemble={getSafeImage(item, 'ensemble')}
                 title={item.title}
                 price={item.price}
                 quantity={item.quantity}
