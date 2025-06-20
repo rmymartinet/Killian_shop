@@ -305,7 +305,7 @@ const AddWizard = () => {
                     </div>
                   <div className="flex flex-col items-center gap-3 sm:gap-4">
                     <h1 className="text-2xl font-semibold text-center">Ici tu peux faire le test pour te donner un apercu</h1>
-                    <p className="text-ellipsis text-center">Quand tu ajoutes les images en haut tu peux voir l'apercu de ce que ca donne en reel sur le site</p>
+                    <p className="text-ellipsis text-center">Quand tu ajoutes les images en haut tu peux voir l&apos;apercu de ce que ca donne en reel sur le site</p>
                     <ProductCardPreview 
                       images={form.images} 
                       title={form.title} 
@@ -320,12 +320,12 @@ const AddWizard = () => {
                   <div className="border grid grid-cols-2 rounded-lg p-3 sm:p-4 bg-white">
                     <div className="flex flex-col items-center gap-3 sm:gap-4">
                       <h1 className="text-2xl font-semibold text-center">Exemple avec avec pants of love sur le site</h1>
-                      <p className="text-center">Ici tu peux voir l'apercu des détails du produit les photos ou l'utilisateurs pourra défiler</p>
+                      <p className="text-center">Ici tu peux voir l&apos;apercu des détails du produit les photos ou l&apos;utilisateurs pourra défiler</p>
                       <Image src="/assets/images/thumbnails.png" alt="detaillee" width={100} height={100} className="w-1/2" />
                     </div>
                     <div className="flex flex-col items-center gap-3 sm:gap-4">
-                      <h1 className="text-2xl font-semibold text-center">Tu peux voir l'apercu de se que ca donnera ici</h1>
-                      <p className="text-center">Ici tu aura 4 photo tu peux en mettre jusqu'a 4 tu peux en mettre moins si tu le souhaite</p>
+                      <h1 className="text-2xl font-semibold text-center">Tu peux voir l&apos;apercu de se que ca donnera ici</h1>
+                      <p className="text-center">Ici tu aura 4 photo tu peux en mettre jusqu&apos;a 4 tu peux en mettre moins si tu le souhaite</p>
                       <ProductDetailsPreview images={form.images} />
                     </div>
                   </div>
@@ -345,19 +345,31 @@ const AddWizard = () => {
         )}
 
         {step === 5 && (
-          <div className="flex flex-col gap-3 sm:gap-4">
-            <h2 className="text-base sm:text-lg font-semibold">Récapitulatif</h2>
-            <ul className="text-sm sm:text-base space-y-2">
-              <li><strong>Titre :</strong> {form.title}</li>
-              <li><strong>Catégorie :</strong> {form.category === "pants" ? "Pantalon" : "Shirt"}</li>
-              <li><strong>Prix :</strong> {form.price} €</li>
-              <li><strong>Longueur :</strong> {form.length} cm</li>
-              {form.category === "pants" && <li><strong>Tour de taille :</strong> {form.waistline}</li>}
-              <li><strong>Poids :</strong> {form.weight} g</li>
-              <li><strong>Matériaux :</strong> {form.material}</li>
-              <li><strong>Quantité :</strong> {form.quantity}</li>
-              <li><strong>Photos :</strong> {form.images.filter((url) => url).length} ajoutées</li>
-            </ul>
+          <div className="flex flex-col gap-4 sm:gap-6">
+            <h3 className="font-semibold text-base sm:text-lg text-center">Aperçu de l&apos;annonce</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div className="flex flex-col gap-2">
+                <h4 className="font-medium">Carte Produit</h4>
+                <p className="text-xs text-gray-500">
+                  C&apos;est ce que les utilisateurs verront sur la page d&apos;accueil.
+                </p>
+                <ProductCardPreview
+                  images={form.images.filter(Boolean)}
+                  title={form.title}
+                  price={form.price}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <h4 className="font-medium">Détails du produit</h4>
+                <p className="text-xs text-gray-500">
+                  Ce sont les images qui apparaîtront sur la page détaillée du produit.
+                </p>
+                <ProductDetailsPreview images={form.images.filter(Boolean)} />
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-center text-gray-600 mt-2">
+              Si tout semble correct, tu peux soumettre. Sinon, reviens en arrière pour éditer.
+            </p>
             <div className="flex gap-3 sm:gap-4 flex-col sm:flex-row sm:justify-end mt-2">
               <button type="button" className="bg-gray-300 text-black p-2 rounded text-sm sm:text-base w-full sm:w-auto" onClick={prevStep}>
                 Retour
@@ -375,44 +387,27 @@ const AddWizard = () => {
 
 // Composant d'aperçu du ProductCard
 const ProductCardPreview = ({ images, title, price }: { images: string[], title: string, price: string }) => {
-  const [hover, setHover] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  
-  // Image principale (vue de face) et image de détail (vue d'ensemble)
-  const mainImage = images[0] || "/assets/images/face.png";
-  const detailImage = images[1] || images[0] || "/assets/images/ensemble.png"; // Vue d'ensemble est à l'index 1
+  const [isHovered, setIsHovered] = useState(false);
+  const imageFace = images[0] || "/assets/images/face.png";
+  const imageEnsemble = images[1] || imageFace;
 
   return (
-    <div className="flex flex-col gap-4 h-full w-full max-w-lg max-h-lg">
-      <div
-        className="p-6 bg-[#fafafa] relative flex-1 min-h-0"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
-        <div className="relative w-full h-full max-w-sm max-h-sm">
-          <div className="w-full h-full aspect-square">
-            <Image
-              src={hover ? detailImage : mainImage}
-              alt={title}
-              width={700}
-              height={700}
-              priority
-              quality={100}
-              loading="eager"
-              className="w-full h-full object-cover transition-opacity duration-300"
-              onLoad={() => setImageLoaded(true)}
-              style={{ 
-                opacity: imageLoaded ? 1 : 0.8,
-                minHeight: '200px',
-                minWidth: '200px'
-              }}
-            />
-          </div>
-        </div>
+    <div 
+      className="border rounded-lg p-4 w-full max-w-xs mx-auto bg-gray-50 shadow-sm"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative w-full aspect-[4/5] overflow-hidden rounded-md bg-white">
+        <Image
+          src={isHovered ? imageEnsemble : imageFace}
+          alt={`Aperçu de ${title}`}
+          fill
+          className="object-contain"
+        />
       </div>
-      <div className="flex-shrink-0 pl-6 pb-6">
-        <p className="text-sm font-semibold">{title || "Titre du produit"}</p>
-        <p className="text-sm">€{price || "0"}.00 EUR</p>
+      <div className="mt-3">
+        <h5 className="font-semibold truncate">{title}</h5>
+        <p className="text-sm text-gray-600">€{price}.00 EUR</p>
       </div>
     </div>
   );
@@ -420,45 +415,44 @@ const ProductCardPreview = ({ images, title, price }: { images: string[], title:
 
 // Composant d'aperçu des détails produit
 const ProductDetailsPreview = ({ images }: { images: string[] }) => {
-  // Sélection des images principales uniquement
-  const mainImages = [
-    { index: 1, image: images[1], label: "Vue d'ensemble" },   // imageEnsemble
-    { index: 2, image: images[2], label: "Vue détaillée1" },    // imageDessus
-    { index: 3, image: images[3], label: "Vue détaillée2" },   // imageCoteDroit
-    { index: 4, image: images[4], label: "Vue détaillée3" },  // imageCoteGauche  
-  ];
+  const imageEnsemble = images[1] || "";
+  // On prend toutes les images après la "vue d'ensemble" comme images détaillées
+  const detailImages = images.slice(2); 
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-md">
-      {mainImages.map(({ index, image, label }) => (
-        <div
-          key={index}
-          className="w-full aspect-[4/3] rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-300 transition-all duration-200"
-        >
-          {image ? (
-            <div className="relative w-full h-full group">
-              <Image
-                src={image}
-                alt={label}
-                width={400}
-                height={300}
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                style={{ 
-                  minWidth: '100%',
-                  minHeight: '100%'
-                }}
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                {label}
-              </div>
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 text-sm p-4">
-              {label}
-            </div>
-          )}
+    <div className="border rounded-lg p-4 flex flex-col gap-3 bg-gray-50 shadow-sm">
+      {imageEnsemble && (
+        <div className="flex flex-col gap-1">
+          <h5 className="text-sm font-medium text-gray-700">Vue d&apos;ensemble</h5>
+          <div className="relative w-full aspect-square overflow-hidden rounded-md bg-white">
+            <Image
+              src={imageEnsemble}
+              alt="Aperçu de la vue d'ensemble"
+              fill
+              className="object-contain"
+            />
+          </div>
         </div>
-      ))}
+      )}
+      {detailImages.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <h5 className="text-sm font-medium text-gray-700">Vues détaillées</h5>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {detailImages.map((img, index) => (
+              img && (
+                <div key={index} className="relative aspect-square overflow-hidden rounded-md bg-white">
+                  <Image
+                    src={img}
+                    alt={`Vue détaillée ${index + 1}`}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
