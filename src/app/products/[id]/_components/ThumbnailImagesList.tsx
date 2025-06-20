@@ -8,8 +8,6 @@ const ThumbnailImagesList = ({
   setCurrentImageIndex,
 }: ThumbnailImagesListProps) => {
 
-  console.log("DATA",data)
-  console.log("imageDetails brutes:", data[0]?.imageDetails)
   
   // Créer un tableau des images valides avec leurs indices originaux
   const validImages = Array.isArray(data[0]?.imageDetails) 
@@ -20,12 +18,10 @@ const ThumbnailImagesList = ({
         )
     : [];
 
-  console.log("Images valides après filtrage:", validImages)
-  console.log("Nombre d'images valides:", validImages.length)
 
   return (
     <div className="h-max mb-2 mt-20 w-max flex flex-col justify-center gap-4 bg-black rounded-xl py-2 px-16 ">
-      {validImages.map(({ imageUrl, originalIndex }: { imageUrl: string; originalIndex: number }, filteredIndex: number) => (
+      {validImages.map(({ imageUrl, originalIndex }: { imageUrl: string; originalIndex: number }) => (
         <div
           ref={refs[originalIndex]}
           key={originalIndex}

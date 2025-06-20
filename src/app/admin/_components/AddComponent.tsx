@@ -300,7 +300,7 @@ const AddWizard = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     <div className="flex flex-col items-center gap-3 sm:gap-4">
                       <h1 className="text-2xl font-semibold">En reel sur le site exemple</h1>
-                      <p className="text-center">Ici j'ai pris un exemple de produit qui est un pantalon et j'ai fait un apercu de ce que ca donne en reel sur le site</p>
+                      <p className="text-center">Ici j&apos;ai pris un exemple de produit qui est un pantalon et j&apos;ai fait un apercu de ce que ca donne en reel sur le site</p>
                       <video src="/assets/videos/killian-card.mov" className="w-full h-full object-cover" autoPlay muted loop></video>
                     </div>
                   <div className="flex flex-col items-center gap-3 sm:gap-4">
