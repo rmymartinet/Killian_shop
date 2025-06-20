@@ -8,6 +8,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   typescript: true,
 });
 
+export const dynamic = "force-dynamic";
+
 interface StripeOrder {
   id: string;
   amount: number;
