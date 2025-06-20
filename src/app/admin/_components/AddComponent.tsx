@@ -5,12 +5,9 @@ import React, { useState, useRef } from "react";
 const imageExamples = [
   { label: "Vue de face", key: "face", example: "/assets/images/face.png" },
   { label: "Vue d'ensemble", key: "ensemble", example: "/assets/images/ensemble.png" },
-  { label: "Vue du dessus", key: "dessus", example: "/assets/images/dessus.png" },
-  { label: "Vue côté droit", key: "cote_droit", example: "/assets/images/cote_droit.png" },
-  { label: "Vue côté gauche", key: "cote_gauche", example: "/assets/images/cote_gauche.png" },
-  { label: "Vue de dos", key: "dos", example: "/assets/images/dos.png" },
-  { label: "Vue détaillée", key: "detaillee", example: "/assets/images/detaillee.png" },
-  { label: "Composition / Étiquette", key: "etiquette", example: "/assets/images/etiquette.png" },
+  { label: "Vue détaillée1", key: "detaillee1", example: "/assets/images/detaillee.png" },
+  { label: "Vue détaillée2", key: "detaillee2", example: "/assets/images/detaillee.png" },
+  { label: "Vue détaillée3", key: "detaillee3", example: "/assets/images/detaillee.png" },
 ];
 
 const initialForm = {
@@ -29,12 +26,9 @@ const initialForm = {
 const apiIndexMapping = {
   face: 0,        // Vue de face va à l'index 0 dans l'API
   ensemble: 1,    // Vue d'ensemble va à l'index 1 dans l'API
-  dessus: 2,      // Vue du dessus va à l'index 2 dans l'API
-  cote_droit: 3,  // Vue côté droit va à l'index 3 dans l'API
-  cote_gauche: 4, // Vue côté gauche va à l'index 4 dans l'API
-  dos: 5,         // Vue de dos va à l'index 5 dans l'API
-  detaillee: 6,   // Vue détaillée va à l'index 6 dans l'API
-  etiquette: 7    // Composition/Étiquette va à l'index 7 dans l'API
+  detaillee1: 2,      // Vue du dessus va à l'index 2 dans l'API
+  detaillee2: 3,  // Vue côté droit va à l'index 3 dans l'API
+  detaillee3: 4, // Vue côté gauche va à l'index 4 dans l'API
 };
 
 const AddWizard = () => {
@@ -119,7 +113,6 @@ const AddWizard = () => {
         ...(form.category === "pants" ? { waistline: form.waistline.trim() } : {})
       };
       
-      console.log("Données envoyées:", newItem);
       
       const response = await fetch("/api/products", {
         method: "POST",
@@ -149,12 +142,12 @@ const AddWizard = () => {
   };
 
   return (
-    <div className="rounded-xl bg-white shadow-lg w-full max-w-4xl flex flex-col gap-6 items-center p-3 sm:p-5">
+    <div className="rounded-xl bg-white w-screen flex flex-col gap-6 items-center p-3 sm:p-5">
       <h1 className="text-lg sm:text-xl text-green-500 font-semibold text-center">Ajouter un article (étape {step}/5)</h1>
       {error && <div className="text-red-500 text-sm sm:text-base text-center px-2">{error}</div>}
       {success && <div className="text-green-600 text-sm sm:text-base text-center px-2">Article ajouté avec succès !</div>}
       {stepError && <div className="text-red-500 text-sm sm:text-base text-center px-2">{stepError}</div>}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6 w-full max-w-2xl px-2 sm:px-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6 w-full max-w-5xl px-2 sm:px-4">
         {step === 1 && (
           <div className="flex flex-col gap-3 sm:gap-4">
             <label className="flex flex-col gap-2">
@@ -251,13 +244,13 @@ const AddWizard = () => {
 
         {step === 4 && (
           <div className="flex flex-col gap-4 sm:gap-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div className="flex flex-col gap-4 sm:gap-6">
               {/* Section upload d'images */}
               <div className="flex flex-col gap-3 sm:gap-4">
                 <h3 className="font-semibold text-base sm:text-lg">Upload des images</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
                   {imageExamples.map((img, idx) => (
-                    <div key={img.key} className="flex flex-col items-center gap-2 border rounded-lg p-2 border-2 border-red-400">
+                    <div key={img.key} className="flex flex-col items-center gap-2 border rounded-lg p-2">
                       <input
                         type="file"
                         accept="image/*"
@@ -270,13 +263,10 @@ const AddWizard = () => {
                           const file = e.target.files[0];
                           if (file) {
                             try {
-                              console.log(`Upload de l'image ${idx}:`, file.name);
                               const url = await uploadToCloudinary(file);
-                              console.log(`URL Cloudinary générée pour ${idx}:`, url);
                               const newImages = [...form.images];
                               newImages[idx] = url;
                               setForm({ ...form, images: newImages });
-                              console.log(`Images mises à jour:`, newImages);
                             } catch (error) {
                               console.error(`Erreur upload image ${idx}:`, error);
                               setError(`Erreur lors de l'upload de l'image ${idx + 1}`);
@@ -287,7 +277,7 @@ const AddWizard = () => {
                       <Image
                         src={form.images[idx] || img.example}
                         alt={img.label}
-                        className="w-16 h-16 sm:w-20 sm:h-20 object-contain border rounded cursor-pointer"
+                        className="w-20 h-20 sm:w-40 sm:h-40 object-contain border rounded cursor-pointer"
                         width={80}
                         height={80}
                         onClick={() => {
@@ -303,24 +293,41 @@ const AddWizard = () => {
                   ))}
                 </div>
               </div>
-
               {/* Section aperçu */}
               <div className="flex flex-col gap-4 sm:gap-6">
-                <div className="flex flex-col gap-3 sm:gap-4">
-                  <h3 className="font-semibold text-base sm:text-lg">Aperçu ProductCard</h3>
-                  <div className="border rounded-lg p-3 sm:p-4 bg-white">
+                <div className="flex flex-col items-center gap-3 sm:gap-4">
+                  <h3 className="font-semibold text-base sm:text-lg md:text-2xl text-center">Apercu du produit</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="flex flex-col items-center gap-3 sm:gap-4">
+                      <h1 className="text-2xl font-semibold">En reel sur le site exemple</h1>
+                      <p className="text-center">Ici j'ai pris un exemple de produit qui est un pantalon et j'ai fait un apercu de ce que ca donne en reel sur le site</p>
+                      <video src="/assets/videos/killian-card.mov" className="w-full h-full object-cover" autoPlay muted loop></video>
+                    </div>
+                  <div className="flex flex-col items-center gap-3 sm:gap-4">
+                    <h1 className="text-2xl font-semibold text-center">Ici tu peux faire le test pour te donner un apercu</h1>
+                    <p className="text-ellipsis text-center">Quand tu ajoutes les images en haut tu peux voir l'apercu de ce que ca donne en reel sur le site</p>
                     <ProductCardPreview 
                       images={form.images} 
                       title={form.title} 
                       price={form.price} 
                     />
                   </div>
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:gap-4">
-                  <h3 className="font-semibold text-base sm:text-lg">Aperçu détails produit</h3>
-                  <div className="border rounded-lg p-3 sm:p-4 bg-white">
-                    <ProductDetailsPreview images={form.images} />
+                  <h3 className="font-semibold text-base sm:text-lg">Aperçu des détails du produit</h3>
+                  <div className="border grid grid-cols-2 rounded-lg p-3 sm:p-4 bg-white">
+                    <div className="flex flex-col items-center gap-3 sm:gap-4">
+                      <h1 className="text-2xl font-semibold text-center">Exemple avec avec pants of love sur le site</h1>
+                      <p className="text-center">Ici tu peux voir l'apercu des détails du produit les photos ou l'utilisateurs pourra défiler</p>
+                      <Image src="/assets/images/thumbnails.png" alt="detaillee" width={100} height={100} className="w-1/2" />
+                    </div>
+                    <div className="flex flex-col items-center gap-3 sm:gap-4">
+                      <h1 className="text-2xl font-semibold text-center">Tu peux voir l'apercu de se que ca donnera ici</h1>
+                      <p className="text-center">Ici tu aura 4 photo tu peux en mettre jusqu'a 4 tu peux en mettre moins si tu le souhaite</p>
+                      <ProductDetailsPreview images={form.images} />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -415,14 +422,10 @@ const ProductCardPreview = ({ images, title, price }: { images: string[], title:
 const ProductDetailsPreview = ({ images }: { images: string[] }) => {
   // Sélection des images principales uniquement
   const mainImages = [
-    { index: 0, image: images[0], label: "Vue de face" },      // imageFace
     { index: 1, image: images[1], label: "Vue d'ensemble" },   // imageEnsemble
-    { index: 2, image: images[2], label: "Vue du dessus" },    // imageDessus
-    { index: 3, image: images[3], label: "Vue côté droit" },   // imageCoteDroit
-    { index: 4, image: images[4], label: "Vue côté gauche" },  // imageCoteGauche
-    { index: 5, image: images[5], label: "Vue de dos" },         // imageDos
-    { index: 6, image: images[6], label: "Vue détaillée" },    // imageDetaillee
-    { index: 7, image: images[7], label: "Étiquette" }         // imageEtiquette
+    { index: 2, image: images[2], label: "Vue détaillée1" },    // imageDessus
+    { index: 3, image: images[3], label: "Vue détaillée2" },   // imageCoteDroit
+    { index: 4, image: images[4], label: "Vue détaillée3" },  // imageCoteGauche  
   ];
 
   return (

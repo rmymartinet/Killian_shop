@@ -55,7 +55,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
   }, [imageDetailsLength.length]);
 
   if (!filteredDataById.length) {
-    return <div>Chargement...</div>;
+    return <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]">Chargement...</div>;
   }
 
   return (

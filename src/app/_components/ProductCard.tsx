@@ -32,9 +32,6 @@ export default function ProductCard({
   const mainImage = imageFace;
   const detailImage = imageEnsemble;
 
-  console.log("mainImage", mainImage);
-  console.log("detailImage", detailImage);
-
   // Animation de révélation avec délai progressif
   useRevealBlockAnimation({ 
     ref: cardRef, 

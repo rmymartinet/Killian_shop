@@ -42,7 +42,7 @@ const ProductContainer = ({data}: {data: Data[]}) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col gap-4 md:p-8 mt-10 md:mt-0 z-50">
+    <div className="flex flex-col gap-4 md:p-8 mt-10 md:mt-0 z-50 bg-white">
         <span ref={productContainerRef} className="text-sm text-black pl-4 md:pl-0">
           Items disponibles [ {isAnimating ? displayCount : (data ? data.length : "...")} ]
         </span>
