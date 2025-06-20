@@ -23,8 +23,7 @@ export function useFilteredData(filter?: string) {
         }
         setData(filteredData);
       } catch (error) {
-        console.log(error);
-        console.error("Error fetching items");
+        console.error("Error fetching items", error);
         setData([]);
       } finally {
         setLoading(false);

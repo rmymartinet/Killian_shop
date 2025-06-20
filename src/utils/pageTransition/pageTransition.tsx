@@ -1,4 +1,4 @@
-import { easeIn } from "framer-motion";
+import { easeInOut } from "framer-motion";
 
 export const anim = () => {
   return {
@@ -7,16 +7,17 @@ export const anim = () => {
     },
     animate: {
       opacity: 1,
-
       transition: {
-        duration: 0.5,
-        delay: 0.5,
-        easeIn,
+        duration: 0.2,
+        ease: easeInOut,
       },
     },
     exit: {
       opacity: 0,
-      easeIn,
+      transition: {
+        duration: 0.1,
+        ease: easeInOut,
+      },
     },
   };
 };

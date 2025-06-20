@@ -1,7 +1,7 @@
 "use client";
 import { TransitionLinkProps } from "@/types/dataTypes";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const TransitionLink = ({
   href,
@@ -9,15 +9,14 @@ const TransitionLink = ({
   children,
   className,
 }: TransitionLinkProps) => {
-  const [isClicked, setIsClicked] = useState(false);
+  const router = useRouter();
 
-  const handleClick = () => {
-    setIsClicked(true);
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Déclencher la navigation avec transition
+    router.push(href);
   };
-
-  useEffect(() => {
-    isClicked && window.scrollTo(0, 0);
-  }, [isClicked]);
 
   return (
     <Link href={href} className={className} onClick={handleClick}>

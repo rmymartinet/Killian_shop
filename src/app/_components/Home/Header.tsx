@@ -9,7 +9,6 @@ import { animateOnMouseMove } from "@/utils/common/animateOnMouseMove";
 import { gridAnitmation } from "@/utils/home/gridAnimation";
 import { setupAnimations } from "@/utils/home/setupAnimation";
 
-import TransitionLink from "../TransitionLinks";
 import FlexGrid from "../FlexGrid";
 import Grid from "../Grid";
 gsap.registerPlugin(useGSAP);
@@ -66,7 +65,7 @@ const Header = ({
         ref={shopButtonRef}
         onMouseEnter={handleOnMouseEnter}
         onMouseLeave={handleOnMouseLeave}
-        className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center overflow-hidden "
+        className="fixed top-[70%] left-1/2 -translate-x-1/2  -translate-y-1/2 w-full flex flex-col items-center overflow-hidden z-40"
       >
         <div
           className="px-4 py-2 bg-white flex items-center gap-4 rounded-xl cursor-pointer border-2 border-black"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
+import { useCart } from "@/app/context/CartContext";
 
 export default function MobileNav() {
   const [isClicked, setIsClicked] = useState(false);
@@ -13,7 +14,7 @@ export default function MobileNav() {
   const menuRef = useRef(null);
   const iconBucketRef = useRef(null);
   const { user, isLoaded } = useUser();
-
+  const { cart } = useCart();
   const handleClickMenu = () => {
     setIsClicked(!isClicked);
   };
@@ -61,7 +62,7 @@ export default function MobileNav() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full flex items-center justify-between py-10 px-2 z-50">
+      <header className="fixed top-0 left-0 w-full flex items-center justify-between py-10 px-4 z-50">
         <button
           onClick={handleClickMenu}
           className="text-white flex flex-col gap-2 cursor-pointer"
@@ -72,24 +73,30 @@ export default function MobileNav() {
         </button>
         <Link
           ref={iconBucketRef}
-          href="/checkout"
+          href="/choose-auth"
           onClick={handleClickCloseMenu}
+          className="relative"
         >
           <FaShoppingCart
             size={20}
             aria-label="Checkout"
-            className={`${
+            className={`relative ${
               isClicked ? "text-white duration-300" : "text-black duration-300"
             }`}
           />
+           {cart.length > 0 && (
+            <div className="absolute -bottom-2 bg-green-500 -right-2 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {cart.length}
+            </div>
+          )}
         </Link>
       </header>
       <nav
         ref={menuRef}
-        className="flex flex-col -translate-y-[100%] gap-6 items-center w-screen h-max fixed inset-0 p-6 bg-black text-white z-40 pt-40"
+        className="flex flex-col -translate-y-[100%] gap-6 items-center w-screen h-[100dvh] fixed inset-0 p-6 bg-black text-white z-40 pt-40"
         aria-hidden="true"
       >
-        <div className="bg-black text-white gap-10 rounded-2xl text-3xl font-semibold shadow-xl flex flex-col items-center">
+        <div className="bg-black text-white gap-10 rounded-2xl text-3xl font-semibold shadow-xl flex flex-col items-start">
           <Link onClick={handleClickCloseMenu} href="/">
             Home
           </Link>

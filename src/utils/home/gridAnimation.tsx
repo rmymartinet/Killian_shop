@@ -6,21 +6,48 @@ export const gridAnitmation = (
   gridContainerRef: React.RefObject<HTMLDivElement>
 ) => {
   const handleScroll = () => {
-    const getBottomShopButton =
-      shopButtonRef.current?.getBoundingClientRect().bottom ?? 0;
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    
+    // La grille doit être visible dans la première moitié de l'écran
+    const isInHomeZone = scrollY < windowHeight / 2;
 
-    const getTopCollectionRef =
-      collectionRef.current?.getBoundingClientRect().top ?? 0;
+    // Logs de débogage
+    console.log("Scroll Debug:", {
+      scrollY,
+      windowHeight,
+      threshold: windowHeight / 2,
+      isInHomeZone
+    });
 
+    // Ajuster le z-index du bouton shop (logique simplifiée)
     gsap.set(shopButtonRef.current, {
-      zIndex: getTopCollectionRef > getBottomShopButton ? 10 : -10,
+      zIndex: isInHomeZone ? 10 : -10,
     });
 
-    gsap.to(gridContainerRef.current, {
-      opacity: getTopCollectionRef > getBottomShopButton ? 1 : 0,
-      duration: 1,
-      ease: "power2.out",
-    });
+    if (isInHomeZone) {
+      // Afficher la grille
+      console.log("Affichage de la grille");
+      gsap.to(gridContainerRef.current, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          console.log("Animation d'affichage terminée");
+        }
+      });
+    } else {
+      // Masquer la grille
+      console.log("Masquage de la grille");
+      gsap.to(gridContainerRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          console.log("Animation de masquage terminée");
+        }
+      });
+    }
   };
 
   window.addEventListener("scroll", handleScroll);

@@ -12,9 +12,7 @@ import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
 import useWindow from "./hooks/useWindow";
 import Lenis from "lenis";
-import { motion, AnimatePresence } from "framer-motion";
 import "lenis/dist/lenis.css";
-import { anim } from "@/utils/pageTransition/pageTransition";
 
 function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -28,13 +26,9 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     lenis.on("scroll", () => {});
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
 
   return (
-    <>
-      <AnimatePresence mode="wait">
+    <CartProvider>
         {pathname !== "/success" &&
         pathname !== "/cancel" &&
         pathname !== "/not-found" ? (
@@ -44,26 +38,18 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
             <Nav key="desktop-nav" />
           )
         ) : null}
-      </AnimatePresence>
+    
+          {children}
+      <CartSideBar />
       
-      <CartProvider>
-        <AnimatePresence mode="wait">
-          <motion.div key={pathname} {...anim()}>
-            {children}
-          </motion.div>
-        </AnimatePresence>
-        <CartSideBar />
-      </CartProvider>
-      
-      <AnimatePresence mode="wait">
         {pathname !== "/contact" &&
           pathname !== "/checkout" &&
           pathname !== "/success" &&
           pathname !== "/cancel" &&
           pathname !== "/admin" &&
           pathname !== "/404" && <Footer key="footer" />}
-      </AnimatePresence>
-    </>
+
+    </CartProvider>
   );
 }
 

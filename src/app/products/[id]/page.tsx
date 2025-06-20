@@ -7,10 +7,15 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { createRef, useEffect, useState } from "react";
 import ProductLabels from "./_components/ProductLabels";
-import ThumbnailImagesList from "./_components/ThumbnailImagesList";
 import { DESKTOP_BREAKPOINT } from "@/utils/responsive";
 import ProductCardDetails from "./_components/ProductCardDetails";
+import { useRef } from "react";
+import { revealBlockAnimation } from "@/utils/Animation";
+import ProductCarousel from "./_components/ProductCarousel";
 import ProductCard from "@/app/_components/ProductCard";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import ThumbnailImagesList from "./_components/ThumbnailImagesList";
+import ProductCardsCarousel from "@/app/_components/ProductCardsCarousel";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,8 +42,8 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const { data }: { data: Data[]; loading: boolean } = useFilteredData("pants");
 
 
-  console.log("DAAATA",data); 
-
+  const productPageRef = useRef<HTMLDivElement>(null);
+  revealBlockAnimation({ref: productPageRef, delay: 0.5});
 
   const filteredDataById = data.filter((item: Data) => item.id === id);
   const imageDetailsLength = filteredDataById.map(
@@ -55,7 +60,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
 
   return (
     <>
-      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]">
+      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]" ref={productPageRef}>
         {width > DESKTOP_BREAKPOINT && <ProductLabels />}
         <ProductCardDetails
           filteredDataById={filteredDataById}
@@ -73,21 +78,14 @@ const ProductPage = ({ params }: ProductPageProps) => {
         )}
       </div>
       <div className="mt-20 min-w-screen  flex md:justify-center items-center">
-        <div className="w-full h-full flex flex-col md:flex-row md:justify-center gap-4 lg:gap-40">
-          {data
-            .filter((item: Data) => item.id !== id)
-            .map((item: Data) => (
-              <ProductCard
-                key={item.id}
-                id={item.id}
-                imageFace={item.imageFace || ""}
-                imageEnsemble={item.imageEnsemble}
-                title={item.title}
-                price={item.price}
-                quantity={item.quantity}
-              />
-            ))}
-        </div>
+      <ProductCardsCarousel
+  products={data
+    .filter((item: Data) => item.id !== id)
+    .map((item: Data, index: number) => ({
+      ...item,
+      index,
+    }))}
+ />
       </div>
     </>
   );

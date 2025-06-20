@@ -1,5 +1,11 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
+import { z } from "zod";
+import { ProductSchema } from "@/schemas/product.schema";
+
+
+
 
 type ErrorWithMessage = {
   message: string;
@@ -22,8 +28,19 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
     return { message: String(maybeError) };
   }
 }
+
 function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;
+}
+
+// Middleware de vérification d'authentification admin
+async function verifyAdminAuth(req: NextRequest) {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    throw new Error("Non autorisé");
+  }
+  // Ici vous pouvez ajouter une vérification supplémentaire pour confirmer que l'utilisateur est bien un admin
+  // par exemple en vérifiant son rôle dans la base de données
 }
 
 //Permet de forcer le chargement dynamique des pages pour afficher les changements de la base de données en temps réel
@@ -36,16 +53,6 @@ export const GET = async () => {
     
     // Traitement des données pour créer imageUrls et imageDetails
     const processedPantsData = pantsData.map((item: any) => {
-      // Vérifier si c'est l'ancienne structure
-      if (item.imageUrls && Array.isArray(item.imageUrls)) {
-        return {
-          ...item,
-          imageUrls: item.imageUrls,
-          imageDetails: item.imageDetails || []
-        };
-      }
-      
-      // Nouvelle structure - créer imageUrls et imageDetails
       const imageUrls = [
         item.imageFace,
         item.imageCoteDroit,
@@ -75,16 +82,6 @@ export const GET = async () => {
     });
     
     const processedShirtsData = shirtsData.map((item: any) => {
-      // Vérifier si c'est l'ancienne structure
-      if (item.imageUrls && Array.isArray(item.imageUrls)) {
-        return {
-          ...item,
-          imageUrls: item.imageUrls,
-          imageDetails: item.imageDetails || []
-        };
-      }
-      
-      // Nouvelle structure - créer imageUrls et imageDetails
       const imageUrls = [
         item.imageFace,
         item.imageCoteDroit,
@@ -117,157 +114,234 @@ export const GET = async () => {
 
     return new NextResponse(JSON.stringify(combinedData), {
       status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, max-age=0'
+      }
     });
   } catch (error) {
     console.error("Erreur API GET:", error);
-    if (
-      error instanceof Error &&
-      error.message.includes("Database connection error")
-    ) {
-      return new NextResponse(
-        JSON.stringify({ error: "Database connection error" }),
-        { status: 500 }
-      );
-    }
-
-    // Pour toute autre erreur, renvoie un message d'erreur générique
     const message = getErrorMessage(error);
     return new NextResponse(JSON.stringify({ error: message }), {
       status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 };
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   try {
+    await verifyAdminAuth(req);
+    
     const item = await req.json();
+  
+    
+    // Validation des données
+    const validationResult = ProductSchema.safeParse(item);
+    if (!validationResult.success) {
+      console.error("Erreur de validation détaillée:", JSON.stringify(validationResult.error.errors, null, 2));
+      return new NextResponse(
+        JSON.stringify({ 
+          error: "Données invalides", 
+          details: validationResult.error.errors,
+          receivedData: item // Ajouter les données reçues pour le débogage
+        }), 
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
 
-    // Traitement des images pour mapper vers les nouveaux champs
-    const filteredImages = item.images ? item.images.filter((url: string) => url !== "") : [];
     
     const processedItem = {
       ...item,
-      // Mapper les images vers les nouveaux champs
-      imageFace: filteredImages[0] || "",
-      imageCoteDroit: filteredImages[1] || null,
-      imageCoteGauche: filteredImages[2] || null,
-      imageDos: filteredImages[3] || null,
-      imageDessus: filteredImages[4] || null,
-      imageEnsemble: filteredImages[5] || null,
-      imageDetaillee: filteredImages[6] || null,
-      imageEtiquette: filteredImages[7] || null
+      // Utiliser directement les indices du tableau images dans le nouvel ordre
+      imageFace: item.images[0] || "",
+      imageEnsemble: item.images[1] || null,
+      imageDessus: item.images[2] || null,
+      imageCoteDroit: item.images[3] || null,
+      imageCoteGauche: item.images[4] || null,
+      imageDos: item.images[5] || null,
+      imageDetaillee: item.images[6] || null,
+      imageEtiquette: item.images[7] || null
     };
 
-    // Supprimer les anciens champs
+
     delete processedItem.images;
-    delete processedItem.imageUrls;
-    delete processedItem.imageDetails;
+
 
     let data;
 
-    if (item.category === "pants") {
-      data = await prisma.pants.create({
-        data: processedItem,
-      });
-    } else if (item.category === "shirts") {
-      data = await prisma.shirts.create({
-        data: processedItem,
-      });
-    }
-
-    return new NextResponse(JSON.stringify(data), { status: 201 });
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes("Database connection error")
-    ) {
-      return new NextResponse(
-        JSON.stringify({ error: "Database connection error" }),
-        { status: 500 }
-      );
-    }
-
-    // Pour toute autre erreur, renvoie un message d'erreur générique
-    const message = getErrorMessage(error);
-    return new NextResponse(JSON.stringify({ error: message }), {
-      status: 500,
-    });
-  }
-};
-
-export const DELETE = async (req: Request) => {
-  try {
-    const { id, category } = await req.json();
-
-    let data;
-
-    if (category === "pants") {
-      data = await prisma.pants.delete({
-        where: {
-          id: id,
-        },
-      });
-    } else if (category === "shirts") {
-      data = await prisma.shirts.delete({
-        where: {
-          id: id,
-        },
-      });
-    } else {
-      // Essayer de supprimer dans les deux tables si la catégorie n'est pas spécifiée
-      try {
-        data = await prisma.pants.delete({
-          where: {
-            id: id,
-          },
+    await prisma.$transaction(async (tx) => {
+      if (item.category === "pants") {
+        data = await tx.pants.create({
+          data: processedItem,
         });
-      } catch {
-        data = await prisma.shirts.delete({
-          where: {
-            id: id,
-          },
+      } else if (item.category === "shirts") {
+        data = await tx.shirts.create({
+          data: processedItem,
         });
       }
-    }
+    });
 
-    return new NextResponse(JSON.stringify(data), { status: 200 });
+    console.log("Produit créé avec succès:", data);
+
+    return new NextResponse(JSON.stringify(data), { 
+      status: 201,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes("Database connection error")
-    ) {
-      return new NextResponse(
-        JSON.stringify({ error: "Database connection error" }),
-        { status: 500 }
-      );
-    }
-
-    // Pour toute autre erreur, renvoie un message d'erreur générique
+    console.error("Erreur API POST:", error);
     const message = getErrorMessage(error);
-    return new NextResponse(JSON.stringify({ error: message }), {
+    if (message.includes("Non autorisé")) {
+      return new NextResponse(JSON.stringify({ error: message }), { 
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    return new NextResponse(JSON.stringify({ error: message }), { 
       status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 };
 
-export const PUT = async (req: Request) => {
+export const DELETE = async (req: NextRequest) => {
   try {
-    const { id, title, price, quantity } = await req.json();
+    await verifyAdminAuth(req);
+    
+    const { id, category } = await req.json();
+    
+    if (!id) {
+      return new NextResponse(
+        JSON.stringify({ error: "ID manquant" }), 
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
 
-    const updatedItem = await prisma.pants.update({
-      where: { id },
-      data: {
-        title,
-        price: parseFloat(price),
-        quantity: parseInt(quantity, 10),
-      },
+    let data;
+
+    await prisma.$transaction(async (tx) => {
+      if (category === "pants") {
+        data = await tx.pants.delete({
+          where: { id },
+        });
+      } else if (category === "shirts") {
+        data = await tx.shirts.delete({
+          where: { id },
+        });
+      } else {
+        // Essayer de supprimer dans les deux tables si la catégorie n'est pas spécifiée
+        try {
+          data = await tx.pants.delete({
+            where: { id },
+          });
+        } catch {
+          data = await tx.shirts.delete({
+            where: { id },
+          });
+        }
+      }
     });
 
-    return new NextResponse(JSON.stringify(updatedItem), { status: 200 });
+    return new NextResponse(JSON.stringify(data), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
-    return new NextResponse(
-      JSON.stringify({ error: "Erreur lors de la mise à jour de l'article" }),
-      { status: 500 }
-    );
+    console.error("Erreur API DELETE:", error);
+    const message = getErrorMessage(error);
+    if (message.includes("Non autorisé")) {
+      return new NextResponse(JSON.stringify({ error: message }), { 
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    return new NextResponse(JSON.stringify({ error: message }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};
+
+export const PUT = async (req: NextRequest) => {
+  try {
+    await verifyAdminAuth(req);
+    
+    const { id, title, price, quantity } = await req.json();
+    
+    if (!id) {
+      return new NextResponse(
+        JSON.stringify({ error: "ID manquant" }), 
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    // Validation des données de mise à jour
+    const updateData = {
+      title,
+      price: parseFloat(price),
+      quantity: parseInt(quantity, 10)
+    };
+
+    const validationSchema = z.object({
+      title: z.string().min(1, "Le titre est requis"),
+      price: z.number().positive("Le prix doit être positif"),
+      quantity: z.number().int().positive("La quantité doit être positive")
+    });
+
+    const validationResult = validationSchema.safeParse(updateData);
+    if (!validationResult.success) {
+      return new NextResponse(
+        JSON.stringify({ 
+          error: "Données invalides", 
+          details: validationResult.error.errors 
+        }), 
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    let updatedItem;
+    await prisma.$transaction(async (tx) => {
+      try {
+        updatedItem = await tx.pants.update({
+          where: { id },
+          data: updateData,
+        });
+      } catch {
+        updatedItem = await tx.shirts.update({
+          where: { id },
+          data: updateData,
+        });
+      }
+    });
+
+    return new NextResponse(JSON.stringify(updatedItem), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    console.error("Erreur API PUT:", error);
+    const message = getErrorMessage(error);
+    if (message.includes("Non autorisé")) {
+      return new NextResponse(JSON.stringify({ error: message }), { 
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    return new NextResponse(JSON.stringify({ error: message }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };

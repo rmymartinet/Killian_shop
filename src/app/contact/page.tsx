@@ -1,10 +1,16 @@
 "use client";
 
+import { useRef } from "react";
 import { FaInstagram } from "react-icons/fa";
+import { revealBlockAnimation } from "@/utils/Animation";
 
 export default function ContactPage() {
+
+  const contactPageRef = useRef<HTMLDivElement>(null);
+  revealBlockAnimation({ref: contactPageRef, delay: 0.5 });
+
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-10 p-8 bg-gradient-to-br from-gray-50 to-gray-100 mt-[20vh] md:mt-0">
+    <main className="min-h-screen flex flex-col items-center justify-center gap-10 p-8 bg-gradient-to-br from-gray-50 to-gray-100 mt-[20vh] md:mt-0" ref={contactPageRef}>
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8 text-center">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Contactez-nous</h1>
         
