@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { revealBlockAnimation } from "@/utils/Animation";
+import { useRevealBlockAnimation } from "@/utils/Animation";
 
 export default function ProductCard({
   id,
@@ -36,7 +36,7 @@ export default function ProductCard({
   console.log("detailImage", detailImage);
 
   // Animation de révélation avec délai progressif
-  revealBlockAnimation({ 
+  useRevealBlockAnimation({ 
     ref: cardRef, 
     delay: index * 0.1 // 0.1s de délai entre chaque carte
   });
@@ -92,7 +92,7 @@ export default function ProductCard({
                     "
                     style={{ transition: "opacity 0.5s" }}
                   >
-                    👆 Clique sur l'image pour voir l'autre vue
+                    👆 Clique sur l&apos;image pour voir l&apos;autre vue
                   </div>
                   {/* Bouton pour accéder à la fiche produit */}
                   <button

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { upsertUser } from "@/lib/users";
 import { CustomerAddress } from "@/types/dataTypes";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { z } from "zod";
@@ -162,7 +163,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
 }
 
 async function updateStockAndRecordPurchase(
-  tx: any,
+  tx: Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">,
   productIds: string[],
   quantities: number[],
   userEmail: string,

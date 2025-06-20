@@ -140,8 +140,9 @@ const AddWizard = () => {
       setSuccess(true);
       setForm(initialForm);
       setStep(1);
-    } catch (err: any) {
-      setError(err.message || "Erreur inconnue");
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || "Erreur inconnue");
     } finally {
       setLoading(false);
     }
@@ -157,7 +158,7 @@ const AddWizard = () => {
         {step === 1 && (
           <div className="flex flex-col gap-3 sm:gap-4">
             <label className="flex flex-col gap-2">
-              Titre de l'annonce :
+              Titre de l&apos;annonce :
               <input
                 type="text"
                 name="title"

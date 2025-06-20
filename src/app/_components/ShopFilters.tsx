@@ -1,8 +1,7 @@
 "use client";
 
-import { revealBlockAnimation } from "@/utils/Animation";
+import { useRevealBlockAnimation } from "@/utils/Animation";
 import { useRef } from "react";
-
 
 interface ShopFiltersProps {
   onFilterChange: (category: string) => void;
@@ -22,7 +21,7 @@ export default function ShopFilters({ onFilterChange, activeFilter }: ShopFilter
 
   const shopFiltersRef = useRef<HTMLDivElement>(null);
 
-revealBlockAnimation({ref: shopFiltersRef, delay: 0.5});
+  useRevealBlockAnimation({ref: shopFiltersRef, delay: 0.5});
   return (
     <div className="flex flex-wrap gap-2 md:gap-4 justify-center mb-6 md:mb-8 px-4" ref={shopFiltersRef}>
       {categories.map((category) => (

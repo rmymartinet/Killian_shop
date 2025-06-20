@@ -10,10 +10,7 @@ import ProductLabels from "./_components/ProductLabels";
 import { DESKTOP_BREAKPOINT } from "@/utils/responsive";
 import ProductCardDetails from "./_components/ProductCardDetails";
 import { useRef } from "react";
-import { revealBlockAnimation } from "@/utils/Animation";
-import ProductCarousel from "./_components/ProductCarousel";
-import ProductCard from "@/app/_components/ProductCard";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useRevealBlockAnimation } from "@/utils/Animation";
 import ThumbnailImagesList from "./_components/ThumbnailImagesList";
 import ProductCardsCarousel from "@/app/_components/ProductCardsCarousel";
 
@@ -41,9 +38,8 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const { width } = useWindow();
   const { data }: { data: Data[]; loading: boolean } = useFilteredData("pants");
 
-
   const productPageRef = useRef<HTMLDivElement>(null);
-  revealBlockAnimation({ref: productPageRef, delay: 0.5});
+  useRevealBlockAnimation({ref: productPageRef, delay: 0.5});
 
   const filteredDataById = data.filter((item: Data) => item.id === id);
   const imageDetailsLength = filteredDataById.map(
@@ -57,6 +53,10 @@ const ProductPage = ({ params }: ProductPageProps) => {
         .map((_, i) => refs[i] || createRef())
     );
   }, [imageDetailsLength.length]);
+
+  if (!filteredDataById.length) {
+    return <div>Chargement...</div>;
+  }
 
   return (
     <>
@@ -78,14 +78,14 @@ const ProductPage = ({ params }: ProductPageProps) => {
         )}
       </div>
       <div className="mt-20 min-w-screen  flex md:justify-center items-center">
-      <ProductCardsCarousel
-  products={data
-    .filter((item: Data) => item.id !== id)
-    .map((item: Data, index: number) => ({
-      ...item,
-      index,
-    }))}
- />
+        <ProductCardsCarousel
+          products={data
+            .filter((item: Data) => item.id !== id)
+            .map((item: Data, index: number) => ({
+              ...item,
+              index,
+            }))}
+        />
       </div>
     </>
   );

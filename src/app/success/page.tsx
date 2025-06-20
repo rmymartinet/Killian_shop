@@ -23,7 +23,10 @@ const PaymentSuccess = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [orderDetails, setOrderDetails] = useState<{
+    productIds: string[];
+    quantities: number[];
+  } | null>(null);
   const { setCart } = useCart();
   const router = useRouter();
 
@@ -73,7 +76,7 @@ const PaymentSuccess = () => {
         
         if (data.success) {
           setPaymentVerified(true);
-          setOrderDetails(data.orderDetails);
+          setOrderDetails(data.orderDetails || null);
           
           // Vider le panier proprement selon le système du CartContext
           setCart([]);
@@ -223,7 +226,7 @@ const PaymentSuccess = () => {
                 className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-6 rounded-xl font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
               >
                 <IoArrowBack className="inline mr-2" />
-                Retour à l'accueil
+                Retour à l&apos;accueil
               </button>
             </div>
           </div>
@@ -249,7 +252,7 @@ const PaymentSuccess = () => {
             {/* Message d'aide */}
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
               <p className="text-sm text-blue-800">
-                Ne vous inquiétez pas, aucun montant n'a été débité de votre compte.
+                Ne vous inquiétez pas, aucun montant n&apos;a été débité de votre compte.
               </p>
             </div>
 
@@ -266,7 +269,7 @@ const PaymentSuccess = () => {
                 className="w-full bg-gray-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
               >
                 <IoArrowBack className="inline mr-2" />
-                Retour à l'accueil
+                Retour à l&apos;accueil
               </button>
             </div>
           </div>

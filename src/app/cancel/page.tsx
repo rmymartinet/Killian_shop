@@ -77,7 +77,7 @@ const PaymentCancel = () => {
             Paiement annulé
           </h1>
           <p className="text-lg text-gray-600 mb-6">
-            Votre paiement a été annulé. Aucun montant n'a été débité de votre compte.
+            Votre paiement a été annulé. Aucun montant n&apos;a été débité de votre compte.
           </p>
 
           {/* Information sur le panier */}
@@ -105,7 +105,7 @@ const PaymentCancel = () => {
               </p>
             </div>
             <p className="text-sm text-green-600">
-              Votre compte bancaire n'a pas été débité. Vous pouvez réessayer en toute sécurité.
+              Votre compte bancaire n&apos;a pas été débité. Vous pouvez réessayer en toute sécurité.
             </p>
           </div>
 
@@ -135,7 +135,7 @@ const PaymentCancel = () => {
               className="w-full bg-gray-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
             >
               <IoArrowBack className="inline mr-2" />
-              Retour à l'accueil
+              Retour à l&apos;accueil
             </button>
           </div>
 
@@ -143,7 +143,7 @@ const PaymentCancel = () => {
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-500">
               Si vous avez des questions concernant votre commande, 
-              n'hésitez pas à nous contacter.
+              n&apos;hésitez pas à nous contacter.
             </p>
           </div>
         </div>

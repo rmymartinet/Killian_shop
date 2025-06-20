@@ -8,6 +8,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   typescript: true,
 });
 
+interface StripeOrder {
+  id: string;
+  amount: number;
+  status: Stripe.PaymentIntent.Status;
+  createdAt: string;
+  source: 'stripe';
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { userId, sessionClaims } = getAuth(req);
@@ -47,7 +55,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Récupérer les commandes Stripe
-    let stripeOrders: any[] = [];
+    let stripeOrders: StripeOrder[] = [];
     try {
       const payments = await stripe.paymentIntents.list({
         limit: 100,

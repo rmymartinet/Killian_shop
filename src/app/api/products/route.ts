@@ -4,8 +4,18 @@ import { getAuth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { ProductSchema } from "@/schemas/product.schema";
 
-
-
+// Define an interface for items that have image properties
+interface ProductImageItem {
+  imageFace?: string | null;
+  imageCoteDroit?: string | null;
+  imageCoteGauche?: string | null;
+  imageDos?: string | null;
+  imageDessus?: string | null;
+  imageEnsemble?: string | null;
+  imageDetaillee?: string | null;
+  imageEtiquette?: string | null;
+  [key: string]: unknown; // Allow other properties
+}
 
 type ErrorWithMessage = {
   message: string;
@@ -52,7 +62,7 @@ export const GET = async () => {
     const shirtsData = await prisma.shirts.findMany();
     
     // Traitement des données pour créer imageUrls et imageDetails
-    const processedPantsData = pantsData.map((item: any) => {
+    const processedPantsData = pantsData.map((item: ProductImageItem) => {
       const imageUrls = [
         item.imageFace,
         item.imageCoteDroit,
@@ -81,7 +91,7 @@ export const GET = async () => {
       };
     });
     
-    const processedShirtsData = shirtsData.map((item: any) => {
+    const processedShirtsData = shirtsData.map((item: ProductImageItem) => {
       const imageUrls = [
         item.imageFace,
         item.imageCoteDroit,

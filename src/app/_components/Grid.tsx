@@ -1,6 +1,6 @@
 import { Data } from "@/types/dataTypes";
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useHomeReload } from "@/app/hooks/useHomeReload";
 
 const Grid = ({

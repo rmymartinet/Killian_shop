@@ -3,14 +3,14 @@
 import { Data } from "@/types/dataTypes";
 import ProductGrid from "./ProductGrid";
 import { useRef, useEffect, useState } from "react";
-import { revealBlockAnimation } from "@/utils/Animation";
+import { useRevealBlockAnimation } from "@/utils/Animation";
 
 const ProductContainer = ({data}: {data: Data[]}) => {
   const productContainerRef = useRef<HTMLDivElement>(null);
   const [displayCount, setDisplayCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   
-  revealBlockAnimation({ref: productContainerRef, delay: 0.5});
+  useRevealBlockAnimation({ref: productContainerRef, delay: 0.5});
 
   // Animation du compteur quand data change
   useEffect(() => {

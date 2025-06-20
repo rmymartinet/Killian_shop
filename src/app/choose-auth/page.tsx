@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
-import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
+import {  SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import { IoArrowBack, IoPerson, IoPersonOutline } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 
@@ -45,9 +45,6 @@ const ChooseAuth = () => {
     router.push("/checkout");
   };
 
-  const handleSignIn = () => {
-    // Le bouton SignInButton de Clerk gère automatiquement la redirection
-  };
 
   const handleBackToShop = () => {
     router.push("/shop");
@@ -161,7 +158,7 @@ const ChooseAuth = () => {
                   <IoPersonOutline size={32} className="text-gray-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  Continuer en tant qu'invité
+                  Continuer en tant qu&apos;invité
                 </h3>
                 <p className="text-gray-600 mb-4 text-sm">
                   Procédez directement au paiement sans créer de compte

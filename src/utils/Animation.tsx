@@ -47,7 +47,7 @@ export const animatePageOut = (
 };
 
 
-export const revealBlockAnimation = ({ref, delay}: {ref: React.RefObject<HTMLDivElement>, delay?: number}) => {
+export const useRevealBlockAnimation = ({ref, delay}: {ref: React.RefObject<HTMLDivElement>, delay?: number}) => {
   useGSAP(() => {
     gsap.fromTo(ref.current, {
       y: 100,

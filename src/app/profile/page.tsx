@@ -3,6 +3,7 @@
 import { useUser, SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { FaShoppingCart, FaUser, FaEnvelope, FaMapMarkerAlt, FaCalendar } from "react-icons/fa";
+import Link from "next/link";
 
 interface Order {
   id: string;
@@ -27,7 +28,7 @@ interface Product {
 }
 
 export default function ProfilePage() {
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -135,14 +136,14 @@ export default function ProfilePage() {
               <div className="text-center py-12 bg-gray-50 rounded-xl">
                 <FaShoppingCart className="text-gray-400 mx-auto mb-4" size={48} />
                 <p className="text-gray-600 text-lg mb-4">
-                  Vous n'avez pas encore passé de commande.
+                  Vous n&apos;avez pas encore passé de commande.
                 </p>
-                <a 
+                <Link
                   href="/shop" 
                   className="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
                 >
                   Découvrir nos produits
-                </a>
+                </Link>
               </div>
             ) : (
               <div 
