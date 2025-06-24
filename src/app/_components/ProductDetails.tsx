@@ -43,12 +43,12 @@ const PorductDetails = ({
       title: "Longueur",
       description: `Le pantalon mesure : ${filteredDataById[0]?.length} cm`,
     },
-    {
-      title: "Tour de taille",
-      description: `${filteredDataById[0]?.waistline} ${
-        isStringOrNumber ? "" : "cm"
-      }`,
-    },
+    ...(filteredDataById[0]?.waistline && filteredDataById[0]?.category !== "shirts"
+      ? [{
+          title: "Tour de taille",
+          description: `${filteredDataById[0]?.waistline} ${isStringOrNumber ? "" : "cm"}`,
+        }]
+      : []),
     {
       title: "Poids",
       description: `Le pantalon à un poids de ${filteredDataById[0]?.weight} g`,
