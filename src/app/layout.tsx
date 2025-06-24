@@ -11,19 +11,45 @@ import MobileNav from "./_components/Nav/MobileNav";
 import Nav from "./_components/Nav/NavBar";
 import { CartProvider } from "./context/CartContext";
 import useWindow from "./hooks/useWindow";
+import useScrollToTop from "./hooks/useScrollToTop";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+
+interface LenisInstance {
+  scrollTo: (target: number, options?: { duration?: number }) => void;
+  destroy: () => void;
+}
+
+declare global {
+  interface Window {
+    lenis?: LenisInstance;
+  }
+}
 
 function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { width } = useWindow();
+
+  // Hook pour remonter automatiquement vers le haut à chaque changement de page
+  useScrollToTop();
 
   useEffect(() => {
     const lenis = new Lenis({
       autoRaf: true,
     });
 
+    // Exposer Lenis globalement pour que le hook puisse l'utiliser
+    window.lenis = lenis;
+
     lenis.on("scroll", () => {});
+
+    return () => {
+      // Nettoyer Lenis quand le composant se démonte
+      if (window.lenis) {
+        window.lenis.destroy();
+        delete window.lenis;
+      }
+    };
   }, []);
 
 

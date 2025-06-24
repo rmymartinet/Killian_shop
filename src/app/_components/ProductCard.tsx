@@ -1,9 +1,9 @@
 "use client"
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useRevealBlockAnimation } from "@/utils/Animation";
+import { useRouter } from "next/navigation";
 
 export default function ProductCard({
   id,
@@ -27,6 +27,7 @@ export default function ProductCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
+  const router = useRouter();
 
   // Image à afficher selon hover
   const mainImage = imageFace;
@@ -51,6 +52,23 @@ export default function ProductCard({
       e.preventDefault(); // évite d'ouvrir le lien sur mobile
       setShowDetail((prev) => !prev);
     }
+  };
+
+  // Gestionnaire de navigation personnalisé pour forcer le scroll to top
+  const handleNavigation = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Forcer le scroll to top immédiatement
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+    
+    // Naviguer vers la page produit
+    setTimeout(() => {
+      router.push(`/shop/${id}`);
+    }, 100);
   };
 
   return (
@@ -94,13 +112,16 @@ export default function ProductCard({
                   {/* Bouton pour accéder à la fiche produit */}
                   <button
                     className="mt-2 mx-auto block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
-                    onClick={() => window.location.href = `/products/${id}`}
+                    onClick={handleNavigation}
                   >
                     Voir la fiche produit
                   </button>
                 </div>
               ) : (
-                <Link href={`/products/${id}`} className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]">
+                <div 
+                  onClick={handleNavigation}
+                  className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]"
+                >
                   <Image
                     src={
                       isMobile
@@ -116,7 +137,7 @@ export default function ProductCard({
                     onClick={handleImageClick}
                     style={{ touchAction: "manipulation" }}
                   />
-                </Link>
+                </div>
               )}
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-black bg-opacity-70 text-white text-sm font-semibold p-2">
@@ -124,7 +145,10 @@ export default function ProductCard({
             </div>
           </div>
         ) : (
-          <Link href={`/products/${id}`} className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]">
+          <div 
+            onClick={handleNavigation}
+            className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]"
+          >
             <Image
               src={
                 isMobile
@@ -140,7 +164,7 @@ export default function ProductCard({
               onClick={handleImageClick}
               style={{ touchAction: "manipulation" }}
             />
-          </Link>
+          </div>
         )}
         {/* Optionnel : petit indicateur sur mobile */}
         {isMobile && (
@@ -163,7 +187,7 @@ export default function ProductCard({
       {isMobile && (
           <button
             className="mt-2 block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
-            onClick={() => window.location.href = `/products/${id}`}
+            onClick={handleNavigation}
           >
             Voir la fiche produit
           </button>
