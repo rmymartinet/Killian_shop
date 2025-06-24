@@ -29,9 +29,28 @@ export default function ProductCard({
   const [showDetail, setShowDetail] = useState(false);
   const router = useRouter();
 
-  // Image à afficher selon hover
-  const mainImage = imageFace;
-  const detailImage = imageEnsemble;
+  // Détection intelligente des images
+  const hasFace = !!imageFace;
+  const hasEnsemble = !!imageEnsemble;
+  const hasBoth = hasFace && hasEnsemble;
+  const onlyFace = hasFace && !hasEnsemble;
+  const onlyEnsemble = !hasFace && hasEnsemble;
+
+  // Image à afficher selon hover/switch
+  let displayedImage = imageFace;
+  let label = "";
+  if (hasBoth) {
+    displayedImage = isMobile
+      ? (showDetail ? imageEnsemble : imageFace)
+      : (hover ? imageEnsemble : imageFace);
+    label = isMobile ? (showDetail ? "Vue d'ensemble" : "Vue de face") : (hover ? "Vue d'ensemble" : "Vue de face");
+  } else if (onlyFace) {
+    displayedImage = imageFace;
+    label = "Vue de face";
+  } else if (onlyEnsemble) {
+    displayedImage = imageEnsemble;
+    label = "Vue d'ensemble";
+  }
 
   // Animation de révélation avec délai progressif
   useRevealBlockAnimation({ 
@@ -77,114 +96,39 @@ export default function ProductCard({
       className="flex flex-col gap-4 h-full w-full"
     >
       <div
-        className="p-6 bg-[#fafafa] relative overflow-hidden"
+        className="p-6 bg-white border border-gray-200 rounded-lg relative overflow-hidden"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
+        style={{ minHeight: 320 }}
       >
-        {isOutOfStock ? (
-          <div className="relative w-full h-full max-w-sm max-h-sm">
-            <div className="opacity-50 blur-[1px] w-full h-full">
-              {isMobile ? (
-                <div className="block w-full h-full relative aspect-[4/5]">
-                  <Image
-                    src={showDetail ? (detailImage || mainImage || "/assets/images/face.png") : (mainImage || "/assets/images/face.png")}
-                    alt={title}
-                    fill
-                    priority
-                    quality={100}
-                    loading="eager"
-                    className="object-contain"
-                    onClick={handleImageClick}
-                    style={{ touchAction: "manipulation", cursor: "pointer" }}
-                  />
-                  {/* Hint mobile */}
-                  <div
-                    className="
-                      absolute bottom-2 left-1/2 -translate-x-1/2
-                      bg-gray-800 bg-opacity-70 text-white text-xs px-3 py-1 rounded-lg
-                      animate-pulse pointer-events-none
-                      z-50
-                    "
-                    style={{ transition: "opacity 0.5s" }}
-                  >
-                    👆 Clique sur l&apos;image pour voir l&apos;autre vue
-                  </div>
-                  {/* Bouton pour accéder à la fiche produit */}
-                  <button
-                    className="mt-2 mx-auto block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
-                    onClick={handleNavigation}
-                  >
-                    Voir la fiche produit
-                  </button>
-                </div>
-              ) : (
-                <div 
-                  onClick={handleNavigation}
-                  className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]"
-                >
-                  <Image
-                    src={
-                      isMobile
-                        ? (showDetail ? (detailImage || mainImage || "/assets/images/face.png") : (mainImage || "/assets/images/face.png"))
-                        : (hover ? (detailImage || mainImage || "/assets/images/face.png") : (mainImage || "/assets/images/face.png"))
-                    }
-                    alt={title}
-                    fill
-                    priority
-                    quality={100}
-                    loading="eager"
-                    className="object-contain"
-                    onClick={handleImageClick}
-                    style={{ touchAction: "manipulation" }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-black bg-opacity-70 text-white text-sm font-semibold p-2">
-              Épuisé
-            </div>
-          </div>
-        ) : (
-          <div 
-            onClick={handleNavigation}
-            className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]"
-          >
-            <Image
-              src={
-                isMobile
-                  ? (showDetail ? (detailImage || mainImage || "/assets/images/face.png") : (mainImage || "/assets/images/face.png"))
-                  : (hover ? (detailImage || mainImage || "/assets/images/face.png") : (mainImage || "/assets/images/face.png"))
-              }
-              alt={title}
-              fill
-              priority
-              quality={100}
-              loading="eager"
-              className="object-contain"
-              onClick={handleImageClick}
-              style={{ touchAction: "manipulation" }}
-            />
-          </div>
-        )}
-        {/* Optionnel : petit indicateur sur mobile */}
-        {isMobile && (
+        <div 
+          onClick={handleNavigation}
+          className="text-sm text-black cursor-pointer block w-full h-full relative aspect-[4/5]"
+        >
+          <Image
+            src={displayedImage || "/assets/images/face.png"}
+            alt={title}
+            fill
+            priority
+            quality={100}
+            loading="eager"
+            className="object-contain"
+            style={{ background: '#fff', borderRadius: 8 }}
+          />
+        </div>
+        {/* Label dynamique en bas à droite */}
+        {label && (
           <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-            {showDetail ? "Vue d'ensemble" : "Vue de face"}
+            {label}
           </div>
         )}
-        {!isMobile && (
-          <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-            {hover ? "Vue d'ensemble" : "Vue de face"}
-          </div>
-        )}
-       
       </div>
       <div className="flex flex-col gap-4">
-      <div className="flex justify-between md:flex-col md:pl-6 md:pb-6">
-        <p className="text-sm font-semibold h-10">{title}</p>
-        <p className="text-sm">€{price}.00 EUR</p>
-      </div>
-      {isMobile && (
+        <div className="flex justify-between md:flex-col md:pl-6 md:pb-6">
+          <p className="text-sm font-semibold h-10">{title}</p>
+          <p className="text-sm">€{price}.00 EUR</p>
+        </div>
+        {isMobile && (
           <button
             className="mt-2 block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
             onClick={handleNavigation}
