@@ -41,13 +41,12 @@ export default function Checkout() {
                   className="flex items-start gap-10 pb-4 border-b border-black h-[20vh] w-full"
                 >
                   <div className="bg-[#fafafa] h-full">
-                    <Image
-                      width={300}
-                      height={300}
-                      src={item?.imageDetails?.[0] ?? ""}
-                      alt={item.title}
-                      className="w-full h-full object-contain"
-                    />
+                  <Image
+  src={Array.isArray(item.imageUrls) && item.imageUrls[0] ? item.imageUrls[0] : "/assets/images/face.png"}
+  alt={item.title}
+  width={120}
+  height={120}
+/>
                   </div>
                   <div className="flex flex-col justify-between h-full w-full">
                     <div className="flex items-center justify-between w-full">

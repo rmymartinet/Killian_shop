@@ -48,9 +48,17 @@ export function usePayment(
       });
       const data = await response.json();
       if (data?.url) {
-        const url = data.url;
         setLoading(false);
-        window.location.href = url;
+        window.location.href = data.url;
+      } else {
+        setLoading(false);
+        Swal.fire({
+          title: "Erreur paiement",
+          text: data?.error || "Impossible de créer la session de paiement Stripe.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        console.error("Erreur Stripe checkout:", data);
       }
     } catch (error) {
       console.error(
