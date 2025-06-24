@@ -13,6 +13,7 @@ import { CartProvider } from "./context/CartContext";
 import useWindow from "./hooks/useWindow";
 import useScrollToTop from "./hooks/useScrollToTop";
 import Lenis from "lenis";
+import { Analytics } from "@vercel/analytics/next"
 import "lenis/dist/lenis.css";
 
 interface LenisInstance {
@@ -104,6 +105,7 @@ export default function RootLayout({
         </head>
         <body className={`antialiased`}>
           <ClientLayout>{children}</ClientLayout>
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
