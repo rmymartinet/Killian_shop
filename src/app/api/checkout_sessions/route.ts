@@ -129,6 +129,10 @@ export async function POST(request: NextRequest) {
       sessionConfig.customer_email = customerEmail;
     }
 
+    // DEBUG LOGS
+    console.log("checkoutStripeProducts:", checkoutStripeProducts);
+    console.log("sessionConfig:", sessionConfig);
+
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
     if (process.env.NODE_ENV === "development") {
