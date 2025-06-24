@@ -11,7 +11,7 @@ const SideBySideImages = ({ filteredDataById, images }: SideBySideImagesProps) =
   const datas = filteredDataById[0];
 
   return (
-    <div className="flex flex-col lg:flex-row lg:gap-10 bg-white lg:mx-10 rounded-xl shadow-lg p-6 h-max">
+    <div className="flex flex-col lg:flex-row lg:gap-10 lg:mx-10 rounded-xl shadow-lg p-6 h-max items-center">
       {/* Images côte à côte */}
       <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full md:w-1/2">
         {images.map((img, idx) => (

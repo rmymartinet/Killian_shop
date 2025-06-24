@@ -85,7 +85,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
   // Cas 2 : 2 images (peu importe lesquelles)
   if (allImages.length === 2) {
     return (
-      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh] border-2 border-red-500" ref={productPageRef}>
+      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh] border-none" ref={productPageRef}>
         <SideBySideImages images={allImages} filteredDataById={filteredDataById} />
       </div>
     );
