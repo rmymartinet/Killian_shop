@@ -23,10 +23,9 @@ export default function ProductCard({
   index?: number;
 }) {
   const [hover, setHover] = useState(false);
-  const isOutOfStock = quantity === 0;
   const cardRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [showDetail, setShowDetail] = useState(false);
+  const [showDetail] = useState(false);
   const router = useRouter();
 
   // Détection intelligente des images
@@ -66,29 +65,17 @@ export default function ProductCard({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleImageClick = (e: React.MouseEvent) => {
-    if (isMobile) {
-      e.preventDefault(); // évite d'ouvrir le lien sur mobile
-      setShowDetail((prev) => !prev);
-    }
-  };
-
   // Gestionnaire de navigation personnalisé pour forcer le scroll to top
   const handleNavigation = (e: React.MouseEvent) => {
+    if (quantity === 0) return; // Désactive le clic si out of stock
     e.preventDefault();
-    
-    // Forcer le scroll to top immédiatement
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
-    
-    // Naviguer vers la page produit
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     setTimeout(() => {
       router.push(`/shop/${id}`);
     }, 100);
   };
+
+  const isOutOfStock = !quantity || quantity === 0;
 
   return (
     <div 
@@ -96,7 +83,7 @@ export default function ProductCard({
       className="flex flex-col gap-4 h-full w-full"
     >
       <div
-        className="p-6 bg-white border border-gray-200 rounded-lg relative overflow-hidden"
+        className={`p-6 bg-white border border-gray-200 rounded-lg relative overflow-hidden ${isOutOfStock ? 'opacity-60 blur-[2px] pointer-events-none' : ''}`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{ minHeight: 320 }}
@@ -122,13 +109,19 @@ export default function ProductCard({
             {label}
           </div>
         )}
+        {/* Bandeau No stock */}
+        {isOutOfStock && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-80 text-white text-lg font-bold px-4 py-2 rounded">
+            No stock
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between md:flex-col md:pl-6 md:pb-6">
           <p className="text-sm font-semibold h-10">{title}</p>
           <p className="text-sm">€{price}.00 EUR</p>
         </div>
-        {isMobile && (
+        {isMobile && !isOutOfStock && (
           <button
             className="mt-2 block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold"
             onClick={handleNavigation}
