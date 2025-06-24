@@ -10,6 +10,7 @@ const ProductCardDetails = ({
   currentImageIndex,
   setCurrentImageIndex,
   imageDetailsLength,
+  hasValidImageDetails = false,
 }: ProductCardProps) => {
   const { width } = useWindow();
   const datas = filteredDataById[0];
@@ -25,7 +26,7 @@ const ProductCardDetails = ({
                   className="mb-12 mr-14 self-center cursor-pointer"
                   width={400}
                   height={400}
-                  src={item.imageUrls[0]}
+                  src={item.imageUrls[0] || ""}
                   alt=""
                   key={item.id}
                 />
@@ -38,6 +39,7 @@ const ProductCardDetails = ({
           currentImageIndex={currentImageIndex}
           setCurrentImageIndex={setCurrentImageIndex}
           imageDetailsLength={imageDetailsLength}
+          hasValidImageDetails={hasValidImageDetails}
         />
       </div>
       <PorductDetails datas={datas} filteredDataById={filteredDataById} />

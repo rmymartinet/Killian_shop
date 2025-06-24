@@ -10,8 +10,8 @@ export interface Data {
   weight?: number;
   waistline?: string;
   material?: string;
-  imageUrls: string;
-  imageDetails?: string;
+  imageUrls: string[];
+  imageDetails?: string[];
   imageWidth?: number;
   imageHeight?: number;
   quantity?: number;
@@ -85,6 +85,7 @@ export interface ProductCardProps {
   currentImageIndex: number;
   setCurrentImageIndex: (index: number) => void;
   imageDetailsLength: number[];
+  hasValidImageDetails?: boolean;
 }
 
 export interface CartContextProps {
