@@ -40,7 +40,7 @@ export default function Checkout() {
                   key={item.id}
                   className="flex items-start gap-10 pb-4 border-b border-black h-[20vh] w-full"
                 >
-                  <div className="bg-[#fafafa] h-full">
+                  <div className="bg-[#fafafa] h-max">
                   <Image
   src={Array.isArray(item.imageUrls) && item.imageUrls[0] ? item.imageUrls[0] : "/assets/images/face.png"}
   alt={item.title}
