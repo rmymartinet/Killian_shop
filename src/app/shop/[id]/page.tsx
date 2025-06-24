@@ -48,36 +48,33 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const filteredDataById = data.filter((item: Data) => item.id === id);
   const product = filteredDataById[0];
 
-  // Extraction des images
-  const imageFace = product?.imageFace || (product?.imageUrls?.[0] || null);
-  const imageEnsemble = product?.imageEnsemble || (product?.imageUrls?.[1] || null);
-  const imageDetails = product?.imageDetails || [];
-  const hasImageFace = !!imageFace;
-  const hasImageEnsemble = !!imageEnsemble;
-  const hasImageDetails = Array.isArray(imageDetails) && imageDetails.length > 0 && imageDetails.some((img) => img && img.trim() !== "");
+  // Récupère toutes les images valides (face, ensemble, détails) et retire les doublons
+  const allImages = [
+    ...(product?.imageFace ? [product.imageFace] : []),
+    ...(product?.imageEnsemble ? [product.imageEnsemble] : []),
+    ...(Array.isArray(product?.imageDetails) ? product.imageDetails.filter(img => img && img.trim() !== "") : [])
+  ].filter((img, idx, arr) => img && arr.indexOf(img) === idx);
 
   // Pour le carousel/thumbnails
-  const imageDetailsLength = (hasImageFace || hasImageEnsemble) && hasImageDetails ? [imageDetails.length] : [0];
+  const imageDetailsLength = allImages.length > 2 ? [allImages.length] : [0];
+  console.log(imageDetailsLength);
 
-
-
-  // Toujours à la racine !
   useEffect(() => {
-    if ((hasImageFace || hasImageEnsemble) && hasImageDetails) {
+    if (allImages.length > 2) {
       setRefs((refs) =>
         Array(imageDetailsLength.length)
           .fill(null)
           .map((_, i) => refs[i] || createRef())
       );
     }
-  }, [hasImageFace, hasImageEnsemble, hasImageDetails, imageDetails.length]);
+  }, [allImages.length]);
 
   // Gestion du chargement et des erreurs
   if (loading) return <ProductSkeleton />;
-  if (!product || (!hasImageFace && !hasImageEnsemble)) return <ProductSkeleton />;
+  if (!product || allImages.length === 0) return <ProductSkeleton />;
 
-  // Cas 1 : Seulement image de face
-  if (hasImageFace && !hasImageEnsemble && !hasImageDetails) {
+  // Cas 1 : 1 seule image
+  if (allImages.length === 1) {
     return (
       <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]" ref={productPageRef}>
         <SimpleProductView filteredDataById={filteredDataById} />
@@ -85,17 +82,17 @@ const ProductPage = ({ params }: ProductPageProps) => {
     );
   }
 
-  // Cas 2 : Image de face ET ensemble, mais pas d'image détail
-  if (hasImageFace && hasImageEnsemble && !hasImageDetails) {
+  // Cas 2 : 2 images (peu importe lesquelles)
+  if (allImages.length === 2) {
     return (
-      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]" ref={productPageRef}>
-        <SideBySideImages filteredDataById={filteredDataById} />
+      <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh] border-2 border-red-500" ref={productPageRef}>
+        <SideBySideImages images={allImages} filteredDataById={filteredDataById} />
       </div>
     );
   }
 
-  // Cas 3 : Image de face ou ensemble ET au moins une image détail
-  if ((hasImageFace || hasImageEnsemble) && hasImageDetails) {
+  // Cas 3 : 3 images ou plus → carousel + thumbnails
+  if (allImages.length > 2) {
     return (
       <>
         <div className="mt-[20vh] flex justify-center w-full md:px-10 min-h-[100vh]" ref={productPageRef}>
